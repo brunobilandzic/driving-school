@@ -1,0 +1,9 @@
+<ul>
+    <li *ngFor="let user of membersService.users">
+        <div class="card">
+            <div class="card-header">{{user.username}}</div>
+            <div class="card-header">{{user.firstName}}</div>
+            <div class="card-header">{{user.lastName}}</div>
+        </div>
+    </li>
+</ul>

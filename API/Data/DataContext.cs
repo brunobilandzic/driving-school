@@ -22,6 +22,21 @@ namespace API.Data
         {
         }
 
+        public DbSet<DrivingSession> DrivingSessions { get; set; }
+
+        public DbSet<Lecture> Lectures {get; set;}
+
+        public DbSet<DrivingTest> DrivingTests { get; set; }
+
+
+        public DbSet<RegulationsGroup> RegulationsGroups { get; set; }
+
+        public DbSet<RegulationsTest> RegulationsTests { get; set; }
+
+        public DbSet<UserLecture> UserLectures {get; set;}
+
+        public DbSet<UserRegulationsTest> UserRegulationsTest { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         { 
             base.OnModelCreating(builder);
@@ -37,6 +52,9 @@ namespace API.Data
                 .WithOne(u => u.Role)
                 .HasForeignKey(ur => ur.RoleId)
                 .IsRequired();
+
+
+            
         }
         
     }
