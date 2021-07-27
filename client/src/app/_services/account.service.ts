@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
-import { map } from 'rxjs/operators';
-import { UserModel } from '../_models/user-model';
+import { map, take } from 'rxjs/operators';
+import { UserModel } from '../_models/user';
 import { ReplaySubject } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -14,6 +14,7 @@ export class AccountService {
   baseApiUrl = environment.baseApiUrl + 'account/';
   private currentUserSource = new ReplaySubject<UserModel>(1);
   currentUser$ = this.currentUserSource.asObservable();
+  userRoles: string [] =  [];
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -29,6 +30,14 @@ export class AccountService {
   }
 
   setCurrentUser(user: UserModel) {
+    user.roles = [];
+    let roles: any = this.getDecodedToken(user.token).role;
+
+    if(!Array.isArray(roles))
+      user.roles.push(roles);
+    else
+      user.roles = [...roles]
+
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUserSource.next(user);
   }
@@ -46,6 +55,10 @@ export class AccountService {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
     this.router.navigateByUrl("/");
+  }
+
+  getDecodedToken(token: string) {
+    return JSON.parse(atob(token.split(".")[1]));
   }
 
   navigateTo(path: string)

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { UserModel } from '../_models/user-model';
+import { UserModel } from '../_models/user';
 
 @Injectable({
   providedIn: 'root',

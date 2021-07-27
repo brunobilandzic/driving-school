@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
-import { UserModel } from '../_models/user-model';
+import { UserModel } from '../_models/user';
 import { AccountService } from '../_services/account.service';
+import { RolesService } from '../_services/roles.service';
 
 @Component({
   selector: 'app-register',
@@ -19,14 +20,24 @@ export class RegisterComponent implements OnInit {
     password: '',
     repeatPassword: '',
   };
-  baseUrl = environment.baseApiUrl + "account/register"
+
+  checkedRoles = {
+    Professor: false,
+    Instructor: false,
+    Examiner: false,
+  };
+  baseUrl = environment.baseApiUrl + 'account/register';
+  roles: string[] = [];
   constructor(
     private accountService: AccountService,
     private toastr: ToastrService,
-    private http: HttpClient
+    private http: HttpClient,
+    private rolesService: RolesService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.rolesService.roles$.subscribe((roles) => (this.roles = roles));
+  }
 
   check() {
     for (let key in this.model) {
@@ -47,17 +58,21 @@ export class RegisterComponent implements OnInit {
     if (this.model.password != this.model.repeatPassword) {
       this.toastr.error('Passwords do not match');
     }
-
-    this.register()
-      .subscribe((response: UserModel) => {
-        this.accountService.setCurrentUser(response);
-        this.toastr.success("Successfully registered!");
-        this.accountService.navigateTo("/members");
-      })
+    /*
+    this.register().subscribe((response: UserModel) => {
+      this.accountService.setCurrentUser(response);
+      this.toastr.success('Successfully registered!');
+      this.accountService.navigateTo('/members');
+    }); */
   }
 
+  
+
   register() {
-    return this.http.post(this.baseUrl, this.model);
+    this.model["role"] = this.checkedRoles;
+
+    return console.log(this.model);
+    
   }
 
   reset() {

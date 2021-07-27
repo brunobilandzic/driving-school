@@ -1,8 +1,10 @@
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Entities;
+using API.Extensions;
 using API.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,15 +27,20 @@ namespace API.Controllers
         }
 
         [HttpPost("register")]
-
+        // Only admins, instructors and professor can register users.
+        [Authorize(Roles = "Admin, Instructor, Professor")]
         public async Task<ActionResult<AuthUserDto>> Register(RegisterDto registerDto)
         {
 
             if (await UserExists(registerDto.Username)) return BadRequest("User already exists.");
 
+            var roles = User.GetRoles();
+
             // userManager.CreateAsnyc takes an AppUser as a parameter
             // so we have to map from registerDto to AppUser
             var user = _mapper.Map<AppUser>(registerDto);
+
+            
 
             user.UserName = registerDto.Username.ToLower();
 

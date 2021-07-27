@@ -1,5 +1,6 @@
 import { Component, OnInit} from '@angular/core';
 import { AccountService } from '../_services/account.service';
+import { RolesService } from '../_services/roles.service';
 
 @Component({
   selector: 'app-nav',
@@ -8,9 +9,12 @@ import { AccountService } from '../_services/account.service';
 })
 export class NavComponent implements OnInit {
   model: any = {};
-  constructor(public accountService: AccountService) { }
+  roles: string [] = [];
+  constructor(public accountService: AccountService, private rolesService: RolesService) { }
 
   ngOnInit(): void {
+    this.rolesService.roles$
+      .subscribe(roles => this.roles = roles);
   }
 
   login()

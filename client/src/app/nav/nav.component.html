@@ -9,13 +9,17 @@
     <li class="nav-item">
       <a class="nav-link" routerLink="/members">Users</a>
     </li>
+    
+  
+    <li *ngIf="roles?.includes('Admin') || roles?.includes('Professor') || roles?.includes('Instructor') "class="nav-item">
+      <a class="nav-link" routerLink="/register">Register Student</a>
+    </li>
+
+    <li *ngIf="roles?.includes('Admin')"  class="nav-item">
+      <a class="nav-link" routerLink="/register">Register Employee</a>
+    </li>
     <li class="nav-item">
       <a class="nav-link" (click)="accountService.logout()">Logout</a>
-    </li>
-  </ul>
-  <ul *ngIf="!(accountService.currentUser$ | async)" class="navbar-nav mr-auto">
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/register">Register</a>
     </li>
   </ul>
   <div *ngIf="!(accountService.currentUser$ | async)">
@@ -40,3 +44,6 @@
   </form>
 </div>
 </nav>
+<div>
+  <div *ngFor="let role of roles">{{role}}</div>
+</div>
