@@ -16,27 +16,24 @@ namespace API.Entities
         public RegulationsGroup RegulationsGruop { get; set; }
 
 
-        public int RegulationsGroupId { get; set; }
+        public int? RegulationsGroupId { get; set; }
 
         //Only for students
         public ICollection<UserRegulationsTest> UserRegulationsTests { get; set; }
 
         //Only for professors
-        public ICollection<UserLecture> Teaching { get; set; }
+        public ICollection<Lecture> Teaching { get; set; }
 
         //Only for students
-        public ICollection<UserLecture> Listening { get; set; }
-
-        //Only for students
-        public ICollection<DrivingTest> DrivingTestsTaken { get; set; }
+        public ICollection<StudentLecture> StudentLectures { get; set; }
 
         //Only for examiners
         public ICollection<DrivingTest> DrivingTestsGiven { get; set; }
 
-        //Only for students
+        //Only for instructors
+        public ICollection<DrivingSession> DrivingSessionsGiven { get; set; }
+
         public ICollection<DrivingSession> DrivingSessionsTaken { get; set; }
-
-
 
 
 

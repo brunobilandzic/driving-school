@@ -1,10 +1,13 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace API.Entities
 {
     public class DrivingTest
     {
-        public int DrivingTestId { get; set; }
+        public int DrivingSessionId { get; set; }
 
         public DrivingSession DrivingSession { get; set; }
+
 
         public AppUser Examiner { get; set; }
 

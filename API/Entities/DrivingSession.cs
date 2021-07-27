@@ -23,5 +23,7 @@ namespace API.Entities
 
         public string DriverRemarks { get; set; }
 
+        public DrivingTest DrivingTest { get; set; }
+
     }
 }
