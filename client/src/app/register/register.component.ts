@@ -58,12 +58,11 @@ export class RegisterComponent implements OnInit {
     if (this.model.password != this.model.repeatPassword) {
       this.toastr.error('Passwords do not match');
     }
-    /*
+    
     this.register().subscribe((response: UserModel) => {
-      this.accountService.setCurrentUser(response);
-      this.toastr.success('Successfully registered!');
+      this.toastr.success(`You've Successfully registered ${response.firstName} ${response.lastName}`);
       this.accountService.navigateTo('/members');
-    }); */
+    });
   }
 
   
@@ -71,7 +70,7 @@ export class RegisterComponent implements OnInit {
   register() {
     this.model["role"] = this.checkedRoles;
 
-    return console.log(this.model);
+    return this.http.post(this.baseUrl, this.model);
     
   }
 

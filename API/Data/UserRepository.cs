@@ -25,6 +25,13 @@ namespace API.Data
             _context = context;
         }
 
+        public async Task<AppUser> GetUser(string username)
+        {
+            return await _context.Users
+                .Where(u => u.UserName == username)
+                .FirstOrDefaultAsync();
+        }
+
         
         public async Task<PersonDto> GetPersonAsync(string username)
         {

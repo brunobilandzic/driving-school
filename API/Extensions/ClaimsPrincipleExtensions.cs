@@ -9,9 +9,5 @@ namespace API.Extensions
              return claims.FindFirst(ClaimTypes.Name)?.Value;
          }
 
-        public static string GetRoles(this ClaimsPrincipal claims)
-        {
-            return claims.FindFirst(ClaimTypes.Role)?.Value;
-        }
     }
 }
