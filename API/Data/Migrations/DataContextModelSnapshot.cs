@@ -270,7 +270,7 @@ namespace API.Data.Migrations
                     b.ToTable("StudentLectures");
                 });
 
-            modelBuilder.Entity("API.Entities.UserRegulationsTest", b =>
+            modelBuilder.Entity("API.Entities.StudentRegulationsTest", b =>
                 {
                     b.Property<int>("StudentId")
                         .HasColumnType("INTEGER");
@@ -476,16 +476,16 @@ namespace API.Data.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("API.Entities.UserRegulationsTest", b =>
+            modelBuilder.Entity("API.Entities.StudentRegulationsTest", b =>
                 {
                     b.HasOne("API.Entities.RegulationsTest", "RegulationTest")
-                        .WithMany("UserRegulationTests")
+                        .WithMany("StudentRegulationsTest")
                         .HasForeignKey("RegulationsTestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("API.Entities.AppUser", "Student")
-                        .WithMany("UserRegulationsTests")
+                        .WithMany("StudentRegulationsTest")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -546,9 +546,9 @@ namespace API.Data.Migrations
 
                     b.Navigation("StudentLectures");
 
-                    b.Navigation("Teaching");
+                    b.Navigation("StudentRegulationsTest");
 
-                    b.Navigation("UserRegulationsTests");
+                    b.Navigation("Teaching");
 
                     b.Navigation("UserRoles");
                 });
@@ -572,7 +572,7 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.RegulationsTest", b =>
                 {
-                    b.Navigation("UserRegulationTests");
+                    b.Navigation("StudentRegulationsTest");
                 });
 #pragma warning restore 612, 618
         }

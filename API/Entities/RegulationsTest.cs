@@ -10,7 +10,7 @@ namespace API.Entities
 
         public string Location { get; set; }
 
-        public ICollection<UserRegulationsTest> UserRegulationTests { get; set; }
+        public ICollection<StudentRegulationsTest> StudentRegulationsTest { get; set; }
         
     }
 }

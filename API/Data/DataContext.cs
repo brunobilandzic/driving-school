@@ -35,7 +35,7 @@ namespace API.Data
 
         public DbSet<StudentLecture> StudentLectures {get; set;}
 
-        public DbSet<UserRegulationsTest> UserRegulationsTest { get; set; }
+        public DbSet<StudentRegulationsTest> UserRegulationsTest { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         { 
@@ -73,7 +73,7 @@ namespace API.Data
             // func: (1,N) <=> (1,N)
             // note: Many to many relationship, we need a helper table and configure two one to many relationships
             builder.Entity<AppUser>()
-                .HasMany(u => u.UserRegulationsTests)
+                .HasMany(u => u.StudentRegulationsTest)
                 .WithOne(urt => urt.Student)
                 .HasForeignKey(urt => urt.StudentId);
 
@@ -81,7 +81,7 @@ namespace API.Data
             // func: (1,N) <=> (1,N)
             // note: Many to many relationship, we need a helper table and configure two one to many relationships
             builder.Entity<RegulationsTest>()
-                .HasMany(rt => rt.UserRegulationTests)
+                .HasMany(rt => rt.StudentRegulationsTest)
                 .WithOne(urt => urt.RegulationTest)
                 .HasForeignKey(urt => urt.RegulationsTestId);
 
@@ -148,7 +148,7 @@ namespace API.Data
             builder.Entity<DrivingTest>()
                 .HasKey(dt => dt.DrivingSessionId);
 
-            builder.Entity<UserRegulationsTest>()
+            builder.Entity<StudentRegulationsTest>()
                 .HasKey(urt => new {urt.StudentId, urt.RegulationsTestId});
 
 

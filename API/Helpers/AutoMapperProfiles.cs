@@ -1,3 +1,4 @@
+using System.Linq;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
@@ -12,6 +13,18 @@ namespace API.Helpers
             CreateMap<AppUser, PersonDto>();
 
             CreateMap<RegisterDto, AppUser>();
+
+            CreateMap<DrivingSession, DrivingSessionDto>();
+
+            CreateMap<DrivingTest, DrivingTestDto>();
+
+            CreateMap<Lecture, LectureDto>();
+
+            CreateMap<RegulationsGroup, RegulationsGroupDto>();
+
+            CreateMap<RegulationsTest, RegulationsTestDto>();
+
+            
 
         }
     }

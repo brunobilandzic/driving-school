@@ -1,6 +1,6 @@
 namespace API.Entities
 {
-    public class UserRegulationsTest
+    public class StudentRegulationsTest
     {
         public AppUser Student { get; set; }
 

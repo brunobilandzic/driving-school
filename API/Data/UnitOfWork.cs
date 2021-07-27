@@ -14,5 +14,7 @@ namespace API.Data
         }
 
         public IUserRepository UserRepository => new UserRepository(_context, _mapper);
+
+        
     }
 }

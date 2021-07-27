@@ -19,7 +19,7 @@ namespace API.Entities
         public int? RegulationsGroupId { get; set; }
 
         //Only for students
-        public ICollection<UserRegulationsTest> UserRegulationsTests { get; set; }
+        public ICollection<StudentRegulationsTest> StudentRegulationsTest { get; set; }
 
         //Only for professors
         public ICollection<Lecture> Teaching { get; set; }
