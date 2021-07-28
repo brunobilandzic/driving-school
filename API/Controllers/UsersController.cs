@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
+
     public class UsersController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;

@@ -10,7 +10,13 @@ namespace API.Helpers
     {
         public AutoMapperProfiles()
         {
-            CreateMap<AppUser, PersonDto>();
+            CreateMap<AppUser, PersonDto>()
+                .ForMember(
+                    dest => dest.Roles,
+                    opt => opt.MapFrom(
+                        src => src.UserRoles.Select(ur => ur.Role.Name)
+                ));
+
 
             CreateMap<RegisterDto, AppUser>();
 
@@ -23,6 +29,10 @@ namespace API.Helpers
             CreateMap<RegulationsGroup, RegulationsGroupDto>();
 
             CreateMap<RegulationsTest, RegulationsTestDto>();
+
+            CreateMap<RegulationsGroupMinDto, RegulationsGroup>();
+
+            CreateMap<RegulationsGroup, RegulationsGroupMinDto>();
 
             
 

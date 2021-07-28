@@ -1,5 +1,8 @@
+using System.Threading.Tasks;
+using API.Entities;
 using API.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.Data
 {
@@ -7,14 +10,23 @@ namespace API.Data
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        public UnitOfWork(DataContext context, IMapper mapper)
+        private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<AppRole> _roleManager;
+        public UnitOfWork(DataContext context, IMapper mapper, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
         {
+            _roleManager = roleManager;
+            _userManager = userManager;
             _mapper = mapper;
             _context = context;
         }
 
-        public IUserRepository UserRepository => new UserRepository(_context, _mapper);
+        public IUserRepository UserRepository => new UserRepository(_mapper, _userManager, _roleManager);
 
-        
+        public IProfessorRepository ProfessorRepository => new ProfessorRepository(_context, _mapper, _userManager, _roleManager);
+
+        public async Task<int> SaveAllChanges()
+        {
+            return await _context.SaveChangesAsync();
+        }
     }
 }

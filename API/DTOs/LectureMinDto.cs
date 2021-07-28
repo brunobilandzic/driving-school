@@ -1,14 +1,10 @@
 using System;
-using System.Collections.Generic;
 
 namespace API.DTOs
 {
-    public class LectureDto
+    public class LectureMinDto
     {
-
         public int RegulationsGroupId { get; set; }
-
-        public PersonDto Professor { get; set; }
 
         public string  Topic  { get; set; }
 
@@ -16,6 +12,6 @@ namespace API.DTOs
 
         public DateTime DateStart { get; set; }
 
-        public List<PersonDto> Students { get; set; }
+
     }
 }

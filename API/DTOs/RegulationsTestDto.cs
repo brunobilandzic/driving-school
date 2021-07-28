@@ -5,7 +5,7 @@ namespace API.DTOs
 {
     public class RegulationsTestDto
     {
-        public DateTime DateStart { get; set; } = DateTime.Now;
+        public DateTime DateStart { get; set; }
 
         public string Location { get; set; }
 

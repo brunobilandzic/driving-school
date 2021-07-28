@@ -15,27 +15,29 @@ namespace API.Data
 {
     public class UserRepository : IUserRepository
     {
-        private readonly DataContext _context;
         private readonly IMapper _mapper;
+        private readonly RoleManager<AppRole> _roleManager;
+        private readonly UserManager<AppUser> _userManager;
 
-
-        public UserRepository(DataContext context, IMapper mapper)
+        public UserRepository(IMapper mapper, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
         {
+            _userManager = userManager;
+            _roleManager = roleManager;
             _mapper = mapper;
-            _context = context;
+
         }
 
         public async Task<AppUser> GetUser(string username)
         {
-            return await _context.Users
+            return await _userManager.Users
                 .Where(u => u.UserName == username)
                 .FirstOrDefaultAsync();
         }
 
-        
+
         public async Task<PersonDto> GetPersonAsync(string username)
         {
-            return await _context.Users
+            return await _userManager.Users
                 .Where(u => u.UserName == username)
                 .ProjectTo<PersonDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
@@ -43,7 +45,11 @@ namespace API.Data
 
         public async Task<IEnumerable<PersonDto>> GetUsers(string username)
         {
-            var query = _context.Users.AsQueryable();
+            var query = _userManager.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .AsQueryable();
+
 
             query = query.Where(u => u.UserName != username);
 
@@ -52,6 +58,6 @@ namespace API.Data
                 .ToListAsync();
         }
 
-        
+
     }
 }
