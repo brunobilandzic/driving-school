@@ -35,9 +35,6 @@ namespace API.Entities
 
         public ICollection<DrivingSession> DrivingSessionsTaken { get; set; }
 
-
-
-
         
     }
 }

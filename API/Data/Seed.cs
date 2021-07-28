@@ -100,9 +100,11 @@ namespace API.Data
                 regulationsGroupData.Add(new RegulationsGroup());
                 regulationTestData.Add(new RegulationsTest());
                 
-                await context.RegulationsGroups.AddAsync(regulationsGroupData.Last());
-                await context.RegulationsTests.AddAsync(regulationTestData.Last());
+                
             }
+
+            await context.RegulationsGroups.AddRangeAsync(regulationsGroupData);
+            await context.RegulationsTests.AddRangeAsync(regulationTestData);
 
             await context.SaveChangesAsync();
 
@@ -119,11 +121,27 @@ namespace API.Data
             var professorIds = professorUsers.Select(a => a.Id).ToList();
             var instructorIds = InstructorUsers.Select(a => a.Id).ToList();
             var studentIds = studentUsers.Select(a => a.Id).ToList();
+
+            var regulationsGroupIds = await context
+                .RegulationsGroups
+                .Select(rg => rg.RegulationsGroupId)
+                .ToListAsync();
+
+            var regulationsTestsIds = await context
+                .RegulationsTests
+                .Select(rg => rg.RegulationsTestId)
+                .ToListAsync();
+
+            foreach (var student in studentUsers)
+            {
+                student.RegulationsGroupId = getRandomId(regulationsGroupIds);
+            }
+
+            await context.SaveChangesAsync();
         
             // Adding 15 * 5 driving sessions
             // 7 per day
             
-
             var drivingSessionData = new List<DrivingSession>();
             var initialDateStart = DateTime.Now.AddDays(5);
             for (var i=0; i < studentUsers.Count * 15; i++)
@@ -141,7 +159,76 @@ namespace API.Data
                     }
                 );
                 
-                await context.AddAsync(drivingSessionData.Last());
+            }
+            await context.DrivingSessions.AddRangeAsync(drivingSessionData);
+            await context.SaveChangesAsync();
+
+            // Adding lectures 
+
+            var lecturesData = new List<Lecture>();
+
+            initialDateStart = DateTime.Now.AddDays(5);
+            int lecturesCount = 20;
+            
+            
+            List<int> assignStudentIds;
+
+            for(var i = 0; i < lecturesCount; i++)
+            {
+                // Determine the regulationGroup for which whom the lesson is intended
+                // We will need the lectureId to connect students from that regulationgroup to the lesson created
+                int regulationsGroudIndex = (i<10) ?  0 : 1;
+                int savedLectureId = 0;
+
+                lecturesData.Add(
+                    new Lecture
+                    {
+                        RegulationsGroupId = regulationsGroupIds[regulationsGroudIndex],
+                        ProfessorId = getRandomId(professorIds),
+                        Topic = getSmart(lorem),
+                        Remark = getDummy(lorem),
+                        DateStart = initialDateStart
+                    }
+                );
+
+                if(i % 2 == 0)
+                    initialDateStart = initialDateStart.AddDays(1);
+
+                await context.Lectures.AddAsync(lecturesData.Last());
+                await context.SaveChangesAsync();
+
+                savedLectureId = lecturesData.Last().LectureId;
+
+                assignStudentIds = studentUsers
+                    .Where(u => u.RegulationsGroupId == regulationsGroupIds[regulationsGroudIndex])
+                    .Select(u => u.Id)
+                    .ToList();
+
+                foreach (var id in assignStudentIds)
+                {
+                    await context.StudentLectures.AddAsync(
+                        new StudentLecture {
+                            StudentId = id,
+                            LectureId = savedLectureId
+                        }
+                    );
+
+                    
+                }
+                
+            }
+
+            for(var i = 0; i < studentIds.Count; i++) 
+            {
+                int regulationTestIndex = (i < studentIds.Count / 2) ? 0 : 1;
+
+                await context.StudentRegulationsTest.AddAsync(
+                    new StudentRegulationsTest
+                    {
+                        StudentId = studentIds[i],
+                        RegulationsTestId= regulationsTestsIds[regulationTestIndex]
+                    }
+                );
             }
 
             await context.SaveChangesAsync();
@@ -169,6 +256,24 @@ namespace API.Data
             else
                 return lorem[random.Next(lorem.Count)].Smart;
         }
+
+        private static string getDummy(List<DummySmart> lorem)
+        {
+            var random = new Random();
+
+            return lorem[random.Next(lorem.Count)].Dummy;
+
+        }
+
+        private static string getSmart(List<DummySmart> lorem)
+        {
+            var random = new Random();
+
+            return lorem[random.Next(lorem.Count)].Smart;
+
+        }
+
+
 
         private class DummySmart {
             public string Dummy { get; set; }

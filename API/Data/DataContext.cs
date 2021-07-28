@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using API.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -35,7 +36,7 @@ namespace API.Data
 
         public DbSet<StudentLecture> StudentLectures {get; set;}
 
-        public DbSet<StudentRegulationsTest> UserRegulationsTest { get; set; }
+        public DbSet<StudentRegulationsTest> StudentRegulationsTest { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         { 
@@ -59,7 +60,8 @@ namespace API.Data
             builder.Entity<AppUser>()
                 .HasOne(u => u.RegulationsGruop)
                 .WithMany(rg => rg.Students)
-                .HasForeignKey(u => u.RegulationsGroupId);
+                .HasForeignKey(u => u.RegulationsGroupId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             // name: App User - Lecture
             // func: (1,1) <=> (0,N)
@@ -67,7 +69,8 @@ namespace API.Data
             builder.Entity<AppUser>()
                 .HasMany(u => u.Teaching)
                 .WithOne(l => l.Professor)
-                .HasForeignKey(l => l.ProfessorId);
+                .HasForeignKey(l => l.ProfessorId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             // name: App User - Regulations Test Relationship
             // func: (1,N) <=> (1,N)
@@ -75,7 +78,8 @@ namespace API.Data
             builder.Entity<AppUser>()
                 .HasMany(u => u.StudentRegulationsTest)
                 .WithOne(urt => urt.Student)
-                .HasForeignKey(urt => urt.StudentId);
+                .HasForeignKey(urt => urt.StudentId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // name: App User - Regulations Test Relationship
             // func: (1,N) <=> (1,N)
@@ -83,7 +87,8 @@ namespace API.Data
             builder.Entity<RegulationsTest>()
                 .HasMany(rt => rt.StudentRegulationsTest)
                 .WithOne(urt => urt.RegulationTest)
-                .HasForeignKey(urt => urt.RegulationsTestId);
+                .HasForeignKey(urt => urt.RegulationsTestId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // name: App User - Driving Session (App User is a driver)
             // func: (1,1) <=> (0,N)
@@ -91,7 +96,8 @@ namespace API.Data
             builder.Entity<DrivingSession>()
                 .HasOne(ds => ds.Driver)
                 .WithMany(dr => dr.DrivingSessionsTaken)
-                .HasForeignKey(ds => ds.DriverId);
+                .HasForeignKey(ds => ds.DriverId)
+                .OnDelete(DeleteBehavior.Cascade);
             
             // name: App User - Driving Session (App User is an instructor)
             // func: (1,1) <=> (0,N)
@@ -99,14 +105,16 @@ namespace API.Data
             builder.Entity<DrivingSession>()
                 .HasOne(ds => ds.Instructor)
                 .WithMany(dr => dr.DrivingSessionsGiven)
-                .HasForeignKey(ds => ds.InstructorId);
+                .HasForeignKey(ds => ds.InstructorId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             // name: Driving Test - Driving Session
             // func: (0,1) <=> (1,1)
             // note: A driving Test is a driving session and inherits its primary key, driving session does not need to be a driving test
             builder.Entity<DrivingTest>()
                 .HasOne(ds => ds.DrivingSession)
-                .WithOne(ds => ds.DrivingTest);
+                .WithOne(ds => ds.DrivingTest)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // name: App User - Driving Test (App User is an examiner)
             // func: (1,1) <=> (0,N)
@@ -114,7 +122,8 @@ namespace API.Data
             builder.Entity<DrivingTest>()
                 .HasOne(ds => ds.Examiner)
                 .WithMany(dr => dr.DrivingTestsGiven)
-                .HasForeignKey(ds => ds.ExaminerId);
+                .HasForeignKey(ds => ds.ExaminerId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             
             // WARNING!!
@@ -131,7 +140,8 @@ namespace API.Data
             builder.Entity<AppUser>()
                 .HasMany(u => u.StudentLectures)
                 .WithOne(sl => sl.Student)
-                .HasForeignKey(sl => sl.StudentId);
+                .HasForeignKey(sl => sl.StudentId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // name: App User - Lecture (App User is a student)
             // func: (1,N) <=> (0,N)
@@ -139,7 +149,8 @@ namespace API.Data
             builder.Entity<Lecture>()
                 .HasMany(l => l.StudentLectures)
                 .WithOne(sl => sl.Lecture)
-                .HasForeignKey(sl => sl.LectureId);
+                .HasForeignKey(sl => sl.LectureId)
+                .OnDelete(DeleteBehavior.Cascade);
             
 
             builder.Entity<StudentLecture>()

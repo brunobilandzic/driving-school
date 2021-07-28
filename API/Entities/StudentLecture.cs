@@ -10,6 +10,6 @@ namespace API.Entities
 
         public int LectureId { get; set; }
 
-        public bool Attendance { get; set; }
+        public bool Attendance { get; set; } = false;
     }
 }
