@@ -28,6 +28,18 @@ namespace API.Controllers
 
         }
 
+        [HttpGet("student/{username}")]
+        public async Task<ActionResult<StudentDto>> GetStudent(string username)
+        {
+            var user = await _unitOfWork.UserRepository.GetStudent(username);
+
+            return Ok(user);
+
+
+        }
+
+
+
         [HttpGet("{username}")]
         public async Task<PersonDto> GetUser(string username)
         {

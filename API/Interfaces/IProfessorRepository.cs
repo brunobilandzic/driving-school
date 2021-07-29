@@ -11,10 +11,26 @@ namespace API.Interfaces
 {
     public interface IProfessorRepository
     {
-        Task<RegulationsGroupMinDto> AddRegulationsGroup(RegulationsGroupMinDto regulationsGroup);
+        Task<RegulationsGroupDto> AddRegulationsGroup(RegulationsGroupDto regulationsGroup);
 
-        Task<IEnumerable<RegulationsGroupMinDto>> GetRegulationsGroups();
+        Task<IEnumerable<RegulationsGroupDto>> GetRegulationsGroups();
 
-        Task AddStudentToGroup(ChangeGroupDto changeGroupDto);
+        Task<IEnumerable<ChangeGroupResultDto>> AddStudentToGroup(ChangeGroupDto changeGroupDto);
+
+        Task<RegulationsGroupDto> GetRegulationsGroup(int regulationsGroupId);
+
+
+        Task<RegulationsTestDto> AddRegulationsTest(RegulationsTestDto regulationsTest);
+
+        Task<IEnumerable<RegulationsTestDto>> GetRegulationsTests();
+
+        Task<RegulationsTestDto> GetRegulationsTest(int regulationsTestId);
+
+        Task AddStudentToTest(string username, int regulationsTestId);
+
+        Task DeleteStudentFromTest(string username, int regulationsTestId);
+
+        Task DeleteRegulationsTest(int regulationsTestId);
+
     }
 }

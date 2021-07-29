@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Entities;
-using API.Extensions;
 using API.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -29,11 +27,16 @@ namespace API.Data
 
         public async Task<AppUser> GetUser(string username)
         {
-            return await _userManager.Users
-                .Where(u => u.UserName == username)
-                .FirstOrDefaultAsync();
+            return await _userManager.FindByNameAsync(username);
         }
 
+        public async Task<StudentDto> GetStudent(string username)
+        {
+            return await _userManager.Users
+                .Where(u => u.UserName == username)
+                .ProjectTo<StudentDto>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync();
+        }
 
         public async Task<PersonDto> GetPersonAsync(string username)
         {

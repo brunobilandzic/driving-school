@@ -15,9 +15,10 @@ namespace API.Entities
 
         public int ProfessorId { get; set; }
 
-        public string  Topic  { get; set; }
+        public LectureTopic LectureTopic  { get; set; }
+        public int LectureTopicId { get; set; }
 
-        public string Remark { get; set; }
+        public string ProfessorRemark { get; set; }
 
         public DateTime DateStart { get; set; }
 

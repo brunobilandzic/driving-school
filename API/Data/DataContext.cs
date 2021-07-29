@@ -25,6 +25,8 @@ namespace API.Data
 
         public DbSet<DrivingSession> DrivingSessions { get; set; }
 
+        public DbSet<LectureTopic> LectureTopics { get; set; }
+
         public DbSet<Lecture> Lectures {get; set;}
 
         public DbSet<DrivingTest> DrivingTests { get; set; }
@@ -80,6 +82,24 @@ namespace API.Data
                 .WithOne(urt => urt.Student)
                 .HasForeignKey(urt => urt.StudentId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // name: App User - Regulations Test Relationship (App User is an Examiner)
+            // func: (0,1) <=> (0,N)
+            // note: Examiner has to give scores for tests
+            builder.Entity<AppUser>()
+                .HasMany(u => u.RegulationsTestsGiven)
+                .WithOne(rt => rt.Examiner)
+                .HasForeignKey(rt => rt.ExaminerId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // name: App User - Regulations Group Relationship (App User is an Professor)
+            // func: (1,1) <=> (0,N)
+            // note: A Regulations Group is assigned to one professor
+            builder.Entity<AppUser>()
+                .HasMany(u => u.RegulationsGroupsTeaching)
+                .WithOne(rg => rg.Professor)
+                .HasForeignKey(rg => rg.ProfessorId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             // name: App User - Regulations Test Relationship
             // func: (1,N) <=> (1,N)
@@ -152,6 +172,14 @@ namespace API.Data
                 .HasForeignKey(sl => sl.LectureId)
                 .OnDelete(DeleteBehavior.Cascade);
             
+            // name: Lecture - Lecture Topic
+            // func: (0,N) <=> (1,1)
+            // note: A Lecture has and needs to have  oneLecture Topic
+            builder.Entity<Lecture>()
+                .HasOne(l => l.LectureTopic)
+                .WithMany(lt => lt.LecturesHeld)
+                .HasForeignKey(l => l.LectureTopicId);
+
 
             builder.Entity<StudentLecture>()
                 .HasKey(sl => new {sl.LectureId, sl.StudentId});

@@ -3,14 +3,16 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210729084333_AddProfessorToRegulationsGroup")]
+    partial class AddProfessorToRegulationsGroup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,44 +199,25 @@ namespace API.Data.Migrations
                     b.Property<DateTime>("DateStart")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("LectureTopicId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("ProfessorId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("ProfessorRemark")
-                        .HasColumnType("TEXT");
 
                     b.Property<int>("RegulationsGroupId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("LectureId");
+                    b.Property<string>("Remark")
+                        .HasColumnType("TEXT");
 
-                    b.HasIndex("LectureTopicId");
+                    b.Property<string>("Topic")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("LectureId");
 
                     b.HasIndex("ProfessorId");
 
                     b.HasIndex("RegulationsGroupId");
 
                     b.ToTable("Lectures");
-                });
-
-            modelBuilder.Entity("API.Entities.LectureTopic", b =>
-                {
-                    b.Property<int>("LectureTopicId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("LectureTopicId");
-
-                    b.ToTable("LectureTopics");
                 });
 
             modelBuilder.Entity("API.Entities.RegulationsGroup", b =>
@@ -470,12 +453,6 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.Lecture", b =>
                 {
-                    b.HasOne("API.Entities.LectureTopic", "LectureTopic")
-                        .WithMany("LecturesHeld")
-                        .HasForeignKey("LectureTopicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("API.Entities.AppUser", "Professor")
                         .WithMany("Teaching")
                         .HasForeignKey("ProfessorId")
@@ -487,8 +464,6 @@ namespace API.Data.Migrations
                         .HasForeignKey("RegulationsGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("LectureTopic");
 
                     b.Navigation("Professor");
 
@@ -624,11 +599,6 @@ namespace API.Data.Migrations
             modelBuilder.Entity("API.Entities.Lecture", b =>
                 {
                     b.Navigation("StudentLectures");
-                });
-
-            modelBuilder.Entity("API.Entities.LectureTopic", b =>
-                {
-                    b.Navigation("LecturesHeld");
                 });
 
             modelBuilder.Entity("API.Entities.RegulationsGroup", b =>

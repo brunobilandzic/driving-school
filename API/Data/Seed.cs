@@ -11,6 +11,8 @@ namespace API.Data
 {
     public class Seed
     {
+        const int LecturesCount = 10;
+
         public static async Task SeedData(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, DataContext context)
         {
 
@@ -19,6 +21,11 @@ namespace API.Data
 
             var userData = await System.IO.File.ReadAllTextAsync("Data/SeedJson/UserSeedData.json");
             var users = JsonSerializer.Deserialize<List<AppUser>>(userData);
+            // Some lorem text for later
+
+            var loremText = await System.IO.File.ReadAllTextAsync("Data/SeedJson/Lorem.json");
+            var lorem = JsonSerializer.Deserialize<List<DummySmart>>(loremText);
+
             foreach (var user in users)
             {
                 user.FirstName = user.UserName;
@@ -39,11 +46,11 @@ namespace API.Data
             {
                 await roleManager.CreateAsync(role);
             }
-            // Here we are setting every seeded user as member
-            // First two as a professor, but one professor is also instructor
-            // One more instructor
-            // One examiner
-            // Six students
+            // Setting users
+            // 2 professors
+            // 2 instructors
+            // 2 examiners
+            // Rest students
 
             for (int i = 0; i < users.Count; i++)
             {
@@ -61,7 +68,7 @@ namespace API.Data
                 {
                     await userManager.AddToRoleAsync(users[i], "Instructor");
                 }
-                else if (i == 4)
+                else if (i == 4 || i==5)
                 {
                     await userManager.AddToRoleAsync(users[i], "Examiner");
                 }
@@ -80,31 +87,7 @@ namespace API.Data
             await userManager.AddToRoleAsync(admin, "Admin");
 
 
-            //***USER SEED DONE***//
-
-            // Some lorem text for later
-
-            var loremText = await System.IO.File.ReadAllTextAsync("Data/SeedJson/Lorem.json");
-            var lorem = JsonSerializer.Deserialize<List<DummySmart>>(loremText);
-
-            // Here we seed tables that only have primary key required, 
-            // and other fields are not that important for development
-            var regulationsGroupData = new List<RegulationsGroup>();
-            var regulationTestData = new List<RegulationsTest>();
-
-            // Adding 2 regulatons groups
-            // And 2 regulation test          
-
-            for (var i = 0; i < 2; i++)
-            {
-                regulationsGroupData.Add(new RegulationsGroup());
-                regulationTestData.Add(new RegulationsTest());
-                
-                
-            }
-
-            await context.RegulationsGroups.AddRangeAsync(regulationsGroupData);
-            await context.RegulationsTests.AddRangeAsync(regulationTestData);
+           
 
             await context.SaveChangesAsync();
 
@@ -116,11 +99,51 @@ namespace API.Data
             var professorUsers = await userManager.GetUsersInRoleAsync("Professor");
             var InstructorUsers = await userManager.GetUsersInRoleAsync("Instructor");
             var studentUsers = await userManager.GetUsersInRoleAsync("Student");
+            var examinerUsers = await userManager.GetUsersInRoleAsync("Examiner");
 
             var adminIds = adminUsers.Select(a => a.Id).ToList();
             var professorIds = professorUsers.Select(a => a.Id).ToList();
             var instructorIds = InstructorUsers.Select(a => a.Id).ToList();
             var studentIds = studentUsers.Select(a => a.Id).ToList();
+            var examinerIds = examinerUsers.Select(a => a.Id).ToList();
+
+            
+             //***USER SEED DONE***//
+
+            // Here we seed tables that only have primary key required, 
+            // and other fields are not that important for development
+            var regulationsGroupData = new List<RegulationsGroup>();
+            var regulationTestData = new List<RegulationsTest>();
+
+            // Adding 2 regulations groups
+            // And 2 regulation test          
+
+            for (var i = 0; i < 2; i++)
+            {
+                regulationsGroupData.Add(new RegulationsGroup{ProfessorId = professorIds[i]});
+                regulationTestData.Add(new RegulationsTest{ExaminerId = examinerIds[i]});
+                
+            }
+
+            await context.RegulationsGroups.AddRangeAsync(regulationsGroupData);
+            await context.RegulationsTests.AddRangeAsync(regulationTestData);
+
+            // Add Lecture Topics
+
+            for(var i=0; i<LecturesCount; i++)
+            {
+                await context.LectureTopics.AddAsync(
+                    new LectureTopic
+                    {   
+                        Title = getSmart(lorem),
+                        Description = getDummy(lorem),
+
+                    }
+                );
+            }
+
+
+            await context.SaveChangesAsync();
 
             var regulationsGroupIds = await context
                 .RegulationsGroups
@@ -129,17 +152,20 @@ namespace API.Data
 
             var regulationsTestsIds = await context
                 .RegulationsTests
-                .Select(rg => rg.RegulationsTestId)
+                .Select(rt => rt.RegulationsTestId)
+                .ToListAsync();
+
+            var lectureTopicIds = await context
+                .LectureTopics
+                .Select(lt => lt.LectureTopicId)
                 .ToListAsync();
 
             foreach (var student in studentUsers)
             {
                 student.RegulationsGroupId = getRandomId(regulationsGroupIds);
             }
-
-            await context.SaveChangesAsync();
         
-            // Adding 15 * 5 driving sessions
+            // Adding 15 * 5 Driving Sessions
             // 7 per day
             
             var drivingSessionData = new List<DrivingSession>();
@@ -152,7 +178,7 @@ namespace API.Data
                     new DrivingSession
                     {
                     InstructorId = getRandomId(instructorIds),
-                    DriverId =  studentIds[i % 5],
+                    DriverId =  studentIds[i % studentUsers.Count],
                     DateStart = initialDateStart,
                     InstructorRemarks = getRandomText(lorem),
                     DriverRemarks = getRandomText(lorem)
@@ -168,56 +194,56 @@ namespace API.Data
             var lecturesData = new List<Lecture>();
 
             initialDateStart = DateTime.Now.AddDays(5);
-            int lecturesCount = 20;
-            
-            
+
             List<int> assignStudentIds;
 
-            for(var i = 0; i < lecturesCount; i++)
+            // For every regulation group
+            for(var regulationsGroudIndex=0; regulationsGroudIndex < regulationsGroupIds.Count; regulationsGroudIndex++)
             {
-                // Determine the regulationGroup for which whom the lesson is intended
-                // We will need the lectureId to connect students from that regulationgroup to the lesson created
-                int regulationsGroudIndex = (i<10) ?  0 : 1;
-                int savedLectureId = 0;
-
-                lecturesData.Add(
-                    new Lecture
-                    {
-                        RegulationsGroupId = regulationsGroupIds[regulationsGroudIndex],
-                        ProfessorId = getRandomId(professorIds),
-                        Topic = getSmart(lorem),
-                        Remark = getDummy(lorem),
-                        DateStart = initialDateStart
-                    }
-                );
-
-                if(i % 2 == 0)
-                    initialDateStart = initialDateStart.AddDays(1);
-
-                await context.Lectures.AddAsync(lecturesData.Last());
-                await context.SaveChangesAsync();
-
-                savedLectureId = lecturesData.Last().LectureId;
-
-                assignStudentIds = studentUsers
-                    .Where(u => u.RegulationsGroupId == regulationsGroupIds[regulationsGroudIndex])
-                    .Select(u => u.Id)
-                    .ToList();
-
-                foreach (var id in assignStudentIds)
+                // For every Lecture Topic
+                for(var i = 0; i < lectureTopicIds.Count; i++)
                 {
-                    await context.StudentLectures.AddAsync(
-                        new StudentLecture {
-                            StudentId = id,
-                            LectureId = savedLectureId
+                
+                    lecturesData.Add(
+                        new Lecture
+                        {
+                            RegulationsGroupId = regulationsGroupIds[regulationsGroudIndex],
+                            ProfessorId = await context.RegulationsGroups
+                                .Where(rg => rg.RegulationsGroupId == regulationsGroupIds[regulationsGroudIndex])
+                                .Select(rg => rg.ProfessorId)
+                                .SingleOrDefaultAsync(),
+                            LectureTopicId = lectureTopicIds[i],
+                            ProfessorRemark = getDummy(lorem),
+                            DateStart = initialDateStart
                         }
                     );
 
+                    initialDateStart = initialDateStart.AddDays(1);
+
+                    await context.Lectures.AddAsync(lecturesData.Last());
+                    await context.SaveChangesAsync();
+
+                    assignStudentIds = studentUsers
+                        .Where(u => u.RegulationsGroupId == regulationsGroupIds[regulationsGroudIndex])
+                        .Select(u => u.Id)
+                        .ToList();
+
+                    foreach (var id in assignStudentIds)
+                    {
+                        await context.StudentLectures.AddAsync(
+                            new StudentLecture {
+                                StudentId = id,
+                                LectureId = lecturesData.Last().LectureId
+                            }
+                        );
+
+                        
+                    }
                     
                 }
-                
+                // Reset lecture time (same topic has to be on same day)
+                initialDateStart = DateTime.Now.AddDays(5).AddHours(1);
             }
-
             for(var i = 0; i < studentIds.Count; i++) 
             {
                 int regulationTestIndex = (i < studentIds.Count / 2) ? 0 : 1;
@@ -230,10 +256,11 @@ namespace API.Data
                     }
                 );
             }
+        
 
             await context.SaveChangesAsync();
+            
         }
-
         private static int getRandomId(List<int> elements)
         {
             var random = new Random();
@@ -279,5 +306,7 @@ namespace API.Data
             public string Dummy { get; set; }
             public string Smart { get; set; }
         }
+
+
     }
 }

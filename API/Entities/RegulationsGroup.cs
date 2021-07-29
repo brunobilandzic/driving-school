@@ -7,6 +7,10 @@ namespace API.Entities
     {
         public int RegulationsGroupId { get; set; }
 
+        public AppUser Professor { get; set; }
+
+        public int ProfessorId { get; set; }
+
         public DateTime DateStart { get; set; } = DateTime.Now;
 
         public DateTime DateEnd {get; set;} = DateTime.Now.AddDays(30);

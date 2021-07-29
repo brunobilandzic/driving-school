@@ -13,5 +13,7 @@ namespace API.Interfaces
 
         Task<IEnumerable<PersonDto>> GetUsers(string username);
 
+        Task<StudentDto> GetStudent(string username);
+
     }
 }

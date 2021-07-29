@@ -28,13 +28,33 @@ namespace API.Helpers
 
             CreateMap<RegulationsGroup, RegulationsGroupDto>();
 
-            CreateMap<RegulationsTest, RegulationsTestDto>();
+            CreateMap<RegulationsGroupDto, RegulationsGroup>();
 
-            CreateMap<RegulationsGroupMinDto, RegulationsGroup>();
-
-            CreateMap<RegulationsGroup, RegulationsGroupMinDto>();
-
+            CreateMap<RegulationsTest, RegulationsTestDto>()
+                .ForMember(
+                    dest => dest.Students,
+                    opt => opt.MapFrom(
+                        src => src.StudentRegulationsTest.Select(srt => srt.Student)
+                    )
+                    );
             
+            CreateMap<RegulationsTestDto, RegulationsTest>();
+
+            CreateMap<AppUser, StudentDto>()
+                .ForMember(
+                    dest => dest.Lectures,
+                    opt => opt.MapFrom(
+                        src => src.StudentLectures.Select(sl => sl.Lecture)
+                    )    
+                )
+                .ForMember(
+                    dest => dest.RegulationsTests,
+                    opt => opt.MapFrom(
+                        src => src.StudentRegulationsTest.Select(srt => srt.RegulationTest)
+                    ) 
+                );
+
+
 
         }
     }

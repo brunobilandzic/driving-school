@@ -21,19 +21,24 @@ namespace API.Entities
         //Only for students
         public ICollection<StudentRegulationsTest> StudentRegulationsTest { get; set; }
 
+        public ICollection<StudentLecture> StudentLectures { get; set; }
+
+        public ICollection<DrivingSession> DrivingSessionsTaken { get; set; }
+
+        //Only for examiners
+        public ICollection<RegulationsTest> RegulationsTestsGiven { get; set; }
+        public ICollection<DrivingTest> DrivingTestsGiven { get; set; }
+
         //Only for professors
         public ICollection<Lecture> Teaching { get; set; }
 
-        //Only for students
-        public ICollection<StudentLecture> StudentLectures { get; set; }
-
-        //Only for examiners
-        public ICollection<DrivingTest> DrivingTestsGiven { get; set; }
+        public ICollection<RegulationsGroup> RegulationsGroupsTeaching { get; set; }
+        
 
         //Only for instructors
         public ICollection<DrivingSession> DrivingSessionsGiven { get; set; }
 
-        public ICollection<DrivingSession> DrivingSessionsTaken { get; set; }
+        
 
         
     }
