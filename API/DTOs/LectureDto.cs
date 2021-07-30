@@ -5,17 +5,15 @@ namespace API.DTOs
 {
     public class LectureDto
     {
-
+        public int? LectureId { get; set; }
         public int RegulationsGroupId { get; set; }
 
         public PersonDto Professor { get; set; }
 
-        public string  Topic  { get; set; }
-
-        public string Remark { get; set; }
+        public string ProfessorRemark { get; set; }
 
         public DateTime DateStart { get; set; }
 
-        public List<PersonDto> Students { get; set; }
+        public LectureTopicDto LectureTopic { get; set; }
     }
 }

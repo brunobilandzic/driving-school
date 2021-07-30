@@ -99,5 +99,6 @@ namespace API.Controllers
         {
             return await _userManager.Users.AnyAsync(x => x.UserName == username);
         }
+
     }
 }

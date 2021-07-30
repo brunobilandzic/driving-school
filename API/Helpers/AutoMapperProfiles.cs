@@ -25,10 +25,17 @@ namespace API.Helpers
             CreateMap<DrivingTest, DrivingTestDto>();
 
             CreateMap<Lecture, LectureDto>();
+                
+
+            CreateMap<LectureDto, Lecture>();
 
             CreateMap<RegulationsGroup, RegulationsGroupDto>();
 
             CreateMap<RegulationsGroupDto, RegulationsGroup>();
+
+            CreateMap<LectureTopic, LectureTopicDto>();
+
+            CreateMap<LectureTopicDto, LectureTopic>();
 
             CreateMap<RegulationsTest, RegulationsTestDto>()
                 .ForMember(
@@ -53,6 +60,13 @@ namespace API.Helpers
                         src => src.StudentRegulationsTest.Select(srt => srt.RegulationTest)
                     ) 
                 );
+
+            CreateMap<Lecture, LectureWithStudentsDto>()
+                .ForMember(
+                    ls => ls.Students,
+                    opt => opt.MapFrom(
+                        src => src.StudentLectures.Select(sl => sl.Student)
+                    ));
 
 
 

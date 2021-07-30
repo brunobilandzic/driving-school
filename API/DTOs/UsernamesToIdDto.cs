@@ -1,9 +1,9 @@
 namespace API.DTOs
 {
-    public class ChangeGroupDto
+    public class UsernamesToIdDto
     {
         public string [] Usernames { get; set; }
 
-        public int RegulationsGroupId { get; set; }
+        public int Id { get; set; }
     }
 }

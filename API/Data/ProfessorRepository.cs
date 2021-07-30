@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using API.DTOs;
 using API.Entities;
 using API.Errors;
+using API.Extensions;
 using API.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -40,7 +41,7 @@ namespace API.Data
             return _mapper.Map<RegulationsGroupDto>(regulationsGruop);
         }
 
-        public async Task<IEnumerable<ChangeGroupResultDto>> AddStudentToGroup(ChangeGroupDto changeGroupDto)
+        public async Task<IEnumerable<ChangeGroupResultDto>> AddStudentToGroup(UsernamesToIdDto changeGroupDto)
         {
             List<AppUser> students = await _userManager.Users
                 .Where(u => changeGroupDto.Usernames.Any(x => x == u.UserName))
@@ -52,7 +53,7 @@ namespace API.Data
             {
                 changeGroupResults.Add(new ChangeGroupResultDto(student.UserName));
                 if(await _userManager.IsInRoleAsync(student, "Student") == false) continue;
-                student.RegulationsGroupId = changeGroupDto.RegulationsGroupId;
+                student.RegulationsGroupId = changeGroupDto.Id;
                 changeGroupResults.Last().Success = true;
             }
 
@@ -91,9 +92,25 @@ namespace API.Data
 
         public async Task<IEnumerable<RegulationsTestDto>> GetRegulationsTests()
         {
-            return await _context.RegulationsTests
-                .ProjectTo<RegulationsTestDto>(_mapper.ConfigurationProvider)
+            var regulationsTests = await _context.RegulationsTests
                 .ToListAsync();
+
+            var regulationsTestDtos = AutoMapperExtensions<RegulationsTest, RegulationsTestDto>.MapList(_mapper, regulationsTests);
+
+            return regulationsTestDtos;
+
+        }
+
+        public async Task<RegulationsTestDto> GetRegulationsTest(int regulationsTestId)
+        {
+            return _mapper.Map<RegulationsTestDto>(
+                await _context.RegulationsTests
+                    .Include(rt => rt.StudentRegulationsTest)
+                    .ThenInclude(rt => rt.Student)
+                    .Include(rt => rt.Examiner)
+                    .Where(rt => rt.RegulationsTestId == regulationsTestId)
+                    .SingleOrDefaultAsync()
+                );
         }
 
         public async Task AddStudentToTest(string username, int regulationsTestId)
@@ -151,12 +168,7 @@ namespace API.Data
 
         }
 
-        public Task<RegulationsTestDto> GetRegulationsTest(int RegulationsTestId)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        private async Task<StudentDto> GetStudentWithRegulationsTests(string username)
+        private async Task<StudentDto> GetStudent(string username)
         {
             return await _userManager.Users
                 .Where(s => s.UserName == username)
@@ -172,6 +184,193 @@ namespace API.Data
 
             _context.RegulationsTests.Remove(regulationsTest);
         }
+
+        public async Task<IEnumerable<LectureTopicDto>> GetLectureTopics()
+        {
+            return await _context.LectureTopics
+                .ProjectTo<LectureTopicDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<LectureDto>> GetLecturesHeld()
+        {
+            return await _context.Lectures
+                .ProjectTo<LectureDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<LectureDto>> GetLecturesForGroup(int regulationsGroupId)
+        {
+            return await _context.Lectures
+                .Where(lh => lh.RegulationsGroupId == regulationsGroupId)
+                .ProjectTo<LectureDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<LectureWithStudentsDto> GetLecture(int lectureId)
+        {
+            return await _context.Lectures
+                    .Include(l => l.StudentLectures)
+                    .ThenInclude(sl => sl.Student)
+                    .Where(l => l.LectureId == lectureId)
+                    .ProjectTo<LectureWithStudentsDto>(_mapper.ConfigurationProvider)
+                    .FirstOrDefaultAsync();
+                    
+        }
+
+        public async Task<LectureDto> HoldLecture(LectureDto lectureDto, int professorId, bool addStudents)
+        {
+            
+            var lecture = _mapper.Map<Lecture>(lectureDto);
+
+            if(lectureDto.LectureTopic == null) return null;
+            
+            // In POST Request body LectureDto is sent, it doesnt have professorId nor lectureTopicId
+            // So we need to add them manually
+            lecture.ProfessorId = professorId;
+            lecture.LectureTopicId = lecture.LectureTopic.LectureTopicId;
+            lecture.LectureTopic = null;
+
+            var students = await _userManager.Users
+                .Where(s => s.RegulationsGroupId == lectureDto.RegulationsGroupId)
+                .ToListAsync();
+            
+            
+
+            await _context.Lectures.AddAsync(lecture);
+
+            if(await _context.SaveChangesAsync() > 0)
+            {   if(addStudents)
+                {
+                    var studentLectures = new List<StudentLecture>();
+                    foreach (var student in students)
+                    {
+                        studentLectures.Add(new StudentLecture{StudentId = student.Id, LectureId = lecture.LectureId});   
+                    }
+
+                    await _context.StudentLectures.AddRangeAsync(studentLectures);
+
+                    await _context.SaveChangesAsync();
+                }
+
+                return _mapper.Map<LectureDto>(lecture);
+            }
+
+            return null;
+        }
+
+        public async Task<LectureTopicDto> AddLectureTopic(LectureTopicDto lectureTopicDto)
+        {
+            LectureTopic lectureTopic = _mapper.Map<LectureTopic>(lectureTopicDto);
+
+            await _context.AddAsync(lectureTopic);
+
+            if(await _context.SaveChangesAsync() > 0) return _mapper.Map<LectureTopicDto>(lectureTopic);
+
+            return null;
+
+        }
+
+        public async Task AddStudentsToLecture(UsernamesToIdDto studentsLectureDto)
+        {
+            var lecture = await _context.Lectures.FindAsync(studentsLectureDto.Id);
+
+            if(lecture == null) return;
+
+            var topicId = lecture.LectureTopicId;
+            var students = await _userManager.Users
+                .Where(u => studentsLectureDto.Usernames.Any(el => el == u.UserName))
+                .ToListAsync();
+
+            var lectureIds = await _context.Lectures
+                .Where(l => l.LectureTopicId == topicId)
+                .Select(l => l.LectureId)
+                .ToListAsync();
+
+            foreach (var student in students)
+            {
+                if(await _userManager.IsInRoleAsync(student, "Student") == false) continue;
+                foreach (var lectureId in lectureIds)
+                {
+                    var studentLecture = await _context.StudentLectures
+                        .Where(sl => sl.StudentId == student.Id && sl.LectureId == lectureId)
+                        .FirstOrDefaultAsync();
+                    
+                    if(studentLecture != null)
+                    {
+                        _context.StudentLectures.Remove(studentLecture);
+                    }
+                }
+
+                var newStudentLecture = new StudentLecture
+                {
+                    StudentId = student.Id,
+                    LectureId = studentsLectureDto.Id
+                };
+
+                await _context.AddAsync(newStudentLecture);
+            }
+        }
+
+        public async Task MarkAttendances(UsernamesToIdDto studentsLectureId)
+        {
+            var studentIds = await _userManager.Users
+                .Where(s => studentsLectureId.Usernames.Any(u => u == s.UserName))
+                .Select(s => s.Id)
+                .ToListAsync();
+
+            foreach (var studentId in studentIds)
+            {
+                var studentLecture = await _context.StudentLectures
+                .Where(sl => sl.StudentId == studentId && sl.LectureId == studentsLectureId.Id)
+                .FirstOrDefaultAsync();
+
+                if(studentLecture != null)
+                {
+                    studentLecture.Attendance = true;
+                }
+            }
+            
+        }
+
+        public async Task ToggleAttendance(UsernameToIdDto studentLectureId)
+        {
+            var studentId = await _userManager.GetUserIdFromUsername(studentLectureId.Username);
+            var studentLecture = await _context.StudentLectures
+                .Where(sl => sl.StudentId == studentId && sl.LectureId == studentLectureId.Id)
+                .FirstOrDefaultAsync();
+
+            if(studentLecture != null)
+            {
+                studentLecture.Attendance = !studentLecture.Attendance;
+            }
+        }
+
+        public async Task<IEnumerable<UsernameToBool>> GetAttendanceForlecture(int lectureId)
+        {
+            var attendanceList = new List<UsernameToBool>();
+
+            var studentLectures = await _context.StudentLectures
+                .Where(sl => sl.LectureId == lectureId)
+                .Include(sl => sl.Student)
+                .ToListAsync();
+
+            foreach (var studentLecture in studentLectures)
+            {
+                attendanceList.Add(
+                    new UsernameToBool
+                    {
+                        Username = studentLecture.Student.UserName,
+                        Thruth = studentLecture.Attendance
+                    }
+                );
+            }
+
+            return attendanceList;            
+
+        }
+
+
     }
 
 }

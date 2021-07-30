@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.DTOs;
+using API.Entities;
 
 // Handles data manipulation for Professor role
 // e.g.
@@ -15,7 +16,7 @@ namespace API.Interfaces
 
         Task<IEnumerable<RegulationsGroupDto>> GetRegulationsGroups();
 
-        Task<IEnumerable<ChangeGroupResultDto>> AddStudentToGroup(ChangeGroupDto changeGroupDto);
+        Task<IEnumerable<ChangeGroupResultDto>> AddStudentToGroup(UsernamesToIdDto changeGroupDto);
 
         Task<RegulationsGroupDto> GetRegulationsGroup(int regulationsGroupId);
 
@@ -32,5 +33,24 @@ namespace API.Interfaces
 
         Task DeleteRegulationsTest(int regulationsTestId);
 
+        Task<IEnumerable<LectureTopicDto>> GetLectureTopics();
+
+        Task<IEnumerable<LectureDto>> GetLecturesHeld();
+
+        Task<IEnumerable<LectureDto>> GetLecturesForGroup(int regulationsGroupId);
+
+        Task<LectureWithStudentsDto> GetLecture(int lectureId);
+
+        Task<LectureDto> HoldLecture(LectureDto lectureDto, int professorId, bool addStudents);
+
+        Task AddStudentsToLecture(UsernamesToIdDto studentsLectureDto);
+
+        Task MarkAttendances(UsernamesToIdDto studentsLectureId);
+
+        Task ToggleAttendance(UsernameToIdDto studentLectureId);
+
+        Task<IEnumerable<UsernameToBool>> GetAttendanceForlecture(int lectureId);
+
+        Task<LectureTopicDto> AddLectureTopic(LectureTopicDto lectureTopicDto);
     }
 }

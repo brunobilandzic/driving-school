@@ -12,6 +12,8 @@ namespace API.DTOs
 
         public int? ExaminerId { get; set; }
 
+        public PersonDto Examiner { get; set; }
+
         public List<PersonDto> Students { get; set; }
     }
 }
