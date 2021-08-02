@@ -26,6 +26,8 @@ namespace API.Data
 
         public IDrivingRepository DrivingRepository => new DrivingRepository(_context, _userManager, _mapper);
 
+        public IStudentRepository StudentRepository => new StudentRepository(_context, _mapper, _userManager);
+
         public async Task<int> SaveAllChanges()
         {
             return await _context.SaveChangesAsync();

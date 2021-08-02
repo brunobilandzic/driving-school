@@ -10,6 +10,8 @@ namespace API.Interfaces
 
         IDrivingRepository DrivingRepository {get;}
 
+        IStudentRepository StudentRepository {get;}
+
         Task<int> SaveAllChanges();
     }
 }

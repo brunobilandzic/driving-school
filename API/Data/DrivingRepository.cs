@@ -170,7 +170,28 @@ namespace API.Data
 
             return await PagedList<DrivingTestDto>.CreateAsync(drivingTests, paginationParams.PageNumber, paginationParams.PageSize);
         }
+        public async Task<PagedList<DrivingTestDto>> GetDrivingTestsForStudent(int studentId, PaginationParams paginationParams)
+        {
+            var drivingTests = _context.DrivingTests
+                .Include(dt => dt.DrivingSession)
+                .OrderByDescending(dt => dt.DrivingSession.DateStart)
+                .Where(dt => dt.DrivingSession.DriverId == studentId)
+                .ProjectTo<DrivingTestDto>(_mapper.ConfigurationProvider)
+                .AsQueryable();
 
+            return await PagedList<DrivingTestDto>.CreateAsync(drivingTests, paginationParams.PageNumber, paginationParams.PageSize);
+        }
+    	
+        public Task<PagedList<DrivingSessionDto>> GetDrivingSessionsForStudent(int studentId, PaginationParams paginationParams)
+        {
+            var sessions = _context.DrivingSessions
+                .Where(s => s.DriverId == studentId)
+                .ProjectTo<DrivingSessionDto>(_mapper.ConfigurationProvider)
+                .AsQueryable();
+            
+            return PagedList<DrivingSessionDto>.CreateAsync(sessions, paginationParams.PageNumber, paginationParams.PageSize);
+
+        }
         public async Task<PagedList<DrivingTestDto>> GetDrivingTestsForInstructor(int instructorId, PaginationParams paginationParams)
         {
             var drivingTests = _context.DrivingTests
@@ -182,5 +203,7 @@ namespace API.Data
 
             return await PagedList<DrivingTestDto>.CreateAsync(drivingTests, paginationParams.PageNumber, paginationParams.PageSize);
         }
+
+
     }
 }
