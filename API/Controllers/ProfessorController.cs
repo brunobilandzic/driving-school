@@ -195,6 +195,18 @@ namespace API.Controllers
             return BadRequest("Failed to hold a lecture.");
         }
 
+        [HttpPut("edit-lecture/{lectureId}")]
+        public async Task<ActionResult<LectureDto>> EditLecture(int lectureId, LectureDto lectureDto)
+        {
+            lectureDto.LectureId = lectureId;
+            var updatedLecture = await _unitOfWork.ProfessorRepository.EditLecture(lectureDto, lectureId);
+
+            if(await _unitOfWork.SaveAllChanges() > 0)
+                return Ok(updatedLecture);
+            
+            return BadRequest("Failed to update lecture.");
+        }
+
         [HttpPost("lecture-students")]
         public async Task<ActionResult<LectureDto>> AddStudentsToLecture(UsernamesToIdDto studentsLecture)
         {
@@ -242,6 +254,18 @@ namespace API.Controllers
             if (lectureTopic != null) return Ok(lectureTopic);
 
             return BadRequest("Failed to add lecture topic.");
+        }
+
+        [HttpPut("edit-lecture-topic/{lectureTopicId}")]
+        public async Task<ActionResult<LectureTopicDto>> EditLectureTopic(int lectureTopicId, LectureTopicDto lectureTopicDto)
+        {
+            lectureTopicDto.LectureTopicId = lectureTopicId;
+            var updatedLectureTopic = await _unitOfWork.ProfessorRepository.EditLectureTopic(lectureTopicDto, lectureTopicId);
+
+            if(await _unitOfWork.SaveAllChanges() > 0)
+                return Ok(updatedLectureTopic);
+            
+            return BadRequest("Failed to update lecture Topic.");
         }
 
     }

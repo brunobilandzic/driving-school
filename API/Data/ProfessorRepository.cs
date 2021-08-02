@@ -370,7 +370,49 @@ namespace API.Data
 
         }
 
+        public async Task<LectureDto> EditLecture(LectureDto lectureDto, int lectureId)
+        {
+            var lecture =   await  _context.Lectures.FindAsync(lectureId);
+            if(lecture == null) return null;
 
+            if(lectureDto.Professor != null)
+            {
+                var professor = await _userManager.Users
+                    .Where(p => p.UserName == lectureDto.Professor.Username)
+                    .FirstOrDefaultAsync();
+                
+                if(professor != null)
+                {
+                    lecture.ProfessorId = professor.Id;
+                }
+            }
+
+            if(lectureDto.LectureTopic != null)
+            {
+                lecture.LectureTopicId = (int) lectureDto.LectureTopic.LectureTopicId;
+
+            }   
+
+            if(lectureDto.RegulationsGroupId == 0) lectureDto.RegulationsGroupId = lecture.RegulationsGroupId;
+
+            lecture = _mapper.Map(lectureDto, lecture);
+
+            return _mapper.Map<LectureDto>(lecture);
+
+
+        }
+
+        public async Task<LectureTopicDto> EditLectureTopic(LectureTopicDto lectureTopicDto, int lectureTopicId)
+        {
+            var lectureTopic = await _context.LectureTopics.FindAsync(lectureTopicId);
+
+            if(lectureTopic == null) return null;
+
+            lectureTopic = _mapper.Map(lectureTopicDto, lectureTopic);
+
+            return _mapper.Map<LectureTopicDto>(lectureTopic);
+
+        }
     }
 
 }

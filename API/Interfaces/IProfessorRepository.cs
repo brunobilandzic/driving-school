@@ -43,6 +43,8 @@ namespace API.Interfaces
 
         Task<LectureDto> HoldLecture(LectureDto lectureDto, int professorId, bool addStudents);
 
+        Task<LectureDto> EditLecture(LectureDto lectureDto, int lectureId);
+
         Task AddStudentsToLecture(UsernamesToIdDto studentsLectureDto);
 
         Task MarkAttendances(UsernamesToIdDto studentsLectureId);
@@ -52,5 +54,9 @@ namespace API.Interfaces
         Task<IEnumerable<UsernameToBool>> GetAttendanceForlecture(int lectureId);
 
         Task<LectureTopicDto> AddLectureTopic(LectureTopicDto lectureTopicDto);
+
+        Task<LectureTopicDto> EditLectureTopic(LectureTopicDto lectureTopicDto, int lectureTopicId);
+
+
     }
 }

@@ -27,7 +27,15 @@ namespace API.Helpers
             CreateMap<Lecture, LectureDto>();
                 
 
-            CreateMap<LectureDto, Lecture>();
+            CreateMap<LectureDto, Lecture>()
+                .ForMember(
+                    dest => dest.Professor,
+                    opt => opt.Ignore()
+                    )
+                .ForMember(
+                    dest => dest.LectureTopic,
+                    opt => opt.Ignore()
+                );
 
             CreateMap<RegulationsGroup, RegulationsGroupDto>();
 
