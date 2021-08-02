@@ -5,8 +5,8 @@ namespace API.DTOs
     public class DrivingSessionDto
     {
 
-        public PersonDto Instructor { get; set; }
-        public PersonDto Driver { get; set; }
+        public string InstructorUsername { get; set; }
+        public string DriverUsername { get; set; }
 
         public DateTime DateStart { get; set; }
 

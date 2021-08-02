@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -30,17 +31,19 @@ namespace API.Controllers
         // ------------------------
 
         [HttpGet("regulations-groups")]
-        public async Task<ActionResult<IEnumerable<RegulationsGroupDto>>> GetRegulationsGruops()
+        public async Task<ActionResult<PagedList<RegulationsGroupMinDto>>> GetRegulationsGruops([FromQuery] PaginationParams paginationParams)
         {
-            IEnumerable<RegulationsGroupDto> regulationGroups = await _unitOfWork.ProfessorRepository.GetRegulationsGroups();
+            var regulationGroups = await _unitOfWork.ProfessorRepository.GetRegulationsGroups(paginationParams);
 
-            if (regulationGroups != null) return Ok(regulationGroups);
+            if (regulationGroups == null) return BadRequest("Something went wrong."); 
 
-            return BadRequest("Something went wrong.");
+            Response.AddPaginationHeader(regulationGroups.CurrentPage, regulationGroups.PageSize, regulationGroups.TotalCount, regulationGroups.TotalPages);
+
+            return Ok(regulationGroups);
         }
 
         [HttpGet("regulations-groups/{regulationsGroupId}")]
-        public async Task<ActionResult<IEnumerable<RegulationsGroupDto>>> GetRegulationsGroup(int regulationsGroupId)
+        public async Task<ActionResult<RegulationsGroupDto>> GetRegulationsGroup(int regulationsGroupId)
         {
             RegulationsGroupDto regulationGroup = await _unitOfWork.ProfessorRepository.GetRegulationsGroup(regulationsGroupId);
 
@@ -78,17 +81,20 @@ namespace API.Controllers
         // ------------------------
 
         [HttpGet("regulations-tests")]
-        public async Task<ActionResult<IEnumerable<RegulationsTestDto>>> GetRegulationsTests()
+        public async Task<ActionResult<PagedList<RegulationsTestDto>>> GetRegulationsTests([FromQuery] PaginationParams paginationParams)
         {
-            IEnumerable<RegulationsTestDto> regulationTests = await _unitOfWork.ProfessorRepository.GetRegulationsTests();
+            PagedList<RegulationsTestDto> regulationTests = await _unitOfWork.ProfessorRepository.GetRegulationsTests(paginationParams);
 
-            if (regulationTests != null) return Ok(regulationTests);
+            if (regulationTests == null) return BadRequest("Something went wrong.");
 
-            return BadRequest("Something went wrong.");
+            Response.AddPaginationHeader(regulationTests.CurrentPage, regulationTests.PageSize, regulationTests.TotalCount, regulationTests.TotalPages);
+            
+            return Ok(regulationTests);
+             
         }
 
         [HttpGet("regulations-tests/{regulationsTestId}")]
-        public async Task<ActionResult<IEnumerable<RegulationsTestDto>>> GetRegulationsTest(int regulationsTestId)
+        public async Task<ActionResult<RegulationsTestDto>> GetRegulationsTest(int regulationsTestId)
         {
             RegulationsTestDto regulationTest = await _unitOfWork.ProfessorRepository.GetRegulationsTest(regulationsTestId);
 
@@ -145,23 +151,29 @@ namespace API.Controllers
         // ------------------------
 
         [HttpGet("lecture-topics")]
-        public async Task<ActionResult<IEnumerable<LectureTopicDto>>> GetLectureTopics()
+        public async Task<ActionResult<PagedList<LectureTopicDto>>> GetLectureTopics([FromQuery] PaginationParams paginationParams)
         {
-            var lectureTopics = await _unitOfWork.ProfessorRepository.GetLectureTopics();
+            var lectureTopics = await _unitOfWork.ProfessorRepository.GetLectureTopics(paginationParams);
 
-            if (lectureTopics != null) return Ok(lectureTopics);
+            if (lectureTopics == null) return BadRequest("Something went wrong.");
 
-            return BadRequest("Failed to fetch lecture topics.");
+            Response.AddPaginationHeader(lectureTopics.CurrentPage, lectureTopics.PageSize, lectureTopics.TotalCount, lectureTopics.TotalPages);
+            
+            return Ok(lectureTopics);
         }
 
         [HttpGet("lectures")]
-        public async Task<ActionResult<IEnumerable<LectureDto>>> GetLectures()
+        public async Task<ActionResult<PagedList<LectureDto>>> GetLectures([FromQuery] PaginationParams paginationParams)
         {
-            var lectures = await _unitOfWork.ProfessorRepository.GetLecturesHeld();
+            var lectures = await _unitOfWork.ProfessorRepository.GetLecturesHeld(paginationParams);
 
-            if (lectures != null) return Ok(lectures);
+            if (lectures == null) return BadRequest("Something went wrong.");
 
-            return BadRequest("Failed to fetch lectures.");
+            Response.AddPaginationHeader(lectures.CurrentPage, lectures.PageSize, lectures.TotalCount, lectures.TotalPages);
+            
+            return Ok(lectures);
+
+            
         }
 
         [HttpGet("lectures/{lectureId}")]

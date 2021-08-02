@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Entities;
+using API.Helpers;
 
 // Handles data manipulation for Professor role
 // e.g.
@@ -14,7 +15,7 @@ namespace API.Interfaces
     {
         Task<RegulationsGroupDto> AddRegulationsGroup(RegulationsGroupDto regulationsGroup);
 
-        Task<IEnumerable<RegulationsGroupDto>> GetRegulationsGroups();
+        Task<PagedList<RegulationsGroupMinDto>> GetRegulationsGroups(PaginationParams paginationParams);
 
         Task<IEnumerable<ChangeGroupResultDto>> AddStudentToGroup(UsernamesToIdDto changeGroupDto);
 
@@ -23,7 +24,7 @@ namespace API.Interfaces
 
         Task<RegulationsTestDto> AddRegulationsTest(RegulationsTestDto regulationsTest);
 
-        Task<IEnumerable<RegulationsTestDto>> GetRegulationsTests();
+        Task<PagedList<RegulationsTestDto>> GetRegulationsTests(PaginationParams paginationParams);
 
         Task<RegulationsTestDto> GetRegulationsTest(int regulationsTestId);
 
@@ -33,9 +34,9 @@ namespace API.Interfaces
 
         Task DeleteRegulationsTest(int regulationsTestId);
 
-        Task<IEnumerable<LectureTopicDto>> GetLectureTopics();
+        Task<PagedList<LectureTopicDto>> GetLectureTopics(PaginationParams paginationParams);
 
-        Task<IEnumerable<LectureDto>> GetLecturesHeld();
+        Task<PagedList<LectureDto>> GetLecturesHeld(PaginationParams paginationParams);
 
         Task<IEnumerable<LectureDto>> GetLecturesForGroup(int regulationsGroupId);
 

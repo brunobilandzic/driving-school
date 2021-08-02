@@ -14,5 +14,7 @@ namespace API.Entities
         public int ExaminerId { get; set; }
 
         public bool Passed { get; set; }
+
+        public string ExaminerRemarks { get; set; }
     }
 }

@@ -20,9 +20,27 @@ namespace API.Helpers
 
             CreateMap<RegisterDto, AppUser>();
 
-            CreateMap<DrivingSession, DrivingSessionDto>();
+            CreateMap<DrivingSession, DrivingSessionDto>()
+                .ForMember(
+                    dest => dest.DriverUsername,
+                    opt => opt.MapFrom(
+                        src => src.Driver.UserName
+                    ))
+                .ForMember(
+                    dest => dest.InstructorUsername,
+                    opt => opt.MapFrom(
+                        src => src.Instructor.UserName
+                    ));
 
-            CreateMap<DrivingTest, DrivingTestDto>();
+            CreateMap<DrivingSessionDto, DrivingSession>();
+
+            CreateMap<DrivingTest, DrivingTestDto>()
+                .ForMember(
+                    dest => dest.ExaminerUsername,
+                    opt => opt.MapFrom(
+                        src => src.Examiner.UserName
+                    )
+                );
 
             CreateMap<Lecture, LectureDto>();
                 
@@ -40,6 +58,8 @@ namespace API.Helpers
             CreateMap<RegulationsGroup, RegulationsGroupDto>();
 
             CreateMap<RegulationsGroupDto, RegulationsGroup>();
+
+            CreateMap<RegulationsGroup, RegulationsGroupMinDto>();
 
             CreateMap<LectureTopic, LectureTopicDto>();
 

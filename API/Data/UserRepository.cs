@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -46,7 +47,7 @@ namespace API.Data
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<PersonDto>> GetUsers(string username)
+        public async Task<PagedList<PersonDto>> GetUsers(string username, PaginationParams paginationParams)
         {
             var query = _userManager.Users
                 .Include(u => u.UserRoles)
@@ -56,9 +57,11 @@ namespace API.Data
 
             query = query.Where(u => u.UserName != username);
 
-            return await query
-                .ProjectTo<PersonDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+            return await PagedList<PersonDto>.CreateAsync(
+                query.ProjectTo<PersonDto>(_mapper.ConfigurationProvider), 
+                paginationParams.PageNumber, 
+                paginationParams.PageSize
+            );
         }
 
 

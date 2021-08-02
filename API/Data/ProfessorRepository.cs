@@ -6,6 +6,7 @@ using API.DTOs;
 using API.Entities;
 using API.Errors;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -60,12 +61,14 @@ namespace API.Data
             return changeGroupResults;
         }
 
-        public async Task<IEnumerable<RegulationsGroupDto>> GetRegulationsGroups()
+        public async Task<PagedList<RegulationsGroupMinDto>> GetRegulationsGroups(PaginationParams paginationParams)
         {
-            List<RegulationsGroup> regulationsGroups =  await _context.RegulationsGroups
-                .ToListAsync();
+            var query = _context.RegulationsGroups
+                .ProjectTo<RegulationsGroupMinDto>(_mapper.ConfigurationProvider)
+                .AsQueryable();
 
-            return _mapper.Map<List<RegulationsGroupDto>>(regulationsGroups);
+            return await PagedList<RegulationsGroupMinDto>.CreateAsync(query, paginationParams.PageNumber, paginationParams.PageSize);
+
         }
 
         public async Task<RegulationsGroupDto> GetRegulationsGroup(int regulationsGroupId)
@@ -90,14 +93,13 @@ namespace API.Data
             return _mapper.Map<RegulationsTestDto>(regulationsTest);
         }
 
-        public async Task<IEnumerable<RegulationsTestDto>> GetRegulationsTests()
+        public async Task<PagedList<RegulationsTestDto>> GetRegulationsTests(PaginationParams paginationParams)
         {
-            var regulationsTests = await _context.RegulationsTests
-                .ToListAsync();
+            var regulationsTests = _context.RegulationsTests
+                .ProjectTo<RegulationsTestDto>(_mapper.ConfigurationProvider)
+                .AsQueryable();
 
-            var regulationsTestDtos = AutoMapperExtensions<RegulationsTest, RegulationsTestDto>.MapList(_mapper, regulationsTests);
-
-            return regulationsTestDtos;
+            return await PagedList<RegulationsTestDto>.CreateAsync(regulationsTests, paginationParams.PageNumber, paginationParams.PageSize);
 
         }
 
@@ -185,18 +187,22 @@ namespace API.Data
             _context.RegulationsTests.Remove(regulationsTest);
         }
 
-        public async Task<IEnumerable<LectureTopicDto>> GetLectureTopics()
+        public async Task<PagedList<LectureTopicDto>> GetLectureTopics(PaginationParams paginationParams)
         {
-            return await _context.LectureTopics
+            var lectureTopics =  _context.LectureTopics
                 .ProjectTo<LectureTopicDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+                .AsQueryable();
+
+            return await PagedList<LectureTopicDto>.CreateAsync(lectureTopics, paginationParams.PageNumber, paginationParams.PageSize);
         }
 
-        public async Task<IEnumerable<LectureDto>> GetLecturesHeld()
+        public async Task<PagedList<LectureDto>> GetLecturesHeld(PaginationParams paginationParams)
         {
-            return await _context.Lectures
+            var lecturesHeld =  _context.Lectures
                 .ProjectTo<LectureDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+                .AsQueryable();
+
+            return await PagedList<LectureDto>.CreateAsync(lecturesHeld, paginationParams.PageNumber, paginationParams.PageSize);
         }
 
         public async Task<IEnumerable<LectureDto>> GetLecturesForGroup(int regulationsGroupId)
