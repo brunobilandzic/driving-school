@@ -4,7 +4,7 @@ namespace API.DTOs
 {
     public class DrivingSessionDto
     {
-
+        public int DrivingSessionId { get; set; }
         public string InstructorUsername { get; set; }
         public string DriverUsername { get; set; }
 

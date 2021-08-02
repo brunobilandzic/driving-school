@@ -96,7 +96,11 @@ namespace API.Helpers
                         src => src.StudentLectures.Select(sl => sl.Student)
                     ));
 
+            CreateMap<ExamineDrivingTestDto, DrivingTest>();
 
+            CreateMap<DrivingSessionEditInstructorDto, DrivingSession>();
+
+            CreateMap<DrivingSessionEditStudentDto, DrivingSession>();
 
         }
     }

@@ -97,15 +97,46 @@ namespace API.Data
 
         }
 
-        public Task<DrivingSessionDto> EditDrivingSession(int drivingSessionId, DrivingSessionDto drivingSessionDto)
+        public async Task<DrivingSessionDto> EditDrivingSessionInstructor(DrivingSessionEditInstructorDto drivingSessionDto, int userId)
         {
-            throw new System.NotImplementedException();
+            if(! await _userManager.IsInRoleAsync(new AppUser{Id = userId}, "Instructor")) return null;
+
+            var session = await _context.DrivingSessions
+                .FindAsync(drivingSessionDto.DrivingSessionId);
+            
+            if(session == null || session.InstructorId != userId) return null;
+
+            session = _mapper.Map(drivingSessionDto, session);
+
+            return _mapper.Map<DrivingSessionDto>(session);
         }
 
-        public Task<DrivingTestDto> ExamineDrivingTest(ExamineDrivingTestDto examineDrivingTestDto)
+        public async Task<DrivingSessionDto> EditDrivingSessionStudent(DrivingSessionEditStudentDto drivingSessionDto, int userId)
         {
-            throw new System.NotImplementedException();
+            if(! await _userManager.IsInRoleAsync(new AppUser{Id = userId}, "Student")) return null;
+
+            var session = await _context.DrivingSessions
+                .FindAsync(drivingSessionDto.DrivingSessionId);
+            
+            if(session == null || session.DriverId != userId) return null;
+
+            session = _mapper.Map(drivingSessionDto, session);
+
+            return _mapper.Map<DrivingSessionDto>(session);
         }
+
+        public async Task<DrivingTestDto> ExamineDrivingTest(ExamineDrivingTestDto examineDrivingTestDto)
+        {
+            var drivingTest = await _context.DrivingTests
+                .FindAsync(examineDrivingTestDto.DrivingTestId);
+
+            if(drivingTest == null) return null;
+            
+            _mapper.Map(examineDrivingTestDto, drivingTest);
+
+            return _mapper.Map<DrivingTestDto>(drivingTest);            
+        }
+
 
         public async Task<PagedList<DrivingSessionDto>> GetDrivingSessions(PaginationParams paginationParams)
         {

@@ -2,7 +2,6 @@ namespace API.DTOs
 {
     public class DrivingTestDto
     {
-        public int DrivingTestId { get; set; }
         public int DrivingSessionId { get; set; }
 
         public DrivingSessionDto DrivingSession { get; set; }

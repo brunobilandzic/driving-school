@@ -30,7 +30,7 @@ namespace API.Controllers
         }
  
         [HttpPost("tests")]
-        public async Task<ActionResult<DrivingTestDto>> CreateTest(DrivingSessionDto drivingSessionDto)
+        public async Task<ActionResult<DrivingTestDto>> CreateDrivingTest(DrivingSessionDto drivingSessionDto)
         {
             var test = await _unitOfWork.DrivingRepository
                 .CreateDrivingTest(drivingSessionDto, User.GetUserId());
@@ -38,6 +38,17 @@ namespace API.Controllers
             if(test == null) return BadRequest("Could not create regulations test with data given.");
 
             return Ok(test);
+        }
+
+        [HttpPost("examine")]
+        public async Task<ActionResult<DrivingTestDto>> ExamineDrivingTest(ExamineDrivingTestDto examineDrivingTestDto)
+        {
+            var updatedDrivingTest = await _unitOfWork.DrivingRepository
+                .ExamineDrivingTest(examineDrivingTestDto);
+
+            if(await _unitOfWork.SaveAllChanges() > 0) return updatedDrivingTest;
+
+            return BadRequest("Failed to examine test.");        
         }
 
         

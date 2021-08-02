@@ -42,6 +42,17 @@ namespace API.Controllers
 
         }
 
+        [HttpPut("sessions")]
+        public async Task<ActionResult<DrivingSessionDto>> UpateSession(DrivingSessionEditInstructorDto drivingSessionDto)
+        {
+            var session = await _unitOfWork.DrivingRepository
+                .EditDrivingSessionInstructor(drivingSessionDto, User.GetUserId());
+
+            if(await _unitOfWork.SaveAllChanges() > 0) return session;
+
+            return BadRequest("Failed to update driving session.");
+        }
+
         [HttpGet("tests")]
         public async Task<ActionResult<PagedList<DrivingTestDto>>> GetTests([FromQuery] PaginationParams paginationParams)
         {

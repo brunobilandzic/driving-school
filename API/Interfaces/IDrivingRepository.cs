@@ -17,7 +17,9 @@ namespace API.Interfaces
         Task AddExaminer(UsernameToIdDto examinerToTest);
         Task AddInstructor(UsernameToIdDto intructorToSession);
 
-        Task<DrivingSessionDto> EditDrivingSession(int drivingSessionId, DrivingSessionDto drivingSessionDto);
+        Task<DrivingSessionDto> EditDrivingSessionInstructor(DrivingSessionEditInstructorDto drivingSessionDto, int userId);
+
+        Task<DrivingSessionDto> EditDrivingSessionStudent(DrivingSessionEditStudentDto drivingSessionDto, int userId);
 
         Task<DrivingTestDto> ExamineDrivingTest(ExamineDrivingTestDto examineDrivingTestDto);
 
