@@ -1,0 +1,20 @@
+<div class="form-group">
+  <label>Enter {{label}}</label>
+  <input
+    type="text"
+    placeholder="{{ label }}"
+    [formControl]="ngControl.control"
+    class="form-control form-date-input"
+    bsDatepicker
+    [bsConfig]="bsConfig"
+    [minDate]="minDate"
+    [maxDate]="maxDate"
+    [class.is-invalid]="ngControl.touched && ngControl.invalid"
+  />
+  <div
+    class="invalid-feedback"
+    *ngIf="ngControl.control.errors?.required"
+  >
+    Please enter {{ label }}
+  </div>
+</div>

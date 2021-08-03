@@ -6,6 +6,8 @@ namespace API.DTOs
     public class RegulationsGroupDto
     {
         public int RegulationsGroupId { get; set; }
+
+        public int ProfessorId { get; set; }
         public DateTime DateStart { get; set; }
 
         public DateTime DateEnd {get; set;}

@@ -187,13 +187,11 @@ namespace API.Data
             _context.RegulationsTests.Remove(regulationsTest);
         }
 
-        public async Task<PagedList<LectureTopicDto>> GetLectureTopics(PaginationParams paginationParams)
+        public async Task<IEnumerable<LectureTopicDto>> GetLectureTopics()
         {
-            var lectureTopics =  _context.LectureTopics
+            return await _context.LectureTopics
                 .ProjectTo<LectureTopicDto>(_mapper.ConfigurationProvider)
-                .AsQueryable();
-
-            return await PagedList<LectureTopicDto>.CreateAsync(lectureTopics, paginationParams.PageNumber, paginationParams.PageSize);
+                .ToListAsync();
         }
 
         public async Task<PagedList<LectureDto>> GetLecturesHeld(PaginationParams paginationParams)
@@ -234,7 +232,7 @@ namespace API.Data
             // In POST Request body LectureDto is sent, it doesnt have professorId nor lectureTopicId
             // So we need to add them manually
             lecture.ProfessorId = professorId;
-            lecture.LectureTopicId = lecture.LectureTopic.LectureTopicId;
+            lecture.LectureTopicId = (int) lectureDto.LectureTopic.LectureTopicId;
             lecture.LectureTopic = null;
 
             var students = await _userManager.Users

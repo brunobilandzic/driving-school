@@ -15,7 +15,6 @@ export class JwtInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     this.accountService.currentUser$.subscribe(user => {
-      console.log(user);
       if(!user) return;
       request = request.clone({
         setHeaders: {

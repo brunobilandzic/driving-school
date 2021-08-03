@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Extensions;
@@ -56,16 +57,14 @@ namespace API.Controllers
         }
 
         [HttpGet("lecture-topics")]
-        public async Task<ActionResult<PagedList<LectureTopicDto>>> GetLectureTopics([FromQuery] PaginationParams paginationParams)
+        public async Task<ActionResult<IEnumerable<LectureTopicDto>>> GetLectureTopics()
         {
             var lectureTopics = await _unitOfWork.ProfessorRepository
-                .GetLectureTopics(paginationParams);
+                .GetLectureTopics();
 
             if(lectureTopics == null) return BadRequest("Failed to fetch lecture topics.");
 
-            Response.AddPaginationHeader(lectureTopics.CurrentPage, lectureTopics.PageSize, lectureTopics.TotalCount, lectureTopics.TotalPages);
-
-            return lectureTopics;
+            return Ok(lectureTopics);
         }
 
 

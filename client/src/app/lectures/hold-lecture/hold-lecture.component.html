@@ -1,0 +1,73 @@
+<h4>Hold Lecture</h4>
+<div class="hold-lecture-form">
+  <form autocomplete="off" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="form-group">
+      <label>Lecture Topic:</label>
+      <select
+        [formControl]="form.controls['lectureTopic']"
+        class="form-select form-control form-select"
+      >
+        <option
+          *ngFor="let lt of lectureTopics"
+          value="{{ lt.lectureTopicId }}"
+        >
+          {{ lt.lectureTopicId }}: {{ lt.title }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Regulations Group:</label>
+      <select
+        [formControl]="form.controls['regulationsGroup']"
+        class="form-select form-control form-select"
+      >
+        <option
+          *ngFor="let rg of regulationsGroups"
+          value="{{ rg.regulationsGroupId }}"
+        >
+          {{ rg.regulationsGroupId }}: Start: {{ rg.dateStart | date }} End:
+          {{ rg.dateEnd | date }}
+        </option>
+      </select>
+    </div>
+    <div class="form-check">
+      <input
+        type="checkbox"
+        [formControl]="form.controls['addStudents']"
+        class="form-check-input"
+      />
+      <label>Add Students From Relations Group?</label>
+    </div>
+    <div class="">
+      <div class="pick-date">
+        <app-date-input
+          [minDate]="minDate"
+          [maxDate]="maxDate"
+          [label]="'Date Start'"
+          [formControl]="form.controls['dateStart']"
+        ></app-date-input>
+      </div>
+      <div class="pick-time">
+        <app-time-input
+          [label]="'Lecture Start Time'"
+          [formControl]="form.controls['dateTime']"
+        ></app-time-input>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Remarks</label>
+
+      <textarea
+        placeholder="Enter your remarks"
+        class="form-control"
+        [formControl]="form.controls['professorRemark']"
+        rows="3"
+      ></textarea>
+    </div>
+    <button [disabled]="form.invalid" class="btn btn-success" type="submit">
+      Save
+    </button>
+  </form>
+  {{ form.status }}
+  {{ form.value | json }}
+</div>

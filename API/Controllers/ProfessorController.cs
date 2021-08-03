@@ -54,6 +54,7 @@ namespace API.Controllers
         [HttpPost("regulations-groups")]
         public async Task<ActionResult<RegulationsGroupDto>> AddRegulationsGroup(RegulationsGroupDto regulationsGroupDto)
         {
+            regulationsGroupDto.ProfessorId = User.GetUserId();
             RegulationsGroupDto regulationsGroup = await _unitOfWork.ProfessorRepository.AddRegulationsGroup(regulationsGroupDto);
 
             if (regulationsGroup != null) return Ok(regulationsGroup);
@@ -151,13 +152,11 @@ namespace API.Controllers
         // ------------------------
 
         [HttpGet("lecture-topics")]
-        public async Task<ActionResult<PagedList<LectureTopicDto>>> GetLectureTopics([FromQuery] PaginationParams paginationParams)
+        public async Task<ActionResult<IEnumerable<LectureTopicDto>>> GetLectureTopics()
         {
-            var lectureTopics = await _unitOfWork.ProfessorRepository.GetLectureTopics(paginationParams);
+            var lectureTopics = await _unitOfWork.ProfessorRepository.GetLectureTopics();
 
             if (lectureTopics == null) return BadRequest("Something went wrong.");
-
-            Response.AddPaginationHeader(lectureTopics.CurrentPage, lectureTopics.PageSize, lectureTopics.TotalCount, lectureTopics.TotalPages);
             
             return Ok(lectureTopics);
         }

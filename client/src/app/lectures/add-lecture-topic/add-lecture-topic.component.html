@@ -1,0 +1,11 @@
+<h4>New Lecture Topic</h4>
+<form autocomplete="off" [formGroup]="form" (ngSubmit)="submit()">
+    <app-text-input [label]="'Title'" [formControl]="form.controls['title']"></app-text-input>
+    <label>Description</label>
+    <textarea class="form-control" placeholder="Description" rows="3" [formControl]="form.controls['description']"></textarea>
+    <button type="submit" class="btn btn-success mt-2" [disabled]="form.invalid">Save</button>
+</form>
+
+<div>
+    {{this.form.value | json}}
+</div>

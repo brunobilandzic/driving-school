@@ -7,18 +7,36 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavComponent } from './nav/nav.component';
 import SharedModule from './_modules/shared-module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ErrorsInterceptor } from './_interceptors/errors.interceptor';
 import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { MembersComponent } from './members/members.component';
 import { RegisterComponent } from './register/register.component';
+import { AddLectureTopicComponent } from './lectures/add-lecture-topic/add-lecture-topic.component';
+import { HoldLectureComponent } from './lectures/hold-lecture/hold-lecture.component';
+import { TextInputComponent } from './_inputs/text-input/text-input.component';
+import { DateInputComponent } from './_inputs/date-input/date-input.component';
+import { LecturesHomeProfessorComponent } from './lectures/lectures-home-professor/lectures-home-professor.component';
+import { TimeInputComponent } from './_inputs/time-input/time-input.component';
+import { LecturesListComponent } from './lectures/lectures-list/lectures-list.component';
+import { LectureCardComponent } from './lectures/lecture-card/lecture-card.component';
+import { LectureViewComponent } from './lectures/lecture-view/lecture-view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavComponent,
     MembersComponent,
-    RegisterComponent
+    RegisterComponent,
+    AddLectureTopicComponent,
+    HoldLectureComponent,
+    TextInputComponent,
+    DateInputComponent,
+    LecturesHomeProfessorComponent,
+    TimeInputComponent,
+    LecturesListComponent,
+    LectureCardComponent,
+    LectureViewComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +44,8 @@ import { RegisterComponent } from './register/register.component';
     HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorsInterceptor, multi: true},

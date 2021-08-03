@@ -34,7 +34,7 @@ namespace API.Interfaces
 
         Task DeleteRegulationsTest(int regulationsTestId);
 
-        Task<PagedList<LectureTopicDto>> GetLectureTopics(PaginationParams paginationParams);
+        Task<IEnumerable<LectureTopicDto>> GetLectureTopics();
 
         Task<PagedList<LectureDto>> GetLecturesHeld(PaginationParams paginationParams);
 
