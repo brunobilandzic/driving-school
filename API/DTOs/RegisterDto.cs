@@ -16,6 +16,8 @@ namespace API.DTOs
 
         public string LastName { get; set; }
 
+        public int? regulationsGroupId {get; set;}
+
         public string [] Roles { get; set; }
     }
 }

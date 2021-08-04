@@ -1,0 +1,42 @@
+<div *ngIf="roles.includes('Admin')">
+      <label>Choose Employee Role</label>
+      <div class="form-check">
+        <input
+          id="professorCheck"
+          [checked]="checkedRoles.Professor"
+          [disabled]="checkedRoles.Examiner"
+          type="checkbox"
+          name="role"
+          value="Professor"
+          (change)="checkedRoles.Professor = !checkedRoles.Professor"
+          class="form-check-input"
+        />
+        <label for="professorCheck" class="form-check-label">Professor</label>
+      </div>
+      <div class="form-check">
+        <input
+          id="instructorCheck"
+          [checked]="checkedRoles.Instructor"
+          [disabled]="checkedRoles.Examiner"
+          type="checkbox"
+          name="role"
+          value="Instructor"
+          (change)="checkedRoles.Instructor = !checkedRoles.Instructor"
+          class="form-check-input"
+        />
+        <label for="instructorCheck" class="form-check-label">Instructor</label>
+      </div>
+      <div class="form-check">
+        <input
+          id="examinerCheck"
+          [checked]="checkedRoles.Examiner"
+          [disabled]="checkedRoles.Professor || checkedRoles.Instructor"
+          type="checkbox"
+          name="role"
+          value="Examiner"
+          (change)="checkedRoles.Examiner = !checkedRoles.Examiner"
+          class="form-check-input"
+        />
+        <label for="examinerCheck" class="form-check-label">Examiner</label>
+      </div>
+    </div>

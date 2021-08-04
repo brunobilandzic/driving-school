@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.DTOs;
@@ -19,33 +20,34 @@ namespace API.Controllers
         private readonly ITokenService _tokenService;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly RoleManager<AppRole> _roleManager;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AccountController(UserManager<AppUser> userManager, IMapper mapper, ITokenService tokenService, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager)
+        public AccountController(
+            UserManager<AppUser> userManager, 
+            IMapper mapper, 
+            ITokenService tokenService, 
+            SignInManager<AppUser> signInManager, 
+            RoleManager<AppRole> roleManager,
+            IUnitOfWork unitOfWork
+            )
         {
             _roleManager = roleManager;
+            _unitOfWork = unitOfWork;
             _userManager = userManager;
             _mapper = mapper;
             _tokenService = tokenService;
             _signInManager = signInManager;
+            
+
         }
 
-        [HttpPost("register")]
+        [HttpPost("register-student")]
         // Only admins, instructors and professor can register users.
-        [Authorize(Policy = "UserRegistration")]
-        public async Task<ActionResult<AuthUserDto>> Register(RegisterDto registerDto)
+        [Authorize(Policy = "StudentRegistration")]
+        public async Task<ActionResult<AuthUserDto>> RegisterStudent(RegisterDto registerDto)
         {
 
             if (await UserExists(registerDto.Username)) return BadRequest("User already exists.");
-
-
-            // Get information about the initiator of registration
-            // Must determine if he is admin or not
-            var loggedUser = await _userManager.GetUserAsync(this.User);
-            var isAdmin = await _userManager.IsInRoleAsync(loggedUser, "Admin");
-
-            if(!isAdmin && registerDto.Roles.Length != 0) return BadRequest("Only admin can assign roles.");
-
-            if(registerDto.Roles.Any(el => el == "Examiner") && registerDto.Roles.Length > 1) return BadRequest("Examiner cannot have any other role.");
 
             // userManager.CreateAsnyc takes an AppUser as a parameter
             // so we have to map from registerDto to AppUser
@@ -59,9 +61,14 @@ namespace API.Controllers
 
             if (!result.Succeeded) return BadRequest(result.Errors);
 
-            var roleResult = await _userManager.AddToRolesAsync(user, registerDto.Roles);
+            var roleResult = await _userManager.AddToRoleAsync(user, "Student");
 
             if (!roleResult.Succeeded) return BadRequest(roleResult.Errors);
+
+            await _unitOfWork.ProfessorRepository.AddStudentToGroup(
+                new UsernamesToIdDto
+                    {Usernames = new string[] {user.UserName}, Id = (int) registerDto.regulationsGroupId}
+                );
 
             return new AuthUserDto
             {

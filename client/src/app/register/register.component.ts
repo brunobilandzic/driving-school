@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { UserModel } from '../_models/user';
 import { AccountService } from '../_services/account.service';
+import { MembersService } from '../_services/members.service';
 import { RolesService } from '../_services/roles.service';
 
 @Component({
@@ -19,17 +20,16 @@ export class RegisterComponent implements OnInit {
     username: '',
     password: '',
     repeatPassword: '',
+    regulationsGroupId: undefined
   };
-
-  checkedRoles = {
-    Professor: false,
-    Instructor: false,
-    Examiner: false,
-  };
-  baseUrl = environment.baseApiUrl + 'account/register';
+  regulationsGroups: any;
+  
+  baseUrl = environment.baseApiUrl + 'account/register-student';
   roles: string[] = [];
+  registrationSuccess = false;
+  registeredUser: UserModel;
   constructor(
-    private accountService: AccountService,
+    private membersService: MembersService,
     private toastr: ToastrService,
     private http: HttpClient,
     private rolesService: RolesService
@@ -37,6 +37,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.rolesService.roles$.subscribe((roles) => (this.roles = roles));
+    this.getRegulationsGroups();
   }
 
   check() {
@@ -61,14 +62,20 @@ export class RegisterComponent implements OnInit {
     
     this.register().subscribe((response: UserModel) => {
       this.toastr.success(`You've Successfully registered ${response.firstName} ${response.lastName}`);
-      this.accountService.navigateTo('/members');
+      this.registrationSuccess = true;
+      this.registeredUser = response;
+      
     });
   }
 
-  
+  getRegulationsGroups()
+  {
+    this.membersService.getRegulationsGroups()
+      .subscribe((groups:Array<any>) => this.regulationsGroups = groups.filter((g: any) => (new Date(g.dateEnd).getTime()  > Date.now())));
+  }
 
   register() {
-    this.model["role"] = this.checkedRoles;
+    this.model["role"] = ["this.checkedRoles;"]
 
     return this.http.post(this.baseUrl, this.model);
     

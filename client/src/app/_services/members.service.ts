@@ -9,7 +9,7 @@ import { UserModel } from '../_models/user';
   providedIn: 'root',
 })
 export class MembersService {
-  baseUrl = environment.baseApiUrl + 'users/';
+  baseUrl = environment.baseApiUrl ;
   users: UserModel[] = [];
   constructor(private http: HttpClient) {}
 
@@ -18,8 +18,15 @@ export class MembersService {
       console.log("sending");
       
       this.http
-        .get(this.baseUrl)
+        .get(this.baseUrl+ 'users/')
         .subscribe((users: UserModel[]) => (this.users = users));
     }
+  }
+
+  getRegulationsGroups()
+  {
+    return this.http
+      .get(this.baseUrl + 'professor/regulations-groups')
+      
   }
 }
