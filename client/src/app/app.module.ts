@@ -21,6 +21,8 @@ import { TimeInputComponent } from './_inputs/time-input/time-input.component';
 import { LecturesListComponent } from './lectures/lectures-list/lectures-list.component';
 import { LectureCardComponent } from './lectures/lecture-card/lecture-card.component';
 import { LectureViewComponent } from './lectures/lecture-view/lecture-view.component';
+import { LoadingInterceptor } from './_interceptors/loading.interceptor';
+import { LectureAttendanceComponent } from './lectures/lecture-attendance/lecture-attendance.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,8 @@ import { LectureViewComponent } from './lectures/lecture-view/lecture-view.compo
     TimeInputComponent,
     LecturesListComponent,
     LectureCardComponent,
-    LectureViewComponent
+    LectureViewComponent,
+    LectureAttendanceComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +52,8 @@ import { LectureViewComponent } from './lectures/lecture-view/lecture-view.compo
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorsInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true}
   ],
   bootstrap: [AppComponent],
 

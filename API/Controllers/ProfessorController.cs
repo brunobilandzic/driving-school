@@ -244,7 +244,7 @@ namespace API.Controllers
         }
 
         [HttpPost("attendances-toggle")]
-        public async Task<ActionResult<LectureDto>> ToggleAttendance(UsernameToIdDto studentLecture)
+        public async Task<ActionResult> ToggleAttendance(UsernameToIdDto studentLecture)
         {            
             await _unitOfWork.ProfessorRepository.ToggleAttendance(studentLecture);
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Lecture } from 'src/app/_models/lecture';
 import { LecturesService } from 'src/app/_services/lectures.service';
+import { RolesService } from 'src/app/_services/roles.service';
 
 @Component({
   selector: 'app-lecture-view',
@@ -10,10 +11,11 @@ import { LecturesService } from 'src/app/_services/lectures.service';
 })
 export class LectureViewComponent implements OnInit {
   lecture: Lecture;
-  lectureId: number;
   constructor(
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    public rolesService: RolesService
+  ) {
+  }
 
   ngOnInit(): void {
     this.route.data.subscribe(data => this.lecture = data.lecture);

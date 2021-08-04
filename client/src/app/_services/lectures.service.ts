@@ -4,6 +4,8 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Lecture } from '../_models/lecture';
+import { UsernameToBool } from '../_models/username-to-bool';
+import { UsernameToId } from '../_models/username-to-id';
 import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
 
 @Injectable({
@@ -35,11 +37,20 @@ export class LecturesService {
 
   getLecture(lectureId: string): Observable<Lecture> {
     let lecture = [...this.lectures.values()]
-      .reduce((arr, elem) => arr.push([...elem]), [])
-      .filter((l: Lecture) => l.lectureId == parseInt(lectureId))[0];
-
+      .reduce((arr, elem) => arr.concat(elem.result), [])
+      .find((l: Lecture) => l.lectureId == parseInt(lectureId));
     if (lecture) return of(lecture);
 
     return this.http.get<Lecture>(this.baseUrl + 'lectures/' + lectureId);
+  }
+
+  getAttendance(lectureId: string): Observable<UsernameToBool []> {
+    return this.http.get<UsernameToBool []>(this.baseUrl + 'attendances/' + lectureId);
+  }
+
+  toggleAttendance(usernameToId: UsernameToId): Observable<boolean> {
+    return this.http.post(this.baseUrl + 'attendances-toggle', usernameToId).pipe(map(
+      () => {return true;}
+    ))
   }
 }

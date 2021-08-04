@@ -1,1 +1,10 @@
-{{lecture.lectureId}}
+<h4 class="heading">{{lecture.lectureTopic.title}}</h4>
+<h6 class="subheading text-muted">Regulations Group {{lecture.regulationsGroupId}}</h6>
+<div class="description">
+    <p>
+        {{lecture.lectureTopic.description}}
+    </p>
+</div>
+<div class="professor-footer" *ngIf="true">
+    <div class="btn btn-primary" routerLink="{{'/lectures/attendances/' + lecture.lectureId}}">Attendance</div>
+</div>

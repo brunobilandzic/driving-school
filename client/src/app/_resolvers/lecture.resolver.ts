@@ -16,6 +16,6 @@ export class LectureResolver implements Resolve<Lecture> {
 
   }
   resolve(route: ActivatedRouteSnapshot): Observable<Lecture> {
-    return this.lecturesService.getLecture(route.paramMap.get("lectureId"));
+    return this.lecturesService.getLecture(route.paramMap.get("id"));
   }
 }
