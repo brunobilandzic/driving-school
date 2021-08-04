@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Entities;
-using API.Errors;
 using API.Extensions;
 using API.Helpers;
 using API.Interfaces;
@@ -28,6 +27,25 @@ namespace API.Data
             _mapper = mapper;
             _userManager = userManager;
             _roleManager = roleManager;
+        }
+
+        public async Task<PagedList<PersonDto>> GetStudents(int professorId, PaginationParams paginationParams)
+        {
+            var groupsIds = await _context.RegulationsGroups
+                .Where(g => g.ProfessorId == professorId)
+                .Select(g => g.RegulationsGroupId)
+                .ToListAsync();
+
+            var users = _context.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .Where(s => s.UserRoles.Select(ur => ur.Role.Name).Contains("Student"))
+                .Where(s => !s.Passed)
+                .Where(s => groupsIds.Contains((int) s.RegulationsGroupId))
+                .ProjectTo<PersonDto>(_mapper.ConfigurationProvider)
+                .AsQueryable();
+
+            return await PagedList<PersonDto>.CreateAsync(users, paginationParams.PageNumber, paginationParams.PageSize);    
         }
 
         public async Task<RegulationsGroupDto> AddRegulationsGroup(RegulationsGroupDto regulationsGroupDto)
@@ -418,6 +436,8 @@ namespace API.Data
             return _mapper.Map<LectureTopicDto>(lectureTopic);
 
         }
+
+ 
     }
 
 }

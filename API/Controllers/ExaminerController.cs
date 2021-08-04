@@ -44,7 +44,7 @@ namespace API.Controllers
         public async Task<ActionResult<DrivingTestDto>> ExamineDrivingTest(ExamineDrivingTestDto examineDrivingTestDto)
         {
             var updatedDrivingTest = await _unitOfWork.DrivingRepository
-                .ExamineDrivingTest(examineDrivingTestDto);
+                .ExamineDrivingTest(examineDrivingTestDto, User.GetUserId());
 
             if(await _unitOfWork.SaveAllChanges() > 0) return updatedDrivingTest;
 

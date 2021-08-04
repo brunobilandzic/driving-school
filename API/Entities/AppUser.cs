@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
@@ -6,6 +7,9 @@ namespace API.Entities
     public class AppUser : IdentityUser<int>
     {
         public ICollection<AppUserRole> UserRoles { get; set; }
+
+        public bool Passed { get; set; } = false;
+        public DateTime DateRegistered { get; set; } = DateTime.Now;
 
         public string PhotoUrl { get; set; }
 

@@ -20,13 +20,15 @@ namespace API.Data
             _context = context;
         }
 
-        public IUserRepository UserRepository => new UserRepository(_mapper, _userManager, _roleManager);
+        public IUserRepository UserRepository => new UserRepository(_mapper, _userManager, _roleManager, _context);
 
         public IProfessorRepository ProfessorRepository => new ProfessorRepository(_context, _mapper, _userManager, _roleManager);
 
         public IDrivingRepository DrivingRepository => new DrivingRepository(_context, _userManager, _mapper);
 
         public IStudentRepository StudentRepository => new StudentRepository(_context, _mapper, _userManager);
+
+        public IInstructorRepository InstructorRepository => new InstructorRepository(_context, _mapper);
 
         public async Task<int> SaveAllChanges()
         {

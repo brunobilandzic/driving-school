@@ -18,6 +18,18 @@ namespace API.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        [HttpGet("students")]
+        public async Task<ActionResult<PagedList<PersonDto>>> GetInstructorsStudents([FromQuery] PaginationParams paginationParams)
+        {
+            var students = await _unitOfWork.InstructorRepository.GetStudents(User.GetUserId(), paginationParams);
+
+            if(students == null) return BadRequest("Failed to fetch students.");
+
+            Response.AddPaginationHeader(students.CurrentPage, students.PageSize, students.TotalCount, students.TotalPages);
+
+            return students;
+        }
+
         [HttpGet("sessions")]
         public async Task<ActionResult<PagedList<DrivingSessionDto>>> GetSessions([FromQuery] PaginationParams paginationParams)
         {

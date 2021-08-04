@@ -24,7 +24,7 @@ namespace API.Interfaces
 
         Task<DrivingSessionDto> EditDrivingSessionStudent(DrivingSessionEditStudentDto drivingSessionDto, int userId);
 
-        Task<DrivingTestDto> ExamineDrivingTest(ExamineDrivingTestDto examineDrivingTestDto);
+        Task<DrivingTestDto> ExamineDrivingTest(ExamineDrivingTestDto examineDrivingTestDto, int examinerId);
 
     }
 }

@@ -12,6 +12,8 @@ namespace API.Interfaces
 
         IStudentRepository StudentRepository {get;}
 
+        IInstructorRepository InstructorRepository {get;}
+
         Task<int> SaveAllChanges();
     }
 }

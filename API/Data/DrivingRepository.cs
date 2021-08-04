@@ -125,12 +125,13 @@ namespace API.Data
             return _mapper.Map<DrivingSessionDto>(session);
         }
 
-        public async Task<DrivingTestDto> ExamineDrivingTest(ExamineDrivingTestDto examineDrivingTestDto)
+        public async Task<DrivingTestDto> ExamineDrivingTest(ExamineDrivingTestDto examineDrivingTestDto, int examinerId)
         {
             var drivingTest = await _context.DrivingTests
                 .FindAsync(examineDrivingTestDto.DrivingTestId);
 
             if(drivingTest == null) return null;
+            if(drivingTest.ExaminerId != examinerId) return null;
             
             _mapper.Map(examineDrivingTestDto, drivingTest);
 

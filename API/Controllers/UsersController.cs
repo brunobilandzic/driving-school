@@ -41,12 +41,33 @@ namespace API.Controllers
 
         }
 
+        [Authorize(Policy = "NotOnlyStudent")]
+        [HttpGet("students")]
+        public async Task<ActionResult<PagedList<PersonDto>>> GetStudents([FromQuery] PaginationParams paginationParams)
+        {
+            var students = await _unitOfWork.UserRepository.GetStudents(paginationParams);
 
+            if(students == null) return BadRequest("Failed to fetch all students.");
+        
+            Response.AddPaginationHeader(students.CurrentPage, students.PageSize, students.TotalCount, students.TotalPages);
 
+            return students;
+        }
+        
         [HttpGet("{username}")]
-        public async Task<PersonDto> GetUser(string username)
+        public async Task<ActionResult<PersonDto>> GetUser(string username)
         {
             return await _unitOfWork.UserRepository.GetPersonAsync(username);
+        }
+        [Authorize(Roles = "Examiner")]
+        [HttpPost("student-finished/{username}")]
+        public async Task<ActionResult<bool>> MarkStudentFinished(string username)
+        {
+            var isPassed = await _unitOfWork.UserRepository.PassStudent(username);
+
+            if(isPassed) return Ok();
+
+            return BadRequest("Failed to mark student as passed.");
         }
 
 

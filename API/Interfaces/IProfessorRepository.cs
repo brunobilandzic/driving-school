@@ -13,6 +13,7 @@ namespace API.Interfaces
 {
     public interface IProfessorRepository
     {
+        Task<PagedList<PersonDto>> GetStudents(int professorId, PaginationParams paginationParams);
         Task<RegulationsGroupDto> AddRegulationsGroup(RegulationsGroupDto regulationsGroup);
 
         Task<PagedList<RegulationsGroupMinDto>> GetRegulationsGroups(PaginationParams paginationParams);

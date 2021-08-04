@@ -23,6 +23,10 @@ import { LectureCardComponent } from './lectures/lecture-card/lecture-card.compo
 import { LectureViewComponent } from './lectures/lecture-view/lecture-view.component';
 import { LoadingInterceptor } from './_interceptors/loading.interceptor';
 import { LectureAttendanceComponent } from './lectures/lecture-attendance/lecture-attendance.component';
+import { ViewStudentComponent } from './view-student/view-student.component';
+import { ProfessorStudentComponent } from './view-student/professor-student/professor-student.component';
+import { InstructorStudentComponent } from './view-student/instructor-student/instructor-student.component';
+import { StudentListComponent } from './view-student/student-list/student-list.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +43,11 @@ import { LectureAttendanceComponent } from './lectures/lecture-attendance/lectur
     LecturesListComponent,
     LectureCardComponent,
     LectureViewComponent,
-    LectureAttendanceComponent
+    LectureAttendanceComponent,
+    ViewStudentComponent,
+    ProfessorStudentComponent,
+    InstructorStudentComponent,
+    StudentListComponent
   ],
   imports: [
     BrowserModule,

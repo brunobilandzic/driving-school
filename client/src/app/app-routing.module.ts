@@ -8,11 +8,14 @@ import { LecturesHomeProfessorComponent } from './lectures/lectures-home-profess
 import { LecturesListComponent } from './lectures/lectures-list/lectures-list.component';
 import { MembersComponent } from './members/members.component';
 import { RegisterComponent } from './register/register.component';
+import { StudentListComponent } from './view-student/student-list/student-list.component';
+import { ViewStudentComponent } from './view-student/view-student.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { RoleGuard } from './_guards/role.guard';
 import { AttendanceResolver } from './_resolvers/attendance.resolver';
 import { IdResolver } from './_resolvers/id.resolver';
 import { LectureResolver } from './_resolvers/lecture.resolver';
+import { StudentResolver } from './_resolvers/student.resolver';
 
 const routes: Routes = [
   { path: 'members', component: MembersComponent, canActivate: [AuthGuard] },
@@ -63,6 +66,23 @@ const routes: Routes = [
     },
     data: { activationRoles: ['Professor'] },
   },
+  {
+    path: 'student/:id',
+    component: ViewStudentComponent,
+    canActivate: [RoleGuard],
+    resolve: {
+      student: StudentResolver,
+      id: IdResolver
+    },
+    data: { activationRoles: ['Professor', 'Instructor'] },
+  },
+  {
+    path: 'students',
+    component: StudentListComponent,
+    canActivate: [RoleGuard],
+    data: { activationRoles: ['Professor', 'Instructor'] },
+  }
+
 
 ];
 

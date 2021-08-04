@@ -5,7 +5,3 @@
     <textarea class="form-control" placeholder="Description" rows="3" [formControl]="form.controls['description']"></textarea>
     <button type="submit" class="btn btn-success mt-2" [disabled]="form.invalid">Save</button>
 </form>
-
-<div>
-    {{this.form.value | json}}
-</div>

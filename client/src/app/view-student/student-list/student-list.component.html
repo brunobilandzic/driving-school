@@ -1,0 +1,44 @@
+<div class="d-flex">
+  <div
+    [ngClass]="['btn', active.all ? 'btn-dark' : 'btn-outline-dark']"
+    (click)="loadAll()"
+  >
+    All Students
+  </div>
+  <div
+    [ngClass]="['btn', 'ml-2', active.instructor ? 'btn-dark' : 'btn-outline-dark']"
+    (click)="loadInstructors()"
+    *ngIf="roles.includes('Instructor')"
+  >
+    My Students As Instructor
+  </div>
+  <div
+    [ngClass]="['btn','ml-2', active.professor ? 'btn-dark' : 'btn-outline-dark']"
+    (click)="loadProfessors()"
+    *ngIf="roles.includes('Professor')"
+  >
+    My Students As Professor
+  </div>
+</div>
+
+
+<div>
+    <div *ngFor="let student of students">
+       <a href="{{resolveLink(student.username)}}"> {{student.username}}</a>
+    </div>
+
+    <div *ngIf="pagination" class="d-flex justify-content-center">
+        <pagination
+          [boundaryLinks]="true"
+          [totalItems]="pagination.totalItems"
+          [itemsPerPage]="pagination.itemsPerPage"
+          [(ngModel)]="pagination.currentPage"
+          (pageChanged)="pageChanged($event)"
+          previousText="&lsaquo;"
+          nextText="&rsaquo;"
+          firstText="&laquo;"
+          lastText="&raquo;"
+        >
+        </pagination>
+      </div>
+  </div>

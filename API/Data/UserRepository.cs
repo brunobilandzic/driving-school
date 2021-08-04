@@ -16,12 +16,14 @@ namespace API.Data
     {
         private readonly IMapper _mapper;
         private readonly RoleManager<AppRole> _roleManager;
+        private readonly DataContext _context;
         private readonly UserManager<AppUser> _userManager;
 
-        public UserRepository(IMapper mapper, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
+        public UserRepository(IMapper mapper, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, DataContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
             _mapper = mapper;
 
         }
@@ -64,6 +66,38 @@ namespace API.Data
             );
         }
 
+        public async Task<bool> PassStudent(string username)
+        {
+            var student = await _userManager.Users
+                .Where(s  => s.UserName == username)
+                .FirstOrDefaultAsync();
+            
+            if(student == null) return false;
+            if(! await _userManager.IsInRoleAsync(student, "Student")) return false;
 
+            var drivingTest = await _context.DrivingTests
+                .Include(dt => dt.DrivingSession)
+                .Where(dt => dt.DrivingSession.DriverId == student.Id)
+                .Where(dt => dt.Passed == true)
+                .FirstOrDefaultAsync();
+
+            if(drivingTest == null) return false;
+
+            student.Passed = true;
+            return true;
+        }
+
+        public async Task<PagedList<PersonDto>> GetStudents(PaginationParams paginationParams)
+        {
+            var students = _context.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .Where(u => u.UserRoles.Select(ur => ur.Role.Name).Contains("Student"))
+                .OrderByDescending(u => u.DateRegistered)
+                .ProjectTo<PersonDto>(_mapper.ConfigurationProvider)
+                .AsQueryable();
+
+            return await PagedList<PersonDto>.CreateAsync(students, paginationParams.PageNumber, paginationParams.PageSize);
+        }
     }
 }

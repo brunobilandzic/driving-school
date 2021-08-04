@@ -1,0 +1,20 @@
+<app-professor-student
+  *ngIf="
+     professorView || (forceView=='professor' && (rolesService.roles$ | async).includes('Professor'))
+  "
+></app-professor-student>
+<app-instructor-student
+  *ngIf="
+    instructorView || (forceView=='instructor' && (rolesService.roles$ | async).includes('Instructor'))
+  "
+></app-instructor-student>
+
+<div 
+    class="choose-view"
+    *ngIf="!professorView && !instructorView && !loading && forceView==''"
+    >
+    <div class="btn btn-outline-primary" (click)="professorView=true">View As Professor</div>
+    <div class="btn btn-outline-primary" (click)="instructorView=true">View As Instructor</div>
+</div>
+
+

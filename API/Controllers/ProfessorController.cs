@@ -26,6 +26,18 @@ namespace API.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        [HttpGet("students")]
+        public async Task<ActionResult<PagedList<PersonDto>>> GetStudents([FromQuery] PaginationParams paginationParams)
+        {
+            var students = await _unitOfWork.ProfessorRepository.GetStudents(User.GetUserId(), paginationParams);
+
+            if(students == null) return BadRequest("Failed to fetch students.");
+
+            Response.AddPaginationHeader(students.CurrentPage, students.PageSize, students.TotalCount, students.TotalPages);
+
+            return students;
+        }
+
         // ------------------------
         // REGULATIONS GROUPS START
         // ------------------------
