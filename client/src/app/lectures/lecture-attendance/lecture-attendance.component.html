@@ -1,21 +1,70 @@
 <div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th class="col-2">Username</th>
-        <th class="col-6"></th>
-        <th class="col-2">Attendance</th>
-        <th class="col-2 text-right">Update</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let attendance of attendances">
-        <td class="col-2">{{attendance.username}}</td>
-        <td class="col-6"></td>
-        <td class="col-2">{{attendance.thruth}}</td>
-        <td class="col-2 text-right"><div class="btn btn-primary" (click)="toggleAttendance(attendance.username, attendance.thruth)">Update</div></td>
+  <tabset>
+    <tab heading="Singular">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="col-2">Username</th>
+            <th class="col-6"></th>
+            <th class="col-2">Attendance</th>
+            <th class="col-2 text-right">Update</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let attendance of attendances">
+            <td class="col-2">{{ attendance.username }}</td>
+            <td class="col-6"></td>
+            <td class="col-2">{{ attendance.thruth }}</td>
+            <td class="col-2 text-right">
+              <div
+                class="btn btn-primary"
+                (click)="
+                  toggleAttendance(attendance.username, attendance.thruth)
+                "
+              >
+                Update
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </tab>
+    <tab heading="List">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="col-2">Username</th>
+            <th class="col-8"></th>
+            <th class="col-2 text-right">Attendance</th>
+          </tr>
+        </thead>
         
-      </tr>
-    </tbody>
-  </table>
+          <tbody>
+            <tr *ngFor="let attendance of attendances">
+              <td class="col-2">{{ attendance.username }}</td>
+              <td class="col-8"></td>
+              <td class="col-2 text-right">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  [value]="attendance.username"
+                  (click)="attendStudent($event)"
+                  [disabled]="attendance.thruth"
+                  [checked]="studentsToAttend.includes(attendance.username)"
+                />
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <td class="col-8"></td>
+            <td class="col-2 text-right"><div (click)="selectAll()" class="btn btn-primary">Select All</div></td>
+            <td class="col-2 text-right"><div (click)="submit()" class="btn btn-success">Save</div></td>
+          </tfoot>
+      </table>
+    </tab>
+  </tabset>
+</div>
+
+<div *ngFor="let item of studentsToAttend">
+  {{item |json}}
 </div>

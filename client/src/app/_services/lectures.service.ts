@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Lecture } from '../_models/lecture';
 import { UsernameToBool } from '../_models/username-to-bool';
 import { UsernameToId } from '../_models/username-to-id';
+import { UsernamesToId } from '../_models/usernames-to-id';
 import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
 
 @Injectable({
@@ -50,6 +51,12 @@ export class LecturesService {
 
   toggleAttendance(usernameToId: UsernameToId): Observable<boolean> {
     return this.http.post(this.baseUrl + 'attendances-toggle', usernameToId).pipe(map(
+      () => {return true;}
+    ))
+  }
+
+  markAttendances(usernamesToId: UsernamesToId): Observable<boolean> {
+    return this.http.post(this.baseUrl + 'attendances', usernamesToId).pipe(map(
       () => {return true;}
     ))
   }

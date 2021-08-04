@@ -6,6 +6,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TimepickerModule } from 'ngx-bootstrap/timepicker';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { TabsModule } from 'ngx-bootstrap/tabs';
 
 @NgModule({
     imports: [
@@ -17,7 +18,8 @@ import { NgxSpinnerModule } from "ngx-spinner";
         BsDatepickerModule.forRoot(),
         TimepickerModule.forRoot(),
         PaginationModule.forRoot(),
-        NgxSpinnerModule
+        NgxSpinnerModule,
+        TabsModule.forRoot()
     ],
     exports: [
         ToastrModule,
@@ -26,7 +28,8 @@ import { NgxSpinnerModule } from "ngx-spinner";
         BsDatepickerModule,
         TimepickerModule,
         PaginationModule,
-        NgxSpinnerModule
+        NgxSpinnerModule,
+        TabsModule
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

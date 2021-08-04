@@ -198,6 +198,7 @@ namespace API.Data
         {
             var lecturesHeld =  _context.Lectures
                 .ProjectTo<LectureDto>(_mapper.ConfigurationProvider)
+                .OrderByDescending(l => l.DateStart)
                 .AsQueryable();
 
             return await PagedList<LectureDto>.CreateAsync(lecturesHeld, paginationParams.PageNumber, paginationParams.PageSize);
