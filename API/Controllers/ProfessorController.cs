@@ -38,6 +38,17 @@ namespace API.Controllers
             return students;
         }
 
+        [HttpGet("students/{username}")]
+        public async Task<ActionResult<PersonDto>> GetStudent(string username)
+        {
+            var student = await _unitOfWork.ProfessorRepository.GetStudent(username);
+
+            if(student == null) return BadRequest("Failed to fetch student.");
+
+            return student;
+        }
+
+
         // ------------------------
         // REGULATIONS GROUPS START
         // ------------------------
@@ -115,6 +126,8 @@ namespace API.Controllers
 
             return NotFound("Something went wrong.");
         }
+
+
         [HttpPost("regulations-tests")]
         public async Task<ActionResult<RegulationsTestDto>> AddRegulationsTest(RegulationsTestDto regulationsTestDto)
         {
@@ -240,7 +253,7 @@ namespace API.Controllers
             return BadRequest("Failed to add students to lecture.");
         }
         [HttpGet("attendances/{lectureId}")]
-        public async Task<ActionResult<IEnumerable<UsernameToBool>>> GetAttendanceForlecture(int lectureId)
+        public async Task<ActionResult<IEnumerable<UsernameToBool>>> GetAttendanceForLecture(int lectureId)
         {
             return Ok(await _unitOfWork.ProfessorRepository.GetAttendanceForlecture(lectureId));
         }
@@ -253,6 +266,12 @@ namespace API.Controllers
             if(await _unitOfWork.SaveAllChanges() > 0) return Ok();
 
             return BadRequest("Failed to mark attendance.");
+        }
+
+        [HttpGet("student-attendances/{username}")]
+        public async Task<ActionResult<IEnumerable<StudentLectureDto>>> GetAttendanceForStudent(string username)
+        {
+            return Ok(await _unitOfWork.ProfessorRepository.GetAttendancesForStudent(username));
         }
 
         [HttpPost("attendances-toggle")]

@@ -1,1 +1,12 @@
-<p>professor-student works!</p>
+<div *ngIf="isInstructor" class="btn btn-outline-dark" (click)="toggleViewClick()">View As Instructor</div>
+<tabset>
+    <tab heading="Info">
+        <app-student-info [student]="student" (refreshStudent)="loadStudent($event)"></app-student-info>
+    </tab>
+    <tab heading="Lectures">
+        <div>Lectures</div>
+    </tab>
+    <tab heading="Regulations Tests">
+        <div>Tests</div>
+    </tab>
+</tabset>

@@ -1,3 +1,5 @@
+using System;
+
 namespace API.DTOs
 {
     public class PersonDto
@@ -11,5 +13,7 @@ namespace API.DTOs
         public string LastName { get; set; }
 
         public string [] Roles { get; set; }
+
+        public DateTime DateRegistered { get; set; }
     }
 }

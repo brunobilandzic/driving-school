@@ -1,0 +1,34 @@
+<div *ngIf="student" class="user-info row">
+  <div class="card col-4">
+    <img
+      class="card-img-top"
+      src="{{ student.photoUrl }}"
+      alt="{{ student.firstName + ' ' + student.lastName }}"
+    />
+
+    <div class="card-body">
+      <h4 class="card-title">
+        {{ student.firstName + " " + student.lastName }}
+      </h4>
+      <div class="card-text">
+        <div>
+          Regulations Group: {{ student.regulationsGroupId }}
+        </div>
+        <div>
+          Registered on: {{ student.dateRegistered | date }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="student-info d-flex flex-column justify-content-between">
+      <ul class="info-list custom-list">
+          <li><b>Status:</b> {{student.passed ? "Passed School" : "Not yet finished"}}</li>
+          <li><b>Attendance:</b> {{getLecturesCount()}} lectures attended.</li>
+          <li><b>Tests taken:</b> {{getTestsCount()}} regulations tests taken.</li>
+      </ul>
+      <div class="info-footer">
+        <div class="btn btn-outline-dark" (click)="openGroupModal()">Change Group</div>
+        <div class="btn btn-outline-dark ml-2" (click)="openTestModal()">Sign For Exam</div>
+      </div>
+  </div>
+</div>

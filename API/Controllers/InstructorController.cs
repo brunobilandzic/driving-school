@@ -30,6 +30,16 @@ namespace API.Controllers
             return students;
         }
 
+        [HttpGet("students/{username}")]
+        public async Task<ActionResult<DriverDto>> GetDriver(string username)
+        {
+            var driver = await _unitOfWork.InstructorRepository.GetDriver(username);
+
+            if(driver == null ) return BadRequest("Failed to fetch driver.");
+
+            return Ok(driver);
+        }
+
         [HttpGet("sessions")]
         public async Task<ActionResult<PagedList<DrivingSessionDto>>> GetSessions([FromQuery] PaginationParams paginationParams)
         {

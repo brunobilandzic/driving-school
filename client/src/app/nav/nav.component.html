@@ -1,9 +1,6 @@
 <nav class="navbar navbar-light bg-light">
   <a href="/" class="navbar-brand">Driving School</a>
   <ul *ngIf="accountService.currentUser$ | async" class="navbar-nav mr-auto">
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/members">Users</a>
-    </li>
     <li
       *ngIf="
         roles?.includes('Admin') ||

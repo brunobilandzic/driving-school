@@ -5,4 +5,5 @@ export interface UserModel {
     photoUrl: string;
     token: string;
     roles: string [];
+    dateRegistered: Date;
 }

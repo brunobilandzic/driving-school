@@ -31,6 +31,8 @@ export class StudentListComponent implements OnInit {
   }
 
   loadAll() {
+    if(this.pagination != undefined && !this.active.all)
+      this.pageNumber = 1;
     Object.keys(this.active).forEach((key) => {
       if (key != 'all') this.active[key] = false;
     });
@@ -42,10 +44,11 @@ export class StudentListComponent implements OnInit {
         this.pagination = result.pagination;
         this.students = result.result;
       });
-    console.log(this.active);
   }
 
   loadInstructors() {
+    if(this.pagination != undefined && !this.active.instructor)
+      this.pageNumber = 1;
     Object.keys(this.active).forEach((key) => {
       if (key != 'instructor') this.active[key] = false;
     });
@@ -60,6 +63,8 @@ export class StudentListComponent implements OnInit {
   }
 
   loadProfessors() {
+    if(this.pagination != undefined && !this.active.professor)
+      this.pageNumber = 1;
     Object.keys(this.active).forEach((key) => {
       if (key != 'professor') this.active[key] = false;
     });
@@ -88,7 +93,6 @@ export class StudentListComponent implements OnInit {
         }
       }
     })
-    console.log(link);
     return encodeURI(link);
   }
 

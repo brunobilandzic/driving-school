@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { DriverModel } from 'src/app/_models/driver';
+import { StudentModel } from 'src/app/_models/student';
+import { MembersService } from 'src/app/_services/members.service';
 
 @Component({
   selector: 'app-instructor-student',
@@ -6,10 +9,24 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./instructor-student.component.css']
 })
 export class InstructorStudentComponent implements OnInit {
-
-  constructor() { }
+  @Output() toggleView = new EventEmitter<boolean>();
+  @Input() isProfessor: boolean;
+  @Input() username: string;
+  driver: DriverModel;
+  constructor(private membersService: MembersService) { }
 
   ngOnInit(): void {
+    this.loadStudent();
   }
+
+  toggleViewClick() {
+    this.toggleView.emit(true);
+  }
+
+  loadStudent() {
+    this.membersService.getDriver(this.username)
+      .subscribe((driver) => this.driver = driver)
+  }
+
 
 }

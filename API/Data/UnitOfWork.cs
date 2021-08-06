@@ -28,7 +28,7 @@ namespace API.Data
 
         public IStudentRepository StudentRepository => new StudentRepository(_context, _mapper, _userManager);
 
-        public IInstructorRepository InstructorRepository => new InstructorRepository(_context, _mapper);
+        public IInstructorRepository InstructorRepository => new InstructorRepository(_context, _mapper, _userManager);
 
         public async Task<int> SaveAllChanges()
         {

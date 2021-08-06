@@ -14,5 +14,12 @@ namespace API.Extensions
 
             return -1;
         }
+
+        public async static Task<bool> IsInRoleUsername(this UserManager<AppUser> userManager, string username, string roleName)
+        {
+            var user = await userManager.FindByNameAsync(username);
+
+            return await userManager.IsInRoleAsync(user, roleName);
+        }
     }
 }

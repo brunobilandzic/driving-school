@@ -8,6 +8,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { TabsModule } from 'ngx-bootstrap/tabs';
 
+
 @NgModule({
     imports: [
         ToastrModule.forRoot(

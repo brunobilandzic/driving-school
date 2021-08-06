@@ -74,18 +74,18 @@ namespace API.Helpers
                     );
             
             CreateMap<RegulationsTestDto, RegulationsTest>();
-
+            CreateMap<AppUser, DriverDto>();
             CreateMap<AppUser, StudentDto>()
                 .ForMember(
                     dest => dest.Lectures,
                     opt => opt.MapFrom(
-                        src => src.StudentLectures.Select(sl => sl.Lecture)
+                        src => src.StudentLectures
                     )    
                 )
                 .ForMember(
                     dest => dest.RegulationsTests,
                     opt => opt.MapFrom(
-                        src => src.StudentRegulationsTest.Select(srt => srt.RegulationTest)
+                        src => src.StudentRegulationsTest
                     ) 
                 );
 
@@ -102,6 +102,53 @@ namespace API.Helpers
 
             CreateMap<DrivingSessionEditStudentDto, DrivingSession>();
 
+            CreateMap<StudentLecture, IdToBool>()
+                .ForMember(
+                    dest => dest.Id,
+                    opt => opt.MapFrom(
+                        src => src.LectureId
+                    )
+                )
+                .ForMember(
+                    dest => dest.Thruth,
+                    opt => opt.MapFrom(
+                        src => src.Attendance
+                    )
+                );
+
+            CreateMap<StudentLecture, StudentLectureDto>()
+                .ForMember(
+                    dest => dest.StudentUsername,
+                    opt => opt.MapFrom(
+                        src => src.Student.UserName
+                    )
+                )
+                .ForMember(
+                    dest => dest.LectureTopic,
+                    opt => opt.MapFrom(
+                        src => src.Lecture.LectureTopic.Title
+                    )
+                )
+                .ForMember(
+                    dest => dest.DateStart,
+                    opt => opt.MapFrom(
+                        src => src.Lecture.DateStart
+                    )
+                );
+
+            CreateMap<StudentRegulationsTest, StudentRegulationsTestDto>()
+                .ForMember(
+                    dest => dest.StudentUsername,
+                    opt => opt.MapFrom(
+                        src => src.Student.UserName
+                    )
+                )
+                .ForMember(
+                    dest => dest.RegulationsTestDate,
+                    opt => opt.MapFrom(
+                        src => src.RegulationTest.DateStart
+                    )
+                );
         }
     }
 }

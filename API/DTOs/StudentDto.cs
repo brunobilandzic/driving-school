@@ -6,9 +6,11 @@ namespace API.DTOs
     {
         public int RegulationsGroupId { get; set; }
         
-        public List<RegulationsTestDto> RegulationsTests {get; set;}
+        public List<StudentRegulationsTestDto> RegulationsTests {get; set;}
 
-        public List<LectureDto> Lectures {get; set;}
+        public List<StudentLectureDto> Lectures {get; set;}
+
+        public bool Passed { get; set; }
         
     }
 }

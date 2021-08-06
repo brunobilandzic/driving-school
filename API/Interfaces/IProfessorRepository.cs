@@ -14,6 +14,8 @@ namespace API.Interfaces
     public interface IProfessorRepository
     {
         Task<PagedList<PersonDto>> GetStudents(int professorId, PaginationParams paginationParams);
+
+        Task<StudentDto> GetStudent(string username);
         Task<RegulationsGroupDto> AddRegulationsGroup(RegulationsGroupDto regulationsGroup);
 
         Task<PagedList<RegulationsGroupMinDto>> GetRegulationsGroups(PaginationParams paginationParams);
@@ -28,6 +30,8 @@ namespace API.Interfaces
         Task<PagedList<RegulationsTestDto>> GetRegulationsTests(PaginationParams paginationParams);
 
         Task<RegulationsTestDto> GetRegulationsTest(int regulationsTestId);
+
+        Task<IEnumerable<StudentRegulationsTestDto>> GetRegulationsTestsForStudent(string username);
 
         Task AddStudentToTest(string username, int regulationsTestId);
 
@@ -54,6 +58,8 @@ namespace API.Interfaces
         Task ToggleAttendance(UsernameToIdDto studentLectureId);
 
         Task<IEnumerable<UsernameToBool>> GetAttendanceForlecture(int lectureId);
+
+        Task<IEnumerable<StudentLectureDto>> GetAttendancesForStudent(string username);
 
         Task<LectureTopicDto> AddLectureTopic(LectureTopicDto lectureTopicDto);
 

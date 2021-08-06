@@ -71,7 +71,6 @@ const routes: Routes = [
     component: ViewStudentComponent,
     canActivate: [RoleGuard],
     resolve: {
-      student: StudentResolver,
       id: IdResolver
     },
     data: { activationRoles: ['Professor', 'Instructor'] },

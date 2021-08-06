@@ -27,6 +27,9 @@ import { ViewStudentComponent } from './view-student/view-student.component';
 import { ProfessorStudentComponent } from './view-student/professor-student/professor-student.component';
 import { InstructorStudentComponent } from './view-student/instructor-student/instructor-student.component';
 import { StudentListComponent } from './view-student/student-list/student-list.component';
+import { StudentInfoComponent } from './view-student/student-info/student-info.component';
+import { AddToGroupComponent } from './view-student/student-info/add-to-group/add-to-group.component';
+import { SignToTestComponent } from './view-student/student-info/sign-to-test/sign-to-test.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +50,10 @@ import { StudentListComponent } from './view-student/student-list/student-list.c
     ViewStudentComponent,
     ProfessorStudentComponent,
     InstructorStudentComponent,
-    StudentListComponent
+    StudentListComponent,
+    StudentInfoComponent,
+    AddToGroupComponent,
+    SignToTestComponent
   ],
   imports: [
     BrowserModule,

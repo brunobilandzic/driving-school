@@ -48,6 +48,19 @@ namespace API.Data
             return await PagedList<PersonDto>.CreateAsync(users, paginationParams.PageNumber, paginationParams.PageSize);    
         }
 
+        public async Task<StudentDto> GetStudent(string username)
+        {
+            if(await _userManager.IsInRoleUsername(username, "Student") == false) return null;
+
+            return await _userManager.Users
+                .Where(u => u.UserName == username)
+                .ProjectTo<StudentDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+
+            
+            
+        }
+
         public async Task<RegulationsGroupDto> AddRegulationsGroup(RegulationsGroupDto regulationsGroupDto)
         {
             RegulationsGroup regulationsGruop = _mapper.Map<RegulationsGroup>(regulationsGroupDto);
@@ -70,8 +83,39 @@ namespace API.Data
 
             foreach (AppUser student in students)
             {
-                changeGroupResults.Add(new ChangeGroupResultDto(student.UserName));
                 if(await _userManager.IsInRoleAsync(student, "Student") == false) continue;
+
+                // Bind student to future lectures form 
+                var studentLecturesToDelete = await _context.StudentLectures
+                    .Include(sl => sl.Lecture)
+                    .Where(sl => sl.Lecture.RegulationsGroupId == student.RegulationsGroupId &&
+                        sl.Lecture.DateStart > DateTime.Now && sl.StudentId == student.Id
+                    )
+                    .ToListAsync();
+                
+                _context.StudentLectures.RemoveRange(studentLecturesToDelete);
+
+                var studentLecturesToAdd = new List<StudentLecture>();
+
+                var lecturesToAddIds = _context.Lectures
+                    .Where(l => l.RegulationsGroupId == changeGroupDto.Id && l.DateStart > DateTime.Now)
+                    .Select(l => l.LectureId);
+
+
+                foreach (var lectureId in lecturesToAddIds)
+                {
+                    studentLecturesToAdd.Add(
+                        new StudentLecture
+                        {
+                            LectureId = lectureId,
+                            StudentId = student.Id
+                        }
+                    );
+                }
+
+                await _context.StudentLectures.AddRangeAsync(studentLecturesToAdd);
+
+                changeGroupResults.Add(new ChangeGroupResultDto(student.UserName));
                 student.RegulationsGroupId = changeGroupDto.Id;
                 changeGroupResults.Last().Success = true;
             }
@@ -133,6 +177,21 @@ namespace API.Data
                 );
         }
 
+        
+        public async Task<IEnumerable<StudentRegulationsTestDto>> GetRegulationsTestsForStudent(string username)
+        {
+            if(await _userManager.IsInRoleUsername(username, "Student") == false) return null;
+
+            return await _userManager.Users
+                .Where(u => u.UserName == username)
+                .Include(u => u.StudentRegulationsTest)
+                .ThenInclude(srt => srt.RegulationTest)
+                .SelectMany(u => u.StudentRegulationsTest)
+                .ProjectTo<StudentRegulationsTestDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+        }
+
         public async Task AddStudentToTest(string username, int regulationsTestId)
         {
             var user = await _userManager.Users
@@ -141,18 +200,20 @@ namespace API.Data
                 .Where(u => u.UserName == username)
                 .SingleOrDefaultAsync();
             
+            if(user == null) return;
+
+
             var studentId = user.Id;
 
             var student = _mapper.Map<StudentDto>(user);
                         
-            if(student == null) return;
-
+            
             // Finding if student has regulations test that is not yet held
             // To which he is already assigned
             // Information about regulations tests that were held not needed here
 
             var regulationsTestToDelete = student.RegulationsTests
-                .Where(rt => rt.DateStart > DateTime.Now)
+                .Where(rt => rt.RegulationsTestDate > DateTime.Now)
                 .FirstOrDefault();
 
             if(regulationsTestToDelete != null)
@@ -186,14 +247,6 @@ namespace API.Data
 
             _context.StudentRegulationsTest.Remove(studentRegulationsTestToDelete);
 
-        }
-
-        private async Task<StudentDto> GetStudent(string username)
-        {
-            return await _userManager.Users
-                .Where(s => s.UserName == username)
-                .ProjectTo<StudentDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync();
         }
 
         public async Task DeleteRegulationsTest(int regulationsTestId)
@@ -393,6 +446,24 @@ namespace API.Data
 
         }
 
+        public async Task<IEnumerable<StudentLectureDto>> GetAttendancesForStudent(string username)
+        {
+            if(await _userManager.IsInRoleUsername(username, "Student") == false) return null;
+
+            var studentLectures =  await _userManager.Users
+                .Where(u => u.UserName == username)
+                .SelectMany(u => u.StudentLectures)
+                .Include(sl => sl.Lecture)
+                .ThenInclude(l => l.LectureTopic)
+                .Include(sl => sl.Student)
+                .ToListAsync();
+
+            var attendance = _mapper.Map<List<StudentLectureDto>>(studentLectures);
+
+            return attendance;
+                
+        }
+
         public async Task<LectureDto> EditLecture(LectureDto lectureDto, int lectureId)
         {
             var lecture =   await  _context.Lectures.FindAsync(lectureId);
@@ -437,7 +508,6 @@ namespace API.Data
 
         }
 
- 
     }
 
 }

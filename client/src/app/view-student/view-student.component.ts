@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { fromEvent } from 'rxjs';
+import { convertToObject } from 'typescript';
 import { RolesService } from '../_services/roles.service';
 
 @Component({
@@ -12,7 +14,7 @@ export class ViewStudentComponent implements OnInit {
   instructorView = false;
   forceView = '';
   loading = true;
-
+  username: string;
   constructor(
     public rolesService: RolesService,
     private route: ActivatedRoute
@@ -30,7 +32,6 @@ export class ViewStudentComponent implements OnInit {
     });
 
     this.route.queryParamMap.subscribe((queryParamMap) => {
-      console.log(queryParamMap.get("mode"));
       switch (queryParamMap.get("mode")) {
         case 'instructor':
           this.forceView = 'instructor';
@@ -41,6 +42,26 @@ export class ViewStudentComponent implements OnInit {
         default:
           break;
       }
+      
     });
+
+    this.route.data.subscribe(data => this.username = data.id);
+
+    
   }
+
+  toggleToInstructor(e: any)
+  {
+    this.forceView = '';
+    this.professorView = false;
+    this.instructorView = true;
+  }
+
+  toggleToProfessor(e: any)
+  {
+    this.forceView = '';
+    this.instructorView = false;
+    this.professorView = true;
+  }
+
 }
