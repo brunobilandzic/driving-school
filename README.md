@@ -1,6 +1,7 @@
 # Readme #
 
 For client start up:
+
 1. `cd client;`
 2. Create folder called ssl/
 3. Install server certificates from generateTrustedSSL/ to Trusted Root Certification Authorities store
@@ -10,6 +11,7 @@ For client start up:
 7. `ng serve;`
 
 For server startup
+
 1. `cd API`
 2. `dotnet dev-certs https --trust`
 3. `dotnet watch run`
