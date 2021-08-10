@@ -1,3 +1,4 @@
+import { StudentTestModel } from "./student-test";
 import { UserModel } from "./user";
 
 export interface RegulationsTestModel {
@@ -5,6 +6,6 @@ export interface RegulationsTestModel {
     dateStart: Date;
     location?: string;
     examinerId: number;
-    examiner: UserModel [];
-    students: UserModel [];
+    examiner: UserModel;
+    studentRegulationsTest: StudentTestModel [];
 }

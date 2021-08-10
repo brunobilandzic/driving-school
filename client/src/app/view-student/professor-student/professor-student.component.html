@@ -1,12 +1,45 @@
-<div *ngIf="isInstructor" class="btn btn-outline-dark" (click)="toggleViewClick()">View As Instructor</div>
-<tabset>
-    <tab heading="Info">
-        <app-student-info [student]="student" (refreshStudent)="loadStudent($event)"></app-student-info>
-    </tab>
-    <tab heading="Lectures">
-        <div>Lectures</div>
-    </tab>
-    <tab heading="Regulations Tests">
-        <div>Tests</div>
-    </tab>
+<div
+  *ngIf="isInstructor"
+  class="btn btn-outline-dark"
+  (click)="toggleViewClick()"
+>
+  View As Instructor
+</div>
+<tabset *ngIf="student">
+  <tab heading="Info">
+    <app-student-info
+      [student]="student"
+      (refreshStudent)="loadStudent($event)"
+    ></app-student-info>
+  </tab>
+  <tab heading="Lectures">
+    <app-student-lecture-list
+      [lectures]="student.lectures"
+    ></app-student-lecture-list>
+  </tab>
+  <tab heading="Regulations Tests">
+    <div *ngIf="student">
+      <div class="reg-test-item" *ngFor="let rt of student.regulationsTests">
+        <div class="card">
+          <div class="card-body reg-test-body">
+            <div class="card-title">
+              {{ rt.regulationsTestId }}:
+              {{ rt.regulationsTestDate | date: "medium" }}
+            </div>
+            <div
+              *ngIf="checkTestDate(rt.regulationsTestDate); else deleteFromTestItem"
+              class="card-text"
+            >
+              {{ rt.score }}
+            </div>
+            <ng-template #deleteFromTestItem>
+              <div class="delete-from-test btn btn-outline-danger" (click)="deleteFromTest($event, rt.regulationsTestId)">
+                <i class="fa fas fa-trash"></i>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </tab>
 </tabset>

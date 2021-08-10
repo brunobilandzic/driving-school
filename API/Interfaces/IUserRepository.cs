@@ -17,6 +17,7 @@ namespace API.Interfaces
         Task<StudentDto> GetStudent(string username);
 
         Task<PagedList<PersonDto>> GetStudents(PaginationParams paginationParams);
+        Task<IEnumerable<PersonDto>> GetAllStudents();
 
         Task<bool> PassStudent(string username);
 

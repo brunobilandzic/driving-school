@@ -7,8 +7,8 @@ import { TimepickerModule } from 'ngx-bootstrap/timepicker';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { TabsModule } from 'ngx-bootstrap/tabs';
-
-
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { CollapseModule } from 'ngx-bootstrap/collapse';
 @NgModule({
     imports: [
         ToastrModule.forRoot(
@@ -20,7 +20,9 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
         TimepickerModule.forRoot(),
         PaginationModule.forRoot(),
         NgxSpinnerModule,
-        TabsModule.forRoot()
+        BrowserAnimationsModule,
+        TabsModule.forRoot(),
+        CollapseModule.forRoot()
     ],
     exports: [
         ToastrModule,
@@ -30,7 +32,9 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
         TimepickerModule,
         PaginationModule,
         NgxSpinnerModule,
-        TabsModule
+        TabsModule,
+        BrowserAnimationsModule,
+        CollapseModule
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

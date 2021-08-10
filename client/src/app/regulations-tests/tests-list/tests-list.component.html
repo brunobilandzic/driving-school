@@ -1,0 +1,22 @@
+<div>
+    <div *ngFor="let test of regulationsTests">
+        <app-test-card (deleteTest)="deleteTest($event)" [regTest]="test"></app-test-card>
+    </div>
+</div>
+
+<div>
+    <div *ngIf="pagination" class="d-flex flex-row justify-content-center">
+        <pagination
+          [boundaryLinks]="true"
+          [totalItems]="pagination.totalItems"
+          [itemsPerPage]="pagination.itemsPerPage"
+          [(ngModel)]="pageNumber"
+          (pageChanged)="pageChanged($event)"
+          previousText="&lsaquo;"
+          nextText="&rsaquo;"
+          firstText="&laquo;"
+          lastText="&raquo;"
+        >
+        </pagination>
+      </div>
+  </div>

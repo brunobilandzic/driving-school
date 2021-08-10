@@ -8,6 +8,9 @@ import { LecturesHomeProfessorComponent } from './lectures/lectures-home-profess
 import { LecturesListComponent } from './lectures/lectures-list/lectures-list.component';
 import { MembersComponent } from './members/members.component';
 import { RegisterComponent } from './register/register.component';
+import { CreateRegTestComponent } from './regulations-tests/create-reg-test/create-reg-test.component';
+import { TestsListComponent } from './regulations-tests/tests-list/tests-list.component';
+import { TestsPanelComponent } from './regulations-tests/tests-panel/tests-panel.component';
 import { StudentListComponent } from './view-student/student-list/student-list.component';
 import { ViewStudentComponent } from './view-student/view-student.component';
 import { AuthGuard } from './_guards/auth.guard';
@@ -80,6 +83,24 @@ const routes: Routes = [
     component: StudentListComponent,
     canActivate: [RoleGuard],
     data: { activationRoles: ['Professor', 'Instructor'] },
+  },
+  {
+    path: 'regulations-tests/list',
+    component: TestsListComponent,
+    canActivate: [RoleGuard],
+    data: { activationRoles: ['Professor'] },
+  },
+  {
+    path: 'regulations-tests',
+    component: TestsPanelComponent,
+    canActivate: [RoleGuard],
+    data: { activationRoles: ['Professor'] },
+  },
+  {
+    path: 'regulations-tests/add-test',
+    component: CreateRegTestComponent,
+    canActivate: [RoleGuard],
+    data: { activationRoles: ['Professor'] },
   }
 
 

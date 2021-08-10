@@ -1,0 +1,5 @@
+<div>
+    <div *ngFor="let lecture of lectures">
+        <app-student-lecture-card (click)="toggleAttendance(lecture.lectureId)"  [lecture]="lecture"></app-student-lecture-card>
+    </div>
+</div>

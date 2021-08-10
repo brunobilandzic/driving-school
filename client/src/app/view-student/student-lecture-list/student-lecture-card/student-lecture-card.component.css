@@ -1,0 +1,35 @@
+.pending {
+}
+.stud-lect-card .click-info {
+    display: none;
+}
+
+.attended {
+    background-color: #A9FDAC;
+
+}
+
+.not-attended {
+    background-color: #FCA290;
+}
+
+.not-attended:hover, .attended:hover {
+    cursor: pointer;
+}
+
+.stud-lect-card {
+    border: 1px solid;
+    margin: 2rem 0;
+    border-radius: 5px;
+    position: relative;
+}
+.stud-lect-card.attended .click-info, .stud-lect-card.not-attended .click-info {
+    display:block;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.stud-lect-card:first-child {
+    margin-top: 1rem;
+}

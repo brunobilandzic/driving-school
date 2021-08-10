@@ -99,5 +99,19 @@ namespace API.Data
 
             return await PagedList<PersonDto>.CreateAsync(students, paginationParams.PageNumber, paginationParams.PageSize);
         }
+
+        public async Task<IEnumerable<PersonDto>> GetAllStudents()
+        {
+            return await _context.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .Where(u => u.UserRoles.Select(ur => ur.Role.Name).Contains("Student"))
+                .Where(u => u.Passed == false)
+                .OrderByDescending(u => u.DateRegistered)
+                .ProjectTo<PersonDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            
+
+        }
     }
 }

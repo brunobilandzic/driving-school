@@ -1,0 +1,49 @@
+<div>
+  <div class="card d-flex flex-row justify-content-between">
+    <div class="card-body">
+      <div class="card-title">
+        <h1>{{ regTest.regulationsTestId }}</h1>
+      </div>
+      <div class="card-subtitle">
+        {{ regTest.dateStart | date: "medium" }}, {{ regTest.location }}
+      </div>
+      <div class="card-text">Examiner: {{ regTest.examiner.username }}</div>
+    </div>
+    <div *ngIf="checkTestDate(regTest.dateStart)" class="card-side d-flex flex-column">
+      <div class="btn">
+        <i
+          class="fa text-danger fas fa-trash"
+          data-toggle="tooltip"
+          data-placement="left"
+          title="Delete test"
+          (click)="onDeleteTest(regTest.regulationsTestId)"
+        ></i>
+      </div>
+      <div class="btn">
+        <i
+          class="fa fas fa-user-plus"
+          data-toggle="tooltip"
+          data-placement="left"
+          title="Add Students"
+        ></i>
+      </div>
+      <div class="btn">
+        <i
+          (click)="onEditTest(regTest.regulationsTestId)"
+          class="fa fas fa-edit"
+          data-toggle="tooltip"
+          data-placement="left"
+          title="Edit Test"
+        ></i>
+      </div>
+      <div class="btn">
+        <i
+          class="fa fas text-success fa-check"
+          data-toggle="tooltip"
+          data-placement="left"
+          title="Test Scores"
+        ></i>
+      </div>
+    </div>
+  </div>
+</div>

@@ -23,12 +23,36 @@
   <div class="student-info d-flex flex-column justify-content-between">
       <ul class="info-list custom-list">
           <li><b>Status:</b> {{student.passed ? "Passed School" : "Not yet finished"}}</li>
-          <li><b>Attendance:</b> {{getLecturesCount()}} lectures attended.</li>
-          <li><b>Tests taken:</b> {{getTestsCount()}} regulations tests taken.</li>
+          <li><b>Attendance:</b>
+            <span>
+              <span class="lec-count attended mr-2 ml-2">
+                {{getLecturesCount()}} lectures attended
+              </span>
+              <span class="lec-count unattended">
+                {{getUnattendedLecturesCount()}} missed lectures.
+              </span>  
+            </span>
+          </li>
+
+          <li><b>Tests Taken:</b> {{getTestsCount()}} regulations tests taken.</li>
+          <li><b>Test Assigned: </b>
+            <span *ngIf="getStudentTest().length; else noTests" >
+              <i class="fa far text-success fa-check-square"></i>
+              <span> {{getStudentTest()[0].regulationsTestDate | date:'medium'}}</span>
+            </span> 
+            <ng-template #noTests>
+            <span>
+              <span>Not yet assigned to any test </span>
+              <i class="fa far text-danger fa-times-circle"></i>
+            </span>
+              
+            </ng-template>
+            
+          </li>
       </ul>
       <div class="info-footer">
         <div class="btn btn-outline-dark" (click)="openGroupModal()">Change Group</div>
-        <div class="btn btn-outline-dark ml-2" (click)="openTestModal()">Sign For Exam</div>
+        <div class="btn btn-outline-dark ml-2" (click)="openTestModal()">Sign For Test</div>
       </div>
   </div>
 </div>

@@ -53,6 +53,18 @@ namespace API.Controllers
 
             return students;
         }
+
+        [Authorize(Policy = "NotOnlyStudent")]
+        [HttpGet("all-students")]
+        public async Task<ActionResult<IEnumerable<PersonDto>>> GetAllStudents()
+        {
+            var students = await _unitOfWork.UserRepository.GetAllStudents();
+
+            if(students == null) return BadRequest("Failed to fetch all students.");
+
+            return Ok(students);
+        }
+        
         
         [HttpGet("{username}")]
         public async Task<ActionResult<PersonDto>> GetUser(string username)

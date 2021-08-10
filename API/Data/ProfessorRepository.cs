@@ -143,21 +143,86 @@ namespace API.Data
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<RegulationsTestDto> AddRegulationsTest(RegulationsTestDto regulationsTestDto)
+        public async Task<RegulationsTestDto> AddRegulationsTest(RegulationsTestPostDto regulationsTestDto, int examinerId)
         {
             RegulationsTest regulationsTest = _mapper.Map<RegulationsTest>(regulationsTestDto);
+
+            regulationsTest.ExaminerId = examinerId;
 
             await _context.RegulationsTests.AddAsync(regulationsTest);
 
             // Save changes so regulationsTest.Id populates
             await _context.SaveChangesAsync();
 
+            var studentRegulationsTests = new List<StudentRegulationsTest>();
+
+            foreach (var st in regulationsTestDto.Students)
+            {
+                studentRegulationsTests.Add(
+                    new StudentRegulationsTest {
+                        StudentId= await _userManager.GetUserIdFromUsername(st),
+                        RegulationsTestId = regulationsTest.RegulationsTestId
+                    }
+                );
+            }
+
+            await _context.StudentRegulationsTest.AddRangeAsync(studentRegulationsTests);
+
+            if(await _context.SaveChangesAsync() > 0 == false) return null;
+
             return _mapper.Map<RegulationsTestDto>(regulationsTest);
+        }
+
+        public async Task EditRegulationsTest(RegulationsTestPostDto regulationsTestDto, int regulationsTestId)
+        {
+            var studentIds = new List<int>();
+            var studentRegulationsTestsToAdd = new List<StudentRegulationsTest>();
+            foreach (var studentUsername in regulationsTestDto.Students)
+            {
+                studentIds.Add(await _userManager.GetUserIdFromUsername(studentUsername));
+            }
+            foreach (var studentId in studentIds)
+            {
+                var studentRegulationsTest = await _context.StudentRegulationsTest
+                    .Where(srt => srt.StudentId == studentId && srt.RegulationsTestId == regulationsTestId)
+                    .FirstOrDefaultAsync();
+                if(studentRegulationsTest == null)
+                {
+                    studentRegulationsTestsToAdd.Add(new StudentRegulationsTest{
+                        StudentId = studentId,
+                        RegulationsTestId = regulationsTestId
+                    });
+                }
+            }
+
+            var regulationsTest = await _context.RegulationsTests.FindAsync(regulationsTestId);
+
+            regulationsTest = _mapper.Map(regulationsTestDto, regulationsTest);
+            
+            _context.RegulationsTests.Update(regulationsTest);
+
+            await _context.StudentRegulationsTest.AddRangeAsync(studentRegulationsTestsToAdd);
+
+            foreach (var studentId in studentIds)
+            {
+                var studentRegulationsTestToDelete = await _context.StudentRegulationsTest
+                    .Include(srt => srt.RegulationTest)
+                    .Where(srt => (srt.StudentId == studentId && srt.RegulationTest.DateStart > DateTime.Now && srt.RegulationsTestId != regulationsTestId))
+                    .ToListAsync();
+                if(studentRegulationsTestToDelete.Count != 0)
+                {
+                    _context.StudentRegulationsTest.RemoveRange(studentRegulationsTestToDelete);
+                }
+            }
+
+            
+
         }
 
         public async Task<PagedList<RegulationsTestDto>> GetRegulationsTests(PaginationParams paginationParams)
         {
             var regulationsTests = _context.RegulationsTests
+                .OrderByDescending(rt => rt.DateStart)
                 .ProjectTo<RegulationsTestDto>(_mapper.ConfigurationProvider)
                 .AsQueryable();
 
@@ -235,6 +300,57 @@ namespace API.Data
             );
         }
 
+        public async Task AddStudentsToTest(string[] usernames, int regulationsTestId)
+        {
+            var users = await _userManager.Users
+                .Include(u => u.StudentRegulationsTest)
+                .ThenInclude(srt => srt.RegulationTest)
+                .Where(u => usernames.Contains(u.UserName))
+                .ToListAsync();
+            
+            if(users == null) return;
+
+
+            var studentsIds = users.Select(u => u.Id).ToList();
+
+            var students = _mapper.Map<StudentDto []>(users);
+                        
+            
+            // Finding if students have regulations test that is not yet held
+            // To which he is already assigned
+            // Information about regulations tests that were held not needed here
+
+            var regulationsTestsToDelete = students
+                .SelectMany(s => s.RegulationsTests)
+                .Where(rt => rt.RegulationsTestDate > DateTime.Now)
+                .ToList();
+
+            if(regulationsTestsToDelete != null)
+            {
+                foreach (var rt in regulationsTestsToDelete)
+                {
+                var studentRegulationsTestToDelete = await _context.StudentRegulationsTest
+                    .Where(srt => srt.Student.UserName == rt.StudentUsername && srt.RegulationsTestId == rt.RegulationsTestId)
+                    .FirstOrDefaultAsync();
+
+                _context.StudentRegulationsTest.Remove(studentRegulationsTestToDelete);
+
+                }
+
+            }
+            foreach (var username in usernames)
+            {
+                await _context.StudentRegulationsTest.AddAsync(
+                new StudentRegulationsTest
+                {
+                    StudentId = users.Where(u => u.UserName == username).Select(u => u.Id).FirstOrDefault(),
+                    RegulationsTestId = regulationsTestId
+                }
+                );
+            }
+            
+        }
+
         public async Task DeleteStudentFromTest(string username, int regulationsTestId)
         {
             var student = await _userManager.FindByNameAsync(username);
@@ -253,9 +369,10 @@ namespace API.Data
         {
             var regulationsTest = await _context.RegulationsTests.FindAsync(regulationsTestId);
 
-            if(regulationsTest == null) return;
+            if(regulationsTest == null) return; 
 
             _context.RegulationsTests.Remove(regulationsTest);
+            
         }
 
         public async Task<IEnumerable<LectureTopicDto>> GetLectureTopics()

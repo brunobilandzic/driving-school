@@ -45,6 +45,12 @@ export class MembersService {
       .get(this.baseUrl + 'professor/regulations-tests')
   }
 
+  getStudentsRegulationsTests(username: string)
+  {
+    return this.http
+      .get(this.baseUrl + 'professor/regulations-tests/student/' + username)
+  }
+
   getStudents(view: string, pageNumber: number, pageSize: number)
   {
     let key = view + '-' + pageNumber.toString() + '-' + pageSize.toString();
@@ -61,6 +67,11 @@ export class MembersService {
         return result;
       }))
     
+  }
+
+  getAllStudents()
+  {
+    return this.http.get(this.baseUrl + 'users/all-students');
   }
 
   getStudent(username: string): Observable<StudentModel> {
@@ -95,5 +106,9 @@ export class MembersService {
 
   signToTest(studentToTest: UsernameToId) {
     return this.http.post(this.baseUrl + 'professor/regulations-test-student', studentToTest)
+  }
+
+  deleteFromTest(studentFromTest: UsernameToId){
+    return this.http.delete(this.baseUrl + 'professor/regulations-test-student', {body: studentFromTest});
   }
 }

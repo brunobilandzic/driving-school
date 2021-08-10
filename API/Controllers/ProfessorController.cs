@@ -127,17 +127,39 @@ namespace API.Controllers
             return NotFound("Something went wrong.");
         }
 
+        [HttpGet("regulations-tests/student/{username}")]
+        public async Task<ActionResult<IEnumerable<StudentRegulationsTestDto>>> GetRegulationsTestsForStudent(string username)
+        {
+            var studentRegulationsTests = await _unitOfWork.ProfessorRepository.GetRegulationsTestsForStudent(username);
+
+            if(studentRegulationsTests == null) return BadRequest("Failed to fetch tests for student.");
+
+            return Ok(studentRegulationsTests);
+        }
+
 
         [HttpPost("regulations-tests")]
-        public async Task<ActionResult<RegulationsTestDto>> AddRegulationsTest(RegulationsTestDto regulationsTestDto)
+        public async Task<ActionResult<RegulationsTestDto>> AddRegulationsTest(RegulationsTestPostDto regulationsTestDto)
         {
-            RegulationsTestDto regulationsTest = await _unitOfWork.ProfessorRepository.AddRegulationsTest(regulationsTestDto);
+
+            RegulationsTestDto regulationsTest = await _unitOfWork.ProfessorRepository.AddRegulationsTest(regulationsTestDto, User.GetUserId());
 
             if (regulationsTest != null) return Ok(regulationsTest);
 
             return BadRequest("Something went wrong.");
         }
-        [HttpDelete("regulations-test/{id}")]
+
+        
+        [HttpPut("regulations-tests/{regulationsTestId}")]
+        public async Task<ActionResult> EditRegulationsTest(int regulationsTestId, RegulationsTestPostDto regulationsTestDto)
+        {
+            await _unitOfWork.ProfessorRepository.EditRegulationsTest(regulationsTestDto, regulationsTestId);
+
+            if(await _unitOfWork.SaveAllChanges() > 0) return Ok();
+
+            return BadRequest("Something went wrong while trying to update regulations test.");
+        }
+        [HttpDelete("regulations-tests/{id}")]
         public async Task<ActionResult> DeleteRegulationsTest(int id)
         {
             await _unitOfWork.ProfessorRepository.DeleteRegulationsTest(id);
@@ -157,6 +179,19 @@ namespace API.Controllers
             return BadRequest("Failed to add student to test.");
 
         }
+
+        [HttpPost("students-to-test")]
+        public async Task<ActionResult> AddStudentsToTest(UsernamesToIdDto changeTestDto)
+        {
+            await _unitOfWork.ProfessorRepository.AddStudentsToTest(changeTestDto.Usernames, changeTestDto.Id);
+
+            if (await _unitOfWork.SaveAllChanges() > 0) return Ok();
+
+            return BadRequest("Failed to add student to test.");
+
+        }
+
+
 
         [HttpDelete("regulations-test-student")]
         public async Task<ActionResult> DeleteStudentFromTest(UsernameToIdDto changeTestDto)

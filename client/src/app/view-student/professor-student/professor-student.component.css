@@ -1,0 +1,23 @@
+.reg-test-body{
+    display: flex;
+    justify-content: space-between;
+}
+
+.reg-test-body .card-text  {
+    font-size: 2rem;
+    align-self: flex-end;
+}
+
+.reg-test-item{
+    margin: 2rem 0;
+}
+
+.reg-test-item:first-child {
+    margin-top: 1rem;
+}
+
+.delete-from-test:hover {
+    cursor: pointer;
+    color: white;
+    border-color: white;
+}

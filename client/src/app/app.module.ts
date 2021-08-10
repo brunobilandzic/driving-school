@@ -30,6 +30,12 @@ import { StudentListComponent } from './view-student/student-list/student-list.c
 import { StudentInfoComponent } from './view-student/student-info/student-info.component';
 import { AddToGroupComponent } from './view-student/student-info/add-to-group/add-to-group.component';
 import { SignToTestComponent } from './view-student/student-info/sign-to-test/sign-to-test.component';
+import { StudentLectureListComponent } from './view-student/student-lecture-list/student-lecture-list.component';
+import { StudentLectureCardComponent } from './view-student/student-lecture-list/student-lecture-card/student-lecture-card.component';
+import { TestsListComponent } from './regulations-tests/tests-list/tests-list.component';
+import { TestCardComponent } from './regulations-tests/test-card/test-card.component';
+import { TestsPanelComponent } from './regulations-tests/tests-panel/tests-panel.component';
+import { CreateRegTestComponent } from './regulations-tests/create-reg-test/create-reg-test.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +59,13 @@ import { SignToTestComponent } from './view-student/student-info/sign-to-test/si
     StudentListComponent,
     StudentInfoComponent,
     AddToGroupComponent,
-    SignToTestComponent
+    SignToTestComponent,
+    StudentLectureListComponent,
+    StudentLectureCardComponent,
+    TestsListComponent,
+    TestCardComponent,
+    TestsPanelComponent,
+    CreateRegTestComponent
   ],
   imports: [
     BrowserModule,

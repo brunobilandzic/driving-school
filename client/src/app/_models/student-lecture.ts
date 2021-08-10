@@ -3,4 +3,5 @@ export interface StudentLectureModel {
     lectureTopic: string;
     lectureId: number;
     attendance: boolean;
+    dateStart: Date;
 }

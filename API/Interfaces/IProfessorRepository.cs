@@ -25,15 +25,19 @@ namespace API.Interfaces
         Task<RegulationsGroupDto> GetRegulationsGroup(int regulationsGroupId);
 
 
-        Task<RegulationsTestDto> AddRegulationsTest(RegulationsTestDto regulationsTest);
+        Task<RegulationsTestDto> AddRegulationsTest(RegulationsTestPostDto regulationsTest, int examinerId);
 
         Task<PagedList<RegulationsTestDto>> GetRegulationsTests(PaginationParams paginationParams);
+
+        Task EditRegulationsTest(RegulationsTestPostDto regulationsTestDto, int regulationsTestId);
 
         Task<RegulationsTestDto> GetRegulationsTest(int regulationsTestId);
 
         Task<IEnumerable<StudentRegulationsTestDto>> GetRegulationsTestsForStudent(string username);
 
         Task AddStudentToTest(string username, int regulationsTestId);
+
+        Task AddStudentsToTest(string[] usernames, int regulationsTestId);
 
         Task DeleteStudentFromTest(string username, int regulationsTestId);
 

@@ -65,27 +65,32 @@ namespace API.Helpers
 
             CreateMap<LectureTopicDto, LectureTopic>();
 
-            CreateMap<RegulationsTest, RegulationsTestDto>()
-                .ForMember(
-                    dest => dest.Students,
-                    opt => opt.MapFrom(
-                        src => src.StudentRegulationsTest.Select(srt => srt.Student)
-                    )
-                    );
+            CreateMap<RegulationsTest, RegulationsTestDto>();
             
             CreateMap<RegulationsTestDto, RegulationsTest>();
+
+            CreateMap<RegulationsTestPostDto, RegulationsTest>()
+                .ForMember(
+                    dest => dest.RegulationsTestId,
+                    opt => opt.Ignore()
+                )
+                .ForMember(
+                    dest => dest.ExaminerId,
+                    opt => opt.Ignore()
+                );
+
             CreateMap<AppUser, DriverDto>();
             CreateMap<AppUser, StudentDto>()
                 .ForMember(
                     dest => dest.Lectures,
                     opt => opt.MapFrom(
-                        src => src.StudentLectures
+                        src => src.StudentLectures.OrderByDescending(sl => sl.Lecture.DateStart)
                     )    
                 )
                 .ForMember(
                     dest => dest.RegulationsTests,
                     opt => opt.MapFrom(
-                        src => src.StudentRegulationsTest
+                        src => src.StudentRegulationsTest.OrderByDescending(rt => rt.RegulationTest.DateStart)
                     ) 
                 );
 

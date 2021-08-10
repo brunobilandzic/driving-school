@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace API.DTOs
 {
-    public class RegulationsTestDto
+    public class RegulationsTestPostDto
     {
         public int RegulationsTestId { get; set; }
         public DateTime DateStart { get; set; }
@@ -14,6 +14,6 @@ namespace API.DTOs
 
         public PersonDto Examiner { get; set; }
 
-        public List<StudentRegulationsTestDto> StudentRegulationsTest { get; set; }
+        public List<String> Students { get; set; }
     }
 }
