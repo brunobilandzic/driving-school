@@ -20,6 +20,8 @@ namespace API.Interfaces
 
         Task<PagedList<RegulationsGroupMinDto>> GetRegulationsGroups(PaginationParams paginationParams);
 
+        Task<IEnumerable<RegulationsGroupMinDto>> GetRegulationsGroupsActive();
+
         Task<IEnumerable<ChangeGroupResultDto>> AddStudentToGroup(UsernamesToIdDto changeGroupDto);
 
         Task<RegulationsGroupDto> GetRegulationsGroup(int regulationsGroupId);
@@ -27,9 +29,12 @@ namespace API.Interfaces
 
         Task<RegulationsTestDto> AddRegulationsTest(RegulationsTestPostDto regulationsTest, int examinerId);
 
+
         Task<PagedList<RegulationsTestDto>> GetRegulationsTests(PaginationParams paginationParams);
 
         Task EditRegulationsTest(RegulationsTestPostDto regulationsTestDto, int regulationsTestId);
+
+        Task ExamineStudents(List<ExamineStudentDto> examineStudentsDto, int regulationsTestId);
 
         Task<RegulationsTestDto> GetRegulationsTest(int regulationsTestId);
 
@@ -40,6 +45,8 @@ namespace API.Interfaces
         Task AddStudentsToTest(string[] usernames, int regulationsTestId);
 
         Task DeleteStudentFromTest(string username, int regulationsTestId);
+
+        Task DeleteStudentsFromTestBunch(string[] usernames, int regulationsTestId);
 
         Task DeleteRegulationsTest(int regulationsTestId);
 

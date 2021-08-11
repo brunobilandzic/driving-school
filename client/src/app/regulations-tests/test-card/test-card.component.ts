@@ -1,7 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { passedToday } from 'src/app/_helpers/datePassedToday';
 import { RegulationsTestModel } from 'src/app/_models/regulations-test';
+import { RegulationsTestsService } from 'src/app/_services/regulations-tests.service';
+import { AddStudentsModalComponent } from './add-students-modal/add-students-modal.component';
 
 @Component({
   selector: 'app-test-card',
@@ -11,9 +14,14 @@ import { RegulationsTestModel } from 'src/app/_models/regulations-test';
 export class TestCardComponent implements OnInit {
   @Input() regTest: RegulationsTestModel;
   @Output() deleteTest = new EventEmitter<number>();
-  constructor(private router: Router) {}
+  @Output() updateTests = new EventEmitter<boolean>();
+  addStudentsModal: BsModalRef;
+  updatedTest: RegulationsTestModel;
 
-  ngOnInit(): void {}
+  constructor(private router: Router, private modalService: BsModalService, private regTestService: RegulationsTestsService) {}
+
+  ngOnInit(): void {
+  }
 
   checkTestDate(dateString) {
     return passedToday(dateString);
@@ -33,5 +41,23 @@ export class TestCardComponent implements OnInit {
       'regulations-tests/add-test',
       { data: JSON.stringify(this.regTest) },
     ]);
+  }
+
+  onAddStudentsClick() {
+    const initialState = {
+      regTest: this.regTest,
+      updateTests: this.updateTests
+    };
+    this.addStudentsModal = this.modalService.show(AddStudentsModalComponent, {
+      initialState,
+    });
+    
+  }
+
+  onScoreClicks() {
+    this.router.navigate([
+      'regulations-tests/scores',
+      {data: JSON.stringify(this.regTest)}
+    ])
   }
 }

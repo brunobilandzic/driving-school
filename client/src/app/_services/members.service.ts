@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { DriverModel } from '../_models/driver';
 import { PaginatedResult } from '../_models/pagination';
+import { RegulationsGroup } from '../_models/regulations-group';
 import { StudentModel } from '../_models/student';
 import { UserModel } from '../_models/user';
 import { UsernameToId } from '../_models/username-to-id';
@@ -18,6 +19,7 @@ export class MembersService {
   baseUrl = environment.baseApiUrl ;
   users: UserModel[] = [];
   students = new Map();
+  regulationsGroups = new Map();
   student: StudentModel;
   driver: DriverModel;
   constructor(private http: HttpClient) {}
@@ -35,9 +37,27 @@ export class MembersService {
   getRegulationsGroups()
   {
     return this.http
-      .get(this.baseUrl + 'professor/regulations-groups')
+      .get(this.baseUrl + 'professor/regulations-groups-active')
       
   }
+
+  getAllRegulationsGroups(pageNumber: number, pageSize: number) {
+    let key = pageNumber.toString() + '-' + pageSize.toString();
+    let regulationsGroups = this.regulationsGroups.get(key);
+
+    if(regulationsGroups != null) return of(regulationsGroups);
+
+    let params = getPaginationHeaders(pageNumber, pageSize);
+
+    return getPaginatedResult<RegulationsGroup []>(this.baseUrl + 'professor/regulations-groups', params, this.http)
+      .pipe(map(rgs => {
+        this.regulationsGroups.set(key, rgs);
+        return rgs;
+      }))
+
+  } 
+
+
 
   getRegulationsTests()
   {

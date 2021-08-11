@@ -1,0 +1,59 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Add Students</h4>
+  <button
+    type="button"
+    class="close pull-right"
+    aria-label="Close"
+    (click)="bsModalRef.hide()"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="btn-container row">
+    <div class="btn-wrap col-4">
+      <div
+        (click)="
+          expanded = expanded == 'add-from-group' ? '' : 'add-from-group'
+        "
+        class="btn options-btn btn-outline-dark"
+      >
+        Add From Group
+      </div>
+    </div>
+
+    <div class="btn-wrap col-4">
+      <div
+        (click)="expanded = expanded == 'delete-bunch' ? '' : 'delete-bunch'"
+        class="btn options-btn btn-outline-dark"
+      >
+        <div class="btn-text">Delete Bunch</div>
+      </div>
+    </div>
+    <div class="btn-wrap col-4">
+      <div (click)="onDeleteAll()" class=" btn options-btn btn-outline-dark">
+        <div class="btn-text">Delete All</div>
+      </div>
+    </div>
+  </div>
+  <app-add-from-group-modal
+    [collapse]="expanded != 'add-from-group'"
+    [regulationsTestId]="regTest.regulationsTestId"
+    (onFinish)="onFinish($event)"
+  ></app-add-from-group-modal>
+  <app-delete-bunch-modal
+    [studentsAssigned]="regTest.studentRegulationsTest"
+    [regulationsTestId]="regTest.regulationsTestId"
+    [collapse]="expanded != 'delete-bunch'"
+    (onFinish)="onFinish($event)"
+  ></app-delete-bunch-modal>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-outline-danger"
+    (click)="bsModalRef.hide()"
+  >
+    Cancel
+  </button>
+</div>

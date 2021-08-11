@@ -37,4 +37,17 @@ export class TestsListComponent implements OnInit {
     this.regTestService.deleteRegulationsTest(testId)
       .subscribe(() => this.loadRegulationsTests());
   }
+
+  updateTests(e: any){
+    if(e)
+    {
+      console.log("updating tests..")
+      this.regTestService.updateTests(this.pageNumber, this.pageSize)
+        .subscribe((regTests: PaginatedResult<RegulationsTestModel[]>) => {
+          console.log(regTests.result)
+          this.regulationsTests = regTests.result;
+          this.pagination = regTests.pagination;
+        });
+    }
+  }
 }

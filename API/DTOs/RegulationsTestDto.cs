@@ -14,6 +14,8 @@ namespace API.DTOs
 
         public PersonDto Examiner { get; set; }
 
+        public bool Corrected { get; set; }
+
         public List<StudentRegulationsTestDto> StudentRegulationsTest { get; set; }
     }
 }

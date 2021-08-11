@@ -133,6 +133,17 @@ namespace API.Data
 
         }
 
+
+        public async Task<IEnumerable<RegulationsGroupMinDto>> GetRegulationsGroupsActive( )
+        {
+            return await _context.RegulationsGroups
+                .Where(rg => rg.DateEnd > DateTime.Now)
+                .ProjectTo<RegulationsGroupMinDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+        }
+
+
         public async Task<RegulationsGroupDto> GetRegulationsGroup(int regulationsGroupId)
         {
             return await _context.RegulationsGroups
@@ -165,10 +176,15 @@ namespace API.Data
                     }
                 );
             }
+            if(studentRegulationsTests.Count > 0)
+            {
+                await _context.StudentRegulationsTest.AddRangeAsync(studentRegulationsTests);
+                if(await _context.SaveChangesAsync() > 0 == false) throw new Exception("Failed to save students provided with test.");
 
-            await _context.StudentRegulationsTest.AddRangeAsync(studentRegulationsTests);
+            }
+                
 
-            if(await _context.SaveChangesAsync() > 0 == false) return null;
+            
 
             return _mapper.Map<RegulationsTestDto>(regulationsTest);
         }
@@ -351,6 +367,27 @@ namespace API.Data
             
         }
 
+        public async Task ExamineStudents(List<ExamineStudentDto> examineStudentsDto, int regulationsTestId)
+        {            
+            foreach (var studentScore in examineStudentsDto)
+            {
+                var studentId = await  _userManager.GetUserIdFromUsername(studentScore.Username);
+                var studentRegulationsTest = await _context.StudentRegulationsTest
+                    .Where(srt => srt.StudentId == studentId && srt.RegulationsTestId == regulationsTestId)
+                    .FirstOrDefaultAsync();
+                if(studentRegulationsTest == null) continue;
+                studentRegulationsTest.Score = studentScore.Score;
+            }
+
+            var regulationsTest = await _context.RegulationsTests.FindAsync(regulationsTestId);
+
+            if(regulationsTest == null || regulationsTest.Corrected) return;
+
+            regulationsTest.Corrected = true;
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task DeleteStudentFromTest(string username, int regulationsTestId)
         {
             var student = await _userManager.FindByNameAsync(username);
@@ -364,6 +401,25 @@ namespace API.Data
             _context.StudentRegulationsTest.Remove(studentRegulationsTestToDelete);
 
         }
+
+        public async Task DeleteStudentsFromTestBunch(string[] usernames, int regulationsTestId)
+        {
+            var studentsIds = await _userManager.Users
+                .Where(u => usernames.Contains(u.UserName))
+                .Select(u => u.Id)
+                .ToListAsync();
+
+            foreach (var id in studentsIds)
+            {
+                var studentRegulationsTestToDelete = await _context.StudentRegulationsTest
+                    .Where(srt => srt.StudentId == id && srt.RegulationsTestId == regulationsTestId)
+                    .FirstOrDefaultAsync();
+                if(studentRegulationsTestToDelete == null) continue;
+                _context.StudentRegulationsTest.Remove(studentRegulationsTestToDelete);
+            }
+            
+        }
+
 
         public async Task DeleteRegulationsTest(int regulationsTestId)
         {

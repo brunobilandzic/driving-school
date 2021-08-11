@@ -21,5 +21,8 @@ namespace API.Interfaces
 
         Task<bool> PassStudent(string username);
 
+
+        Task<IEnumerable<PersonDto>> GetStudentsFromGroup(int groupId);
+
     }
 }

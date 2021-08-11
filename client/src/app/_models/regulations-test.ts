@@ -7,5 +7,6 @@ export interface RegulationsTestModel {
     location?: string;
     examinerId: number;
     examiner: UserModel;
+    corrected: boolean;
     studentRegulationsTest: StudentTestModel [];
 }

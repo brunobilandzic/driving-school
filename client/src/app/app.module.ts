@@ -36,6 +36,13 @@ import { TestsListComponent } from './regulations-tests/tests-list/tests-list.co
 import { TestCardComponent } from './regulations-tests/test-card/test-card.component';
 import { TestsPanelComponent } from './regulations-tests/tests-panel/tests-panel.component';
 import { CreateRegTestComponent } from './regulations-tests/create-reg-test/create-reg-test.component';
+import { AddStudentsModalComponent } from './regulations-tests/test-card/add-students-modal/add-students-modal.component';
+import { AddFromGroupModalComponent } from './regulations-tests/test-card/add-students-modal/add-from-group-modal/add-from-group-modal.component';
+import { DeleteBunchModalComponent } from './regulations-tests/test-card/add-students-modal/delete-bunch-modal/delete-bunch-modal.component';
+import { TestScoresComponent } from './regulations-tests/test-scores/test-scores.component';
+import { BrowseScoresComponent } from './regulations-tests/test-scores/browse-scores/browse-scores.component';
+import { EnterScoresComponent } from './regulations-tests/test-scores/enter-scores/enter-scores.component';
+
 
 @NgModule({
   declarations: [
@@ -65,7 +72,13 @@ import { CreateRegTestComponent } from './regulations-tests/create-reg-test/crea
     TestsListComponent,
     TestCardComponent,
     TestsPanelComponent,
-    CreateRegTestComponent
+    CreateRegTestComponent,
+    AddStudentsModalComponent,
+    AddFromGroupModalComponent,
+    DeleteBunchModalComponent,
+    TestScoresComponent,
+    BrowseScoresComponent,
+    EnterScoresComponent
   ],
   imports: [
     BrowserModule,

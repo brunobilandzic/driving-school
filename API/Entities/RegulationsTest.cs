@@ -14,6 +14,8 @@ namespace API.Entities
 
         public string Location { get; set; }
 
+        public bool Corrected { get; set; } = false;
+
         public ICollection<StudentRegulationsTest> StudentRegulationsTest { get; set; }
         
     }

@@ -1,0 +1,18 @@
+<div class="delete-bunch add-students-collapse">
+  <h5>Select students to delete</h5>
+  <form (ngSubmit)="onSubmit()" class="form">
+    <div class="form-check" *ngFor="let student of studentsUsernames">
+      <input
+        type="checkbox"
+        (click)="handleStudentCheck($event)"
+        [checked]="studentsToDelete.includes(student)"
+        [value]="student"
+        class="form-check-input"
+      />
+      <label>{{ student }}</label>
+    </div>
+    <button class="btn btn-secondary" type="submit" [disabled]="studentsToDelete.length == 0">
+      Ok
+    </button>
+  </form>
+</div>

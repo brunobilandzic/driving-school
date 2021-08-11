@@ -1,0 +1,38 @@
+<div>
+  <h1>Examine regulations test {{ regTest.regulationsTestId }}</h1>
+  <form (ngSubmit)="onSubmitScores()" class="form">
+    <table class="table">
+      <thead>
+        <tr class="row">
+          <th class="col-3">Username</th>
+          <th class="col-3">Current Score</th>
+          <th class="col-3"></th>
+          <th class="col-3 text-right">Enter Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="row"
+          *ngFor="let studentTest of regTest.studentRegulationsTest"
+        >
+          <td class="col-3">{{ studentTest.studentUsername }}</td>
+          <td class="col-3">{{ studentTest.score }}</td>
+          <td class="col-3"></td>
+          <td class="col-3 text-right">
+            <input
+              [(ngModel)]="enterScores[studentTest.studentUsername]"
+              [name]="studentTest.studentUsername" 
+              type="number"
+              max="100"
+              min="0"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+    <div class="text-center">
+      <button type="submit" class="btn-success btn-lg btn">Save</button>
+    </div>
+  </form>
+</div>

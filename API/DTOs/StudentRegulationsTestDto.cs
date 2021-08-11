@@ -11,5 +11,7 @@ namespace API.DTOs
         public DateTime RegulationsTestDate { get; set; }
 
         public int Score { get; set; }
+
+        
     }
 }

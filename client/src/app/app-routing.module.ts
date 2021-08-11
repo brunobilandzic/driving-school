@@ -9,6 +9,7 @@ import { LecturesListComponent } from './lectures/lectures-list/lectures-list.co
 import { MembersComponent } from './members/members.component';
 import { RegisterComponent } from './register/register.component';
 import { CreateRegTestComponent } from './regulations-tests/create-reg-test/create-reg-test.component';
+import { TestScoresComponent } from './regulations-tests/test-scores/test-scores.component';
 import { TestsListComponent } from './regulations-tests/tests-list/tests-list.component';
 import { TestsPanelComponent } from './regulations-tests/tests-panel/tests-panel.component';
 import { StudentListComponent } from './view-student/student-list/student-list.component';
@@ -99,6 +100,12 @@ const routes: Routes = [
   {
     path: 'regulations-tests/add-test',
     component: CreateRegTestComponent,
+    canActivate: [RoleGuard],
+    data: { activationRoles: ['Professor'] },
+  },
+  {
+    path: 'regulations-tests/scores',
+    component: TestScoresComponent,
     canActivate: [RoleGuard],
     data: { activationRoles: ['Professor'] },
   }

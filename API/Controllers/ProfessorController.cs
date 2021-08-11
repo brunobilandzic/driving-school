@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
@@ -61,6 +62,16 @@ namespace API.Controllers
             if (regulationGroups == null) return BadRequest("Something went wrong."); 
 
             Response.AddPaginationHeader(regulationGroups.CurrentPage, regulationGroups.PageSize, regulationGroups.TotalCount, regulationGroups.TotalPages);
+
+            return Ok(regulationGroups);
+        }
+
+        [HttpGet("regulations-groups-active")]
+        public async Task<ActionResult<IEnumerable<RegulationsGroupMinDto>>> GetRegulationsGruopsActive()
+        {
+            var regulationGroups = await _unitOfWork.ProfessorRepository.GetRegulationsGroupsActive();
+
+            if (regulationGroups == null) return BadRequest("Something went wrong."); 
 
             return Ok(regulationGroups);
         }
@@ -149,6 +160,17 @@ namespace API.Controllers
             return BadRequest("Something went wrong.");
         }
 
+        [HttpPost("examine-test/{regulationsTestId}")]
+        public async Task<ActionResult> ExamineStudents(int regulationsTestId, List<ExamineStudentDto> examineStudentsDto)
+        {
+            await _unitOfWork.ProfessorRepository.ExamineStudents(examineStudentsDto, regulationsTestId);
+
+            if(await _unitOfWork.SaveAllChanges() > 0) return Ok();
+            return BadRequest("Failed to examine students.");
+        }
+
+        
+
         
         [HttpPut("regulations-tests/{regulationsTestId}")]
         public async Task<ActionResult> EditRegulationsTest(int regulationsTestId, RegulationsTestPostDto regulationsTestDto)
@@ -191,12 +213,37 @@ namespace API.Controllers
 
         }
 
+        [HttpPost("group-to-test")]
+        public async Task<ActionResult> AddGroupToTest(IdToId groupToTest)
+        {
+            List<PersonDto> students = new List<PersonDto>(await _unitOfWork.UserRepository.GetStudentsFromGroup(groupToTest.IdFrom));
+
+            var studentsUsernames = students.Select(s => s.Username).ToList();
+
+            await _unitOfWork.ProfessorRepository.AddStudentsToTest(studentsUsernames.ToArray(), groupToTest.IdTo);
+
+            if (await _unitOfWork.SaveAllChanges() > 0) return Ok();
+
+            return BadRequest("Failed to add students from group to test.");
+
+        }
+
 
 
         [HttpDelete("regulations-test-student")]
         public async Task<ActionResult> DeleteStudentFromTest(UsernameToIdDto changeTestDto)
         {
             await _unitOfWork.ProfessorRepository.DeleteStudentFromTest(changeTestDto.Username, changeTestDto.Id);
+
+            if (await _unitOfWork.SaveAllChanges() > 0) return Ok();
+
+            return BadRequest("Failed to delete student from test");
+        }
+
+        [HttpDelete("regulations-test-student-bunch")]
+        public async Task<ActionResult> DeleteStudentFromTestBunch(UsernamesToIdDto deleteFromTest)
+        {
+            await _unitOfWork.ProfessorRepository.DeleteStudentsFromTestBunch(deleteFromTest.Usernames, deleteFromTest.Id);
 
             if (await _unitOfWork.SaveAllChanges() > 0) return Ok();
 

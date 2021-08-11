@@ -113,5 +113,17 @@ namespace API.Data
             
 
         }
+
+        public async  Task<IEnumerable<PersonDto>> GetStudentsFromGroup(int groupId)
+        {
+            return await _context.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .Where(u => u.UserRoles.Select(ur => ur.Role.Name).Contains("Student"))
+                .Where(u => u.RegulationsGroupId == groupId)
+                .OrderByDescending(u => u.DateRegistered)
+                .ProjectTo<PersonDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
     }
 }

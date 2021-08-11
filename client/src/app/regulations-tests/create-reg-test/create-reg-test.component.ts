@@ -36,13 +36,11 @@ export class CreateRegTestComponent implements OnInit {
   ) {
     this.route.paramMap.subscribe((params) => {
       this.testData = JSON.parse(params.get('data'));
-      console.log(this.testData);
     });
     this.membersService
       .getAllStudents()
       .subscribe((students: Array<UserModel>) => {
         this.allStudents = students.map((s) => s.username);
-        console.log(this.allStudents);
       });
     this.testModel = this.fb.group({
       dateStart: ['', Validators.required],
@@ -56,19 +54,13 @@ export class CreateRegTestComponent implements OnInit {
 
   populateForm() {
     if (this.testData == undefined) return;
-    console.log(this.testData.dateStart);
     this.testData.dateStart = new Date(this.testData.dateStart).toUTCString();
-    console.log(new Date(this.testData.dateStart).toISOString());
     Object.keys(this.testData).forEach((k) => {
       this.testModel.controls[k]?.setValue(this.testData[k]);
     });
     this.studentsAssigned = this.testData.studentRegulationsTest.map(
       (s) => s.studentUsername
     );
-    console.log(this.testData);
-
-    console.log(this.testModel.value);
-    console.log(this.students);
   }
 
   handleStudentClick(e: any) {
@@ -120,6 +112,5 @@ export class CreateRegTestComponent implements OnInit {
   resetForm(){
     this.testModel.reset();
     this.students = [];
-    this.allStudents = [];
   }
 }

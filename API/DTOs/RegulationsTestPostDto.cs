@@ -10,6 +10,8 @@ namespace API.DTOs
 
         public string Location { get; set; }
 
+        public bool Corrected { get; set; }
+
         public int? ExaminerId { get; set; }
 
         public PersonDto Examiner { get; set; }

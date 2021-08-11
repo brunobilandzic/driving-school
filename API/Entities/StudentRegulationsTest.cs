@@ -10,7 +10,7 @@ namespace API.Entities
 
         public int RegulationsTestId { get; set; }
 
-        public int Score { get; set; }
+        public int Score { get; set; } = -1;
 
 
     }
