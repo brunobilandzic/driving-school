@@ -1,0 +1,16 @@
+.size-input {
+    width: 100px;
+    height: 2rem;
+}
+
+.page-size {
+    display: flex;
+    align-items: center;
+
+}
+
+.session-list-nav {
+    padding-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid black;
+}

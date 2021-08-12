@@ -8,8 +8,5 @@ namespace API.DTOs
 
         public string InstructorRemarks { get; set; }
 
-        public DateTime DateStart { get; set; }
-    
-        public int Hours { get; set; }
     }
 }

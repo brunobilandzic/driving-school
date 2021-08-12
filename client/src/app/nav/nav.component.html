@@ -19,19 +19,33 @@
   
   <ng-template [ngIf]="roles?.includes('Professor') || roles?.includes('Instructor')">
     <li class="nav-item">
-      <a href="/lectures" class="nav-link">Lectures</a>
-    </li>
-    <li class="nav-item">
       <a href="/students" class="nav-link">Students</a>
     </li>
+  </ng-template>
+
+  <ng-template [ngIf]="roles?.includes('Professor')">
+    <li class="nav-item">
+      <a href="/lectures" class="nav-link">Lectures</a>
+    </li>
+  
     <li class="nav-item">
       <a href="/regulations-tests" class="nav-link">Tests</a>
     </li>
     <li class="nav-item">
       <a href="/regulations-groups" class="nav-link">Groups</a>
     </li>
-
   </ng-template>
+
+  <ng-template [ngIf]="roles?.includes('Instructor')">
+    <li class="nav-item">
+      <a href="/instructor/sessions" class="nav-link">Sessions</a>
+    </li>
+    <li class="nav-item">
+      <a href="/instructor/tests" class="nav-link">Driving Tests</a>
+    </li>
+  </ng-template>
+  
+  
 </ul>
   <div class="ml-auto d-flex" *ngIf="accountService.currentUser$ | async">
       <div class="btn-group" dropdown>

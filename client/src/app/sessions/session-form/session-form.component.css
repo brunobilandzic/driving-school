@@ -1,0 +1,25 @@
+.form-select {
+    height: 2rem;
+}
+
+
+.form-select, .hours-input {
+    width: 100px;
+}
+
+.session-form {
+    justify-content: space-evenly;
+}
+
+.date-time-wrap{
+    flex-grow: 1;
+}
+.session-form-right {
+    flex-grow: 1;
+}
+
+.session-form > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

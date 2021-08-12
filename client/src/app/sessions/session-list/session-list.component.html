@@ -1,0 +1,39 @@
+<div>
+  <div class="session-list-nav">
+    <div class="page-size">
+      <div class="mr-2">Page Size:</div>
+      <input
+        class="form-control size-input mr-2"
+        type="number"
+        max="50"
+        min="1"
+        [(ngModel)]="pageSize"
+      />
+      <div class="btn btn-success btn-sm" (click)="loadDrivingSessions()">
+        Search
+      </div>
+    </div>
+  </div>
+  <div class="session-list">
+    <div class="session-card-wrap" *ngFor="let session of drivingSessions">
+      <app-session-card
+        (refreshSessionList)="refreshSessionList($event)"
+        [session]="session"
+      ></app-session-card>
+    </div>
+  </div>
+</div>
+<div *ngIf="pagination" class="d-flex flex-row justify-content-center">
+  <pagination
+    [boundaryLinks]="true"
+    [totalItems]="pagination.totalItems"
+    [itemsPerPage]="pagination.itemsPerPage"
+    [(ngModel)]="pageNumber"
+    (pageChanged)="pageChanged($event)"
+    previousText="&lsaquo;"
+    nextText="&rsaquo;"
+    firstText="&laquo;"
+    lastText="&raquo;"
+  >
+  </pagination>
+</div>

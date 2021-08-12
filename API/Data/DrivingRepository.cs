@@ -97,18 +97,30 @@ namespace API.Data
 
         }
 
-        public async Task<DrivingSessionDto> EditDrivingSessionInstructor(DrivingSessionEditInstructorDto drivingSessionDto, int userId)
+        public async Task EditDrivingSession(DrivingSessionDto drivingSessionDto)
         {
-            if(! await _userManager.IsInRoleAsync(new AppUser{Id = userId}, "Instructor")) return null;
+            var drivingSession = await _context.DrivingSessions
+                .FindAsync(drivingSessionDto.DrivingSessionId);
+
+            if(drivingSession == null) return;
+
+            drivingSession = _mapper.Map(drivingSessionDto, drivingSession);
+
+            return;
+        }
+
+        public async Task EditDrivingSessionInstructor(DrivingSessionEditInstructorDto drivingSessionDto, int userId)
+        {
+            if(! await _userManager.IsInRoleAsync(new AppUser{Id = userId}, "Instructor")) return;
 
             var session = await _context.DrivingSessions
                 .FindAsync(drivingSessionDto.DrivingSessionId);
             
-            if(session == null || session.InstructorId != userId) return null;
+            if(session == null || session.InstructorId != userId) return;
 
-            session = _mapper.Map(drivingSessionDto, session);
+            session.InstructorRemarks = drivingSessionDto.InstructorRemarks;
 
-            return _mapper.Map<DrivingSessionDto>(session);
+            return;
         }
 
         public async Task<DrivingSessionDto> EditDrivingSessionStudent(DrivingSessionEditStudentDto drivingSessionDto, int userId)

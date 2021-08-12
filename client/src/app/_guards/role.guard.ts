@@ -37,7 +37,7 @@ export class RoleGuard implements CanActivate {
           if (activationRoles.includes(role)) activation = true;
         });
         if(!activation) {
-          this.toastr.error("You dont have permission to create users.")
+          this.toastr.error("You dont have permission.")
         }
         
         return activation;

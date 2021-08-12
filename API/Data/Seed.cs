@@ -181,7 +181,8 @@ namespace API.Data
                     DriverId =  studentIds[i % studentUsers.Count],
                     DateStart = initialDateStart,
                     InstructorRemarks = getRandomText(lorem),
-                    DriverRemarks = getRandomText(lorem)
+                    DriverRemarks = getRandomText(lorem),
+                    Hours = 1
                     }
                 );
                 

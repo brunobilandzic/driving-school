@@ -14,6 +14,9 @@ import { CreateRegTestComponent } from './regulations-tests/create-reg-test/crea
 import { TestScoresComponent } from './regulations-tests/test-scores/test-scores.component';
 import { TestsListComponent } from './regulations-tests/tests-list/tests-list.component';
 import { TestsPanelComponent } from './regulations-tests/tests-panel/tests-panel.component';
+import { SessionFormComponent } from './sessions/session-form/session-form.component';
+import { SessionListComponent } from './sessions/session-list/session-list.component';
+import { SessionPanelComponent } from './sessions/session-panel/session-panel.component';
 import { StudentListComponent } from './view-student/student-list/student-list.component';
 import { ViewStudentComponent } from './view-student/view-student.component';
 import { AuthGuard } from './_guards/auth.guard';
@@ -122,7 +125,24 @@ const routes: Routes = [
     component: RegGroupFormComponent,
     canActivate: [RoleGuard],
     data: { activationRoles: ['Professor'] },
+  },
+  {
+    path: 'instructor/sessions',
+    component: SessionPanelComponent,
+    canActivate: [RoleGuard],
+    data: { activationRoles: ['Instructor'] }
+  },{
+    path: 'instructor/sessions/list',
+    component: SessionListComponent,
+    canActivate: [RoleGuard],
+    data: { activationRoles: ['Instructor'] }
+  },{
+    path: 'instructor/sessions/add',
+    component: SessionFormComponent,
+    canActivate: [RoleGuard],
+    data: { activationRoles: ['Instructor'] }
   }
+
 
 
 ];

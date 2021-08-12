@@ -67,13 +67,23 @@ namespace API.Controllers
         [HttpPut("sessions")]
         public async Task<ActionResult<DrivingSessionDto>> UpateSession(DrivingSessionEditInstructorDto drivingSessionDto)
         {
-            var session = await _unitOfWork.DrivingRepository
+            await _unitOfWork.DrivingRepository
                 .EditDrivingSessionInstructor(drivingSessionDto, User.GetUserId());
 
-            if(await _unitOfWork.SaveAllChanges() > 0) return session;
+            if(await _unitOfWork.SaveAllChanges() > 0) return Ok();
 
             return BadRequest("Failed to update driving session.");
         }
+
+         [HttpPut("session-general")]
+         public async Task<ActionResult> UpdateSessionGenereal(DrivingSessionDto drivingSessionDto) 
+         {
+             await _unitOfWork.DrivingRepository.EditDrivingSession(drivingSessionDto);
+
+            if(await _unitOfWork.SaveAllChanges() > 0) return Ok();
+
+            return BadRequest("No changes to session have been made.");
+         }
 
         [HttpGet("tests")]
         public async Task<ActionResult<PagedList<DrivingTestDto>>> GetTests([FromQuery] PaginationParams paginationParams)

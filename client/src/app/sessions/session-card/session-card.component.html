@@ -1,0 +1,34 @@
+<div class="card session-card d-flex flex-row">
+  <div class="card-body">
+    <h1 class="card-title">{{ session.drivingSessionId }}</h1>
+    <h6 class="card-subtitle text-muted">
+      {{ session.dateStart + "Z" | date: "medium" }}, H: {{ session.hours }}
+    </h6>
+    <div class="card-text mt-2">
+      <div>Driver: {{ session.driverUsername }}</div>
+      <div>Instructor: {{ session.instructorUsername }}</div>
+      <div>Instructor Remarks: {{ session.instructorRemarks }}</div>
+      <div>Driver Remarks: {{ session.driverRemarks }}</div>
+    </div>
+  </div>
+  <div class="card-side d-flex flex-column align-items-center">
+    <div class="btn">
+      <i
+        (click)="onEditSession()"
+        class="fa fas fa-edit"
+        data-toggle="tooltip"
+        data-placement="left"
+        title="Edit Session"
+      ></i>
+    </div>
+    <div class="btn">
+      <i
+        (click)="onRemarkClick()"
+        class="fa fas fa-pencil"
+        data-toggle="tooltip"
+        data-placement="left"
+        title="Add Remark"
+      ></i>
+    </div>
+  </div>
+</div>

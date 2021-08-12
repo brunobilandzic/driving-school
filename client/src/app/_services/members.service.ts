@@ -96,7 +96,7 @@ export class MembersService {
       // fetching students outside given group
       params = params.append("regulationsGroupId", regulationsGroupId.toString())
     }
-    console.log(params)
+
     return this.http.get(this.baseUrl + 'users/all-students', {params});
   }
 

@@ -45,6 +45,11 @@ import { EnterScoresComponent } from './regulations-tests/test-scores/enter-scor
 import { RegGroupListComponent } from './regulations-groups/reg-group-list/reg-group-list.component';
 import { RegGroupFormComponent } from './regulations-groups/reg-group-form/reg-group-form.component';
 import { AddStudentsToGroupComponent } from './regulations-groups/reg-group-list/add-students-to-group/add-students-to-group.component';
+import { SessionPanelComponent } from './sessions/session-panel/session-panel.component';
+import { SessionListComponent } from './sessions/session-list/session-list.component';
+import { SessionCardComponent } from './sessions/session-card/session-card.component';
+import { SessionFormComponent } from './sessions/session-form/session-form.component';
+import { RemarkInputComponent } from './sessions/session-card/remark-input/remark-input.component';
 
 
 @NgModule({
@@ -84,7 +89,12 @@ import { AddStudentsToGroupComponent } from './regulations-groups/reg-group-list
     EnterScoresComponent,
     RegGroupListComponent,
     RegGroupFormComponent,
-    AddStudentsToGroupComponent
+    AddStudentsToGroupComponent,
+    SessionPanelComponent,
+    SessionListComponent,
+    SessionCardComponent,
+    SessionFormComponent,
+    RemarkInputComponent
   ],
   imports: [
     BrowserModule,

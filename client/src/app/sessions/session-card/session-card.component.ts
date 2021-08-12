@@ -1,0 +1,43 @@
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { passedToday } from 'src/app/_helpers/datePassedToday';
+import { DrivingSessionModel } from 'src/app/_models/driving-session';
+import { RemarkInputComponent } from './remark-input/remark-input.component';
+
+@Component({
+  selector: 'app-session-card',
+  templateUrl: './session-card.component.html',
+  styleUrls: ['./session-card.component.css'],
+})
+export class SessionCardComponent implements OnInit {
+  @Input() session: DrivingSessionModel;
+  remarkModal: BsModalRef;
+  @Output() refreshSessionList = new EventEmitter<string>();
+  constructor(
+    private router: Router,
+    private modalService: BsModalService
+    ) {}
+
+  ngOnInit(): void {}
+
+  onEditSession() {
+    this.router.navigate([
+      '/instructor/sessions/add',
+      { data: JSON.stringify(this.session) },
+    ]);
+  }
+
+  onRemarkClick() {
+    const initialState = {
+      instructorRemarks: this.session.instructorRemarks,
+      drivingSessionId: this.session.drivingSessionId,
+      refreshSessionList: this.refreshSessionList
+    };
+    this.remarkModal = this.modalService.show(RemarkInputComponent, {initialState})
+  }
+
+  sessionDriven() {
+    return !passedToday(new Date(this.session.dateStart).toUTCString());
+  }
+}

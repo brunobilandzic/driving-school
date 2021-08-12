@@ -1,0 +1,61 @@
+<div>
+  <form (ngSubmit)="onSubmit()" class="form d-flex session-form">
+    <div class="date-time-wrap">
+      <app-date-input
+        [formControl]="drivingSession.controls['dateStart']"
+        [label]="'Date'"
+        [minDate]="minDate"
+      >
+      </app-date-input>
+      <app-time-input
+        [formControl]="drivingSession.controls['dateTime']"
+        [label]="'Time'"
+      ></app-time-input>
+    </div>
+    <div class="session-form-right">
+      <div class="driver-and-hours">
+        <div  *ngIf="!isEditMode()" class="d-flex form-group align-items-center mb-3">
+          <div class="mr-2">Driver:</div>
+          <select
+            [disabled]="isEditMode()"
+            name="driverUsername"
+            class="form-select"
+            [formControl]="drivingSession.controls['driverUsername']"
+            id=""
+          >
+            <option
+              class="driver-option"
+              *ngFor="let driver of drivers"
+              [value]="driver"
+            >
+              {{ driver }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group d-flex">
+          <div class="mr-2">Hours:</div>
+          <input
+            class="hours-input"
+            type="number"
+            min="1"
+            max="2"
+            [value]="1"
+          />
+        </div>
+      </div>
+      <div class="submit-wrap">
+        <button
+          type="submit"
+          class="btn btn-success"
+          [disabled]="drivingSession.valid == false"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </form>
+
+  {{ drivingSession.value | json }}
+
+  {{ drivingSession.valid }}
+</div>
