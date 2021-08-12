@@ -56,9 +56,9 @@ namespace API.Controllers
 
         [Authorize(Policy = "NotOnlyStudent")]
         [HttpGet("all-students")]
-        public async Task<ActionResult<IEnumerable<PersonDto>>> GetAllStudents()
+        public async Task<ActionResult<IEnumerable<PersonDto>>> GetAllStudents([FromQuery] int regulationsGroupId)
         {
-            var students = await _unitOfWork.UserRepository.GetAllStudents();
+            var students = await _unitOfWork.UserRepository.GetAllStudents(regulationsGroupId);
 
             if(students == null) return BadRequest("Failed to fetch all students.");
 

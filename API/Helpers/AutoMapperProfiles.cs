@@ -59,6 +59,8 @@ namespace API.Helpers
 
             CreateMap<RegulationsGroupDto, RegulationsGroup>();
 
+            CreateMap<RegulationsGroupMinDto, RegulationsGroup>();
+
             CreateMap<RegulationsGroup, RegulationsGroupMinDto>();
 
             CreateMap<LectureTopic, LectureTopicDto>();

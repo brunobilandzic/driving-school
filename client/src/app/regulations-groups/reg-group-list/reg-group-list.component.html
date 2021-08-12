@@ -1,0 +1,53 @@
+<div>
+  <div class="btn btn-outline-dark" routerLink="/regulations-groups/add">
+    Create New
+  </div>
+  <div *ngFor="let regGroup of regulationsGroups">
+    <div class="card group-card d-flex flex-row">
+      <div class="card-body">
+        <h1 class="card-title">{{ regGroup.regulationsGroupId }}</h1>
+        <div class="card-text">
+          <p>Date Start: {{ regGroup.dateStart | date }}</p>
+          <p>Date End: {{ regGroup.dateEnd | date }}</p>
+        </div>
+      </div>
+      <div class="card-side d-flex flex-column">
+        <div class="btn">
+          <i
+            class="fa fas fa-user-plus"
+            data-toggle="tooltip"
+            data-placement="left"
+            title="Add Students"
+            (click)="onAddStudentsClick(regGroup.regulationsGroupId)"
+          ></i>
+        </div>
+        <div class="btn">
+          <i
+            (click)="onEditGroup(regGroup.regulationsGroupId)"
+            class="fa fas fa-edit"
+            data-toggle="tooltip"
+            data-placement="left"
+            title="Edit Test"
+          ></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div *ngIf="pagination" class="d-flex flex-row justify-content-center">
+    <pagination
+      [boundaryLinks]="true"
+      [totalItems]="pagination.totalItems"
+      [itemsPerPage]="pagination.itemsPerPage"
+      [(ngModel)]="pageNumber"
+      (pageChanged)="pageChanged($event)"
+      previousText="&lsaquo;"
+      nextText="&rsaquo;"
+      firstText="&laquo;"
+      lastText="&raquo;"
+    >
+    </pagination>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of} from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -89,9 +89,15 @@ export class MembersService {
     
   }
 
-  getAllStudents()
+  getAllStudents(regulationsGroupId = 0)
   {
-    return this.http.get(this.baseUrl + 'users/all-students');
+    let params = new HttpParams();
+    if(regulationsGroupId > 0) {
+      // fetching students outside given group
+      params = params.append("regulationsGroupId", regulationsGroupId.toString())
+    }
+    console.log(params)
+    return this.http.get(this.baseUrl + 'users/all-students', {params});
   }
 
   getStudent(username: string): Observable<StudentModel> {
@@ -118,6 +124,14 @@ export class MembersService {
         return driver;
       }));
 
+  }
+
+  createGroup(regulationsGroup: Partial<RegulationsGroup>) {
+    return this.http.post(this.baseUrl + 'professor/regulations-groups', regulationsGroup); 
+  }
+
+  editGroup(regulationsGroup: any) {
+    return this.http.put(this.baseUrl + 'professor/regulations-groups', regulationsGroup)
   }
 
   addToGroup(studentsToGroup: UsernamesToId ) {

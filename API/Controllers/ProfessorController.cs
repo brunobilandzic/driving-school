@@ -107,6 +107,16 @@ namespace API.Controllers
 
         }
 
+        [HttpPut("regulations-groups")]
+
+        public async Task<ActionResult> EditRegulationsGroup(RegulationsGroupMinDto regulationsGroupDto)
+        {
+            await _unitOfWork.ProfessorRepository.EditRegulationsGroup(regulationsGroupDto);
+
+            if (await _unitOfWork.SaveAllChanges() > 0) return Ok();
+            return BadRequest("Failed to update regulations group.");
+        }
+
         // ------------------------
         // REGULATIONS GROUPS END
         // ------------------------

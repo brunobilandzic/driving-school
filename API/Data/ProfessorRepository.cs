@@ -126,6 +126,7 @@ namespace API.Data
         public async Task<PagedList<RegulationsGroupMinDto>> GetRegulationsGroups(PaginationParams paginationParams)
         {
             var query = _context.RegulationsGroups
+                .OrderByDescending(rg => rg.DateStart)
                 .ProjectTo<RegulationsGroupMinDto>(_mapper.ConfigurationProvider)
                 .AsQueryable();
 
@@ -152,6 +153,15 @@ namespace API.Data
                 .Where(rg => rg.RegulationsGroupId == regulationsGroupId)
                 .ProjectTo<RegulationsGroupDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
+        }
+
+        public async Task EditRegulationsGroup(RegulationsGroupMinDto regulationsGroupDto) {
+            var regulationsGroup = await _context.RegulationsGroups
+                .FindAsync(regulationsGroupDto.RegulationsGroupId);
+
+            regulationsGroup = _mapper.Map(regulationsGroupDto, regulationsGroup);
+
+
         }
 
         public async Task<RegulationsTestDto> AddRegulationsTest(RegulationsTestPostDto regulationsTestDto, int examinerId)

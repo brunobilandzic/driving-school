@@ -42,6 +42,9 @@ import { DeleteBunchModalComponent } from './regulations-tests/test-card/add-stu
 import { TestScoresComponent } from './regulations-tests/test-scores/test-scores.component';
 import { BrowseScoresComponent } from './regulations-tests/test-scores/browse-scores/browse-scores.component';
 import { EnterScoresComponent } from './regulations-tests/test-scores/enter-scores/enter-scores.component';
+import { RegGroupListComponent } from './regulations-groups/reg-group-list/reg-group-list.component';
+import { RegGroupFormComponent } from './regulations-groups/reg-group-form/reg-group-form.component';
+import { AddStudentsToGroupComponent } from './regulations-groups/reg-group-list/add-students-to-group/add-students-to-group.component';
 
 
 @NgModule({
@@ -78,7 +81,10 @@ import { EnterScoresComponent } from './regulations-tests/test-scores/enter-scor
     DeleteBunchModalComponent,
     TestScoresComponent,
     BrowseScoresComponent,
-    EnterScoresComponent
+    EnterScoresComponent,
+    RegGroupListComponent,
+    RegGroupFormComponent,
+    AddStudentsToGroupComponent
   ],
   imports: [
     BrowserModule,

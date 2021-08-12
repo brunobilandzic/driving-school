@@ -100,13 +100,18 @@ namespace API.Data
             return await PagedList<PersonDto>.CreateAsync(students, paginationParams.PageNumber, paginationParams.PageSize);
         }
 
-        public async Task<IEnumerable<PersonDto>> GetAllStudents()
+        public async Task<IEnumerable<PersonDto>> GetAllStudents(int? regulationsGroupId)
         {
-            return await _context.Users
+            var query = _context.Users
                 .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
                 .Where(u => u.UserRoles.Select(ur => ur.Role.Name).Contains("Student"))
-                .Where(u => u.Passed == false)
+                .Where(u => u.Passed == false);
+
+            if(regulationsGroupId != null || regulationsGroupId == 0)
+                query = query.Where(u => u.RegulationsGroupId != regulationsGroupId);
+            
+            return await query
                 .OrderByDescending(u => u.DateRegistered)
                 .ProjectTo<PersonDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();

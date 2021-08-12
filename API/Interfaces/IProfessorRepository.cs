@@ -20,6 +20,8 @@ namespace API.Interfaces
 
         Task<PagedList<RegulationsGroupMinDto>> GetRegulationsGroups(PaginationParams paginationParams);
 
+        Task EditRegulationsGroup(RegulationsGroupMinDto regulationsGroupDto);
+
         Task<IEnumerable<RegulationsGroupMinDto>> GetRegulationsGroupsActive();
 
         Task<IEnumerable<ChangeGroupResultDto>> AddStudentToGroup(UsernamesToIdDto changeGroupDto);

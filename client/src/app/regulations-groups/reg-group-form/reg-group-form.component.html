@@ -1,0 +1,15 @@
+<div>
+  <form (ngSubmit)="onSubmit()" class="form">
+    <app-date-input
+      [formControl]="regulationsGroup.controls['dateStart']"
+        [label]="'Date Start'"
+        [minDate]="today"
+    ></app-date-input>
+    <app-date-input
+      [formControl]="regulationsGroup.controls['dateEnd']"
+        [label]="'Date End'"
+        [minDate]="today"
+    ></app-date-input>
+    <button type="submit" class="btn btn-success">Submit</button>
+  </form>
+</div>

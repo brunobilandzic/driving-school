@@ -8,6 +8,8 @@ import { LecturesHomeProfessorComponent } from './lectures/lectures-home-profess
 import { LecturesListComponent } from './lectures/lectures-list/lectures-list.component';
 import { MembersComponent } from './members/members.component';
 import { RegisterComponent } from './register/register.component';
+import { RegGroupFormComponent } from './regulations-groups/reg-group-form/reg-group-form.component';
+import { RegGroupListComponent } from './regulations-groups/reg-group-list/reg-group-list.component';
 import { CreateRegTestComponent } from './regulations-tests/create-reg-test/create-reg-test.component';
 import { TestScoresComponent } from './regulations-tests/test-scores/test-scores.component';
 import { TestsListComponent } from './regulations-tests/tests-list/tests-list.component';
@@ -106,6 +108,18 @@ const routes: Routes = [
   {
     path: 'regulations-tests/scores',
     component: TestScoresComponent,
+    canActivate: [RoleGuard],
+    data: { activationRoles: ['Professor'] },
+  },
+  {
+    path: 'regulations-groups',
+    component: RegGroupListComponent,
+    canActivate: [RoleGuard],
+    data: { activationRoles: ['Professor'] },
+  },
+  {
+    path: 'regulations-groups/add',
+    component: RegGroupFormComponent,
     canActivate: [RoleGuard],
     data: { activationRoles: ['Professor'] },
   }
