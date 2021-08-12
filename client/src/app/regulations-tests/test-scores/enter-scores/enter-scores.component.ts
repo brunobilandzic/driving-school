@@ -44,7 +44,17 @@ export class EnterScoresComponent implements OnInit {
     this.regTestService.examineRegulationsTest(this.regTest.regulationsTestId, studentScores)
       .subscribe(() => {
         this.toastr.success("Successfully examined students.");
+        this.updateClientScores(studentScores);
         
       })
+  }
+
+  updateClientScores(studentsScores: StudentScore[])
+  {
+    studentsScores.forEach(studentScore => {
+      this.regTest.studentRegulationsTest.forEach((elem, i) => {
+        if (elem.studentUsername == studentScore.username) elem.score = studentScore.score
+      })
+    });
   }
 }
