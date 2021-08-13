@@ -60,4 +60,8 @@ export class LecturesService {
       () => {return true;}
     ))
   }
+
+  getStudentLectures() {
+    
+  }
 }

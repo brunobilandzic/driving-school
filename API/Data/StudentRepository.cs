@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.DTOs;
@@ -25,19 +26,19 @@ namespace API.Data
         }
         
 
-        public async Task<PagedList<LectureDto>> GetLectures(int studentId, PaginationParams paginationParams)
+        public async Task<IEnumerable<LectureDto>> GetLectures(int studentId)
         {
             var lectureIds = await _context.StudentLectures
                 .Where(sl => sl.StudentId == studentId)
                 .Select(sl => sl.LectureId)
                 .ToListAsync();
 
-            var lectures =  _context.Lectures
+            var lectures =  await _context.Lectures
                 .Where(l => lectureIds.Contains(l.LectureId))
                 .ProjectTo<LectureDto>(_mapper.ConfigurationProvider)
-                .AsQueryable();
+                .ToListAsync();
 
-            return await PagedList<LectureDto>.CreateAsync(lectures, paginationParams.PageNumber, paginationParams.PageSize);
+            return lectures;
         }
     }
 }

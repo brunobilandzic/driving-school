@@ -36,6 +36,7 @@ export class DrivingTestListComponent implements OnInit {
   fetchTests() {
     this.drivingService.getTestsFor(this.role, this.pageNumber, this.pageSize)
       .subscribe((paginatedResult: PaginatedResult<DrivingTestModel []>) => {
+        console.log(paginatedResult);
         this.drivingTests = paginatedResult.result;
         this.pagination = paginatedResult.pagination;
       })

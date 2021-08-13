@@ -13,7 +13,7 @@ namespace API.Interfaces
         Task<PagedList<DrivingTestDto>> GetDrivingTestsForInstructor(int instructorId, PaginationParams paginationParams);
         Task<PagedList<DrivingTestDto>> GetDrivingTestsForExaminer(int examinerId, PaginationParams paginationParams);
 
-        Task<PagedList<DrivingTestDto>> GetDrivingTestsForStudent(int studentId, PaginationParams paginationParams);
+        Task<IEnumerable<DrivingTestDto>> GetDrivingTestsForStudent(int studentId);
         Task<PagedList<DrivingSessionDto>> GetDrivingSessionsForStudent(int studentId, PaginationParams paginationParams);
         Task<DrivingSessionDto> CreateDrivingSession(DrivingSessionDto drivingSessionDto, int instructorId);
         Task<DrivingTestDto> CreateDrivingTest(DrivingSessionDto drivingSessionDto, int examinerId);

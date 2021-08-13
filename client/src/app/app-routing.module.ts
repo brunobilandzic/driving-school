@@ -129,17 +129,17 @@ const routes: Routes = [
     data: { activationRoles: ['Professor'] },
   },
   {
-    path: 'instructor/sessions',
+    path: 'sessions',
     component: SessionPanelComponent,
     canActivate: [RoleGuard],
-    data: { activationRoles: ['Instructor'] }
+    data: { activationRoles: ['Instructor', 'Student'] }
   },{
-    path: 'instructor/sessions/list',
+    path: 'sessions/list',
     component: SessionListComponent,
     canActivate: [RoleGuard],
-    data: { activationRoles: ['Instructor'] }
+    data: { activationRoles: ['Instructor', 'Student'] }
   },{
-    path: 'instructor/sessions/add',
+    path: 'sessions/add',
     component: SessionFormComponent,
     canActivate: [RoleGuard],
     data: { activationRoles: ['Instructor', 'Examiner'] }

@@ -18,14 +18,14 @@ export class DrivingService {
   drivingTests = new Map();
   constructor(private http: HttpClient) {}
 
-  getDrivingSessions(pageNumber: number, pageSize: number) {
+  getDrivingSessions(role:string,  pageNumber: number, pageSize: number) {
     let key = getKey(pageNumber, pageSize);
     let cachedSessions = this.drivingSessions.get(key);
     if (cachedSessions != null) return of(cachedSessions);
 
     let params = getPaginationHeaders(pageNumber, pageSize);
     return getPaginatedResult<DrivingSessionModel[]>(
-      this.baseUrl + 'instructor/sessions',
+      this.baseUrl + role + '/sessions',
       params,
       this.http
     ).pipe(
@@ -54,10 +54,12 @@ export class DrivingService {
     );
   }
 
-  putInstructorRemarks(instructorRemarks: any) {
+  putRemarks(role: string, remarks: any) {
+    console.log(remarks);
+    
     return this.http.put(
-      this.baseUrl + 'instructor/sessions',
-      instructorRemarks
+      this.baseUrl + role + '/sessions',
+      remarks
     );
   }
 
@@ -67,7 +69,9 @@ export class DrivingService {
 
     if (cachedTests != null) return of(cachedTests);
 
-    let params = getPaginationHeaders(pageNumber, pageSize);
+    let params = null;
+    if(role != 'Student')
+      params = getPaginationHeaders(pageNumber, pageSize);
 
     return getPaginatedResult<DrivingTestModel[]>(
       this.baseUrl + role + '/tests',
@@ -96,4 +100,5 @@ export class DrivingService {
   examineTest(examination: any) {
     return this.http.post(this.baseUrl + 'examiner/examine', examination);
   }
+
 }

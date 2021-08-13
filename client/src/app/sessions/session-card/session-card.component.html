@@ -14,6 +14,7 @@
   <div class="card-side d-flex flex-column align-items-center">
     <div class="btn">
       <i
+        *ngIf="role=='Instructor'"
         class="fa text-danger fas fa-trash"
         data-toggle="tooltip"
         data-placement="left"
@@ -23,6 +24,7 @@
     </div>
     <div class="btn">
       <i
+      *ngIf="role=='Instructor'"
         (click)="onEditSession()"
         class="fa fas fa-edit"
         data-toggle="tooltip"

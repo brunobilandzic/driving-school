@@ -1,5 +1,4 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { DrivingService } from 'src/app/_services/driving.service';
@@ -10,8 +9,8 @@ import { DrivingService } from 'src/app/_services/driving.service';
   styleUrls: ['./remark-input.component.css']
 })
 export class RemarkInputComponent implements OnInit {
-  instructorRemarks: string = "";
-
+  remark: string = "";
+  role: string = "";
   drivingSessionId: number;
   refreshSessionList: EventEmitter<string>;
   constructor(
@@ -25,14 +24,18 @@ export class RemarkInputComponent implements OnInit {
   }
 
   onSubmit() {
-    let instructorRemarks = {}
-    instructorRemarks["instructorRemarks"] = this.instructorRemarks
-    instructorRemarks["drivingSessionId"]= this.drivingSessionId;
+    let remarksWrap = {}
+    if(this.role == 'Instructor')
+      remarksWrap["instructorRemarks"] = this.remark;
+    else
+      remarksWrap["driverRemarks"]= this.remark;
 
-    this.drivingService.putInstructorRemarks(instructorRemarks)
+    remarksWrap["drivingSessionId"]= this.drivingSessionId;
+
+    this.drivingService.putRemarks(this.role, remarksWrap)
       .subscribe(() => {
         this.toastr.success("Remark successfully put.")
-        this.refreshSessionList.emit(this.instructorRemarks);
+        this.refreshSessionList.emit(this.remark);
       })
   }
 

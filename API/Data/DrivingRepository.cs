@@ -208,16 +208,16 @@ namespace API.Data
 
             return await PagedList<DrivingTestDto>.CreateAsync(drivingTests, paginationParams.PageNumber, paginationParams.PageSize);
         }
-        public async Task<PagedList<DrivingTestDto>> GetDrivingTestsForStudent(int studentId, PaginationParams paginationParams)
+        public async Task<IEnumerable<DrivingTestDto>> GetDrivingTestsForStudent(int studentId)
         {
-            var drivingTests = _context.DrivingTests
+            var drivingTests = await _context.DrivingTests
                 .Include(dt => dt.DrivingSession)
                 .OrderByDescending(dt => dt.DrivingSession.DateStart)
                 .Where(dt => dt.DrivingSession.DriverId == studentId)
                 .ProjectTo<DrivingTestDto>(_mapper.ConfigurationProvider)
-                .AsQueryable();
+                .ToListAsync();
 
-            return await PagedList<DrivingTestDto>.CreateAsync(drivingTests, paginationParams.PageNumber, paginationParams.PageSize);
+            return drivingTests;
         }
     	
         public Task<PagedList<DrivingSessionDto>> GetDrivingSessionsForStudent(int studentId, PaginationParams paginationParams)

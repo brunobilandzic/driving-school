@@ -12,30 +12,31 @@ import { RemarkInputComponent } from './remark-input/remark-input.component';
 })
 export class SessionCardComponent implements OnInit {
   @Input() session: DrivingSessionModel;
+  @Input() role: string; 
   remarkModal: BsModalRef;
   @Output() refreshSessionList = new EventEmitter<string>();
   @Output() deleteSession = new EventEmitter<number>();
-  constructor(
-    private router: Router,
-    private modalService: BsModalService
-    ) {}
+  constructor(private router: Router, private modalService: BsModalService) {}
 
   ngOnInit(): void {}
 
   onEditSession() {
     this.router.navigate([
-      '/instructor/sessions/add',
+      '/sessions/add',
       { data: JSON.stringify(this.session) },
     ]);
   }
 
   onRemarkClick() {
     const initialState = {
-      instructorRemarks: this.session.instructorRemarks,
+      remark: this.role=='Instructor' ?  this.session.instructorRemarks: this.session.driverRemarks,
       drivingSessionId: this.session.drivingSessionId,
-      refreshSessionList: this.refreshSessionList
+      refreshSessionList: this.refreshSessionList,
+      role: this.role
     };
-    this.remarkModal = this.modalService.show(RemarkInputComponent, {initialState})
+    this.remarkModal = this.modalService.show(RemarkInputComponent, {
+      initialState,
+    });
   }
 
   sessionDriven() {
@@ -43,7 +44,12 @@ export class SessionCardComponent implements OnInit {
   }
 
   onDeleteSessionClick() {
-    if(window.confirm("Dou you want to delete session " +this.session.drivingSessionId) == false) return;
+    if (
+      window.confirm(
+        'Dou you want to delete session ' + this.session.drivingSessionId
+      ) == false
+    )
+      return;
 
     this.deleteSession.emit(this.session.drivingSessionId);
   }

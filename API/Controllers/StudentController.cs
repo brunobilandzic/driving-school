@@ -19,15 +19,13 @@ namespace API.Controllers
         }
 
         [HttpGet("lectures")]
-        public async Task<ActionResult<PagedList<LectureDto>>> GetLectures([FromQuery] PaginationParams paginationParams)
+        public async Task<ActionResult<IEnumerable<LectureDto>>> GetLectures()
         {
-            var lectures = await _unitOfWork.StudentRepository.GetLectures(User.GetUserId(), paginationParams);
+            var lectures = await _unitOfWork.StudentRepository.GetLectures(User.GetUserId());
 
             if(lectures == null) return BadRequest("Failed to fetch lectures for student.");
 
-            Response.AddPaginationHeader(lectures.CurrentPage, lectures.PageSize, lectures.TotalCount, lectures.TotalPages);
-
-            return lectures;
+            return Ok(lectures);
         }
 
         [HttpGet("sessions")]
@@ -44,16 +42,14 @@ namespace API.Controllers
         }
 
         [HttpGet("tests")]
-        public async Task<ActionResult<PagedList<DrivingTestDto>>> GetDrivingTests([FromQuery] PaginationParams paginationParams)
+        public async Task<ActionResult<IEnumerable<DrivingTestDto>>> GetDrivingTests()
         {
             var tests = await _unitOfWork.DrivingRepository
-                .GetDrivingTestsForStudent(User.GetUserId(), paginationParams);
+                .GetDrivingTestsForStudent(User.GetUserId());
 
             if(tests == null) return BadRequest("Failed to fetch driving sessions.");
 
-            Response.AddPaginationHeader(tests.CurrentPage, tests.PageSize, tests.TotalCount, tests.TotalPages);
-
-            return tests;
+            return Ok(tests);
         }
 
         [HttpGet("lecture-topics")]
