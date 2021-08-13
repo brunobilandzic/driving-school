@@ -17,7 +17,7 @@ namespace API.Entities
 
         public DateTime DateStart { get; set; }
 
-        public int Hours { get; set; }
+        public int Hours { get; set; } = 1;
 
         public string InstructorRemarks { get; set; }
 

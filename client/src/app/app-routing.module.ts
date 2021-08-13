@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DrivingTestListComponent } from './driving-tests/driving-test-list/driving-test-list.component';
+import { DrivingTestsPanelComponent } from './driving-tests/driving-tests-panel/driving-tests-panel.component';
 import { AddLectureTopicComponent } from './lectures/add-lecture-topic/add-lecture-topic.component';
 import { HoldLectureComponent } from './lectures/hold-lecture/hold-lecture.component';
 import { LectureAttendanceComponent } from './lectures/lecture-attendance/lecture-attendance.component';
@@ -140,8 +142,24 @@ const routes: Routes = [
     path: 'instructor/sessions/add',
     component: SessionFormComponent,
     canActivate: [RoleGuard],
-    data: { activationRoles: ['Instructor'] }
+    data: { activationRoles: ['Instructor', 'Examiner'] }
+  },{
+    path: 'driving-tests',
+    component: DrivingTestsPanelComponent,
+    canActivate: [RoleGuard],
+    data: { activationRoles: ['Instructor', 'Examiner', 'Student'] }
+  },{
+    path: 'driving-tests/list',
+    component: DrivingTestListComponent,
+    canActivate: [RoleGuard],
+    data: { activationRoles: ['Instructor', 'Examiner', 'Student'] }
+  },{
+    path: 'driving-tests/add-test',
+    component: SessionFormComponent,
+    canActivate: [RoleGuard],
+    data: { activationRoles: ['Examiner'] }
   }
+
 
 
 

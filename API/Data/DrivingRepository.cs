@@ -137,6 +137,24 @@ namespace API.Data
             return _mapper.Map<DrivingSessionDto>(session);
         }
 
+        public async Task DeleteDrivingSession(int drivingSessionId, int executorId)
+        {
+            var drivingSession = await _context.DrivingSessions
+                .FindAsync(drivingSessionId);
+
+            if(drivingSession == null) return;
+
+            if(drivingSession.InstructorId != executorId) {
+                var drivingTest = await _context.DrivingTests
+                    .Where(dt => dt.DrivingSessionId == drivingSessionId)
+                    .FirstOrDefaultAsync();
+
+                if(drivingTest == null || drivingTest.ExaminerId != executorId) return;
+            }
+
+            _context.DrivingSessions.Remove(drivingSession);
+        }
+
         public async Task<DrivingTestDto> ExamineDrivingTest(ExamineDrivingTestDto examineDrivingTestDto, int examinerId)
         {
             var drivingTest = await _context.DrivingTests

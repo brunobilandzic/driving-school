@@ -66,6 +66,13 @@ namespace API.Data
             );
         }
 
+        public async Task<IEnumerable<PersonDto>> GetUsersInRole(string roleName)
+        {
+            var users =  await _userManager.GetUsersInRoleAsync(roleName);
+
+            return _mapper.Map<PersonDto []>(users);
+        }
+
         public async Task<bool> PassStudent(string username)
         {
             var student = await _userManager.Users

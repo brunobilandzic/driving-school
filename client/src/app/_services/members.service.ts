@@ -126,6 +126,10 @@ export class MembersService {
 
   }
 
+  getUsersFromRole(roleName: string) {
+    return this.http.get(this.baseUrl + 'users/role/' + roleName);
+  }
+
   createGroup(regulationsGroup: Partial<RegulationsGroup>) {
     return this.http.post(this.baseUrl + 'professor/regulations-groups', regulationsGroup); 
   }

@@ -1,0 +1,5 @@
+<h2>Regulations Tests</h2>
+<div class="d-flex">
+    <div class="btn btn-outline-dark mr-2" routerLink="/driving-tests/list">Driving Test List</div>
+    <div class="btn btn-outline-dark" *ngIf="roles.includes('Examiner')" (click)="addNewTestClick($event)">Add Driving Test</div>
+</div>

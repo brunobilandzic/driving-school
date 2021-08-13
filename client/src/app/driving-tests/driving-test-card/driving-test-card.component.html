@@ -1,0 +1,49 @@
+<div class="card-wrap">
+    <div class="card d-flex flex-row">
+        <div class="card-body">
+            <h1 class="card-title">{{drivingTest.drivingSessionId}}</h1>
+            <h6 class="card-subtitle text-muted">
+                {{ drivingTest.drivingSession.dateStart + "Z" | date: "medium" }}
+              </h6>
+              <div class="card-text mt-2">
+                <div>Driver: {{ drivingTest.drivingSession.driverUsername }}</div>
+                <div>Instructor: {{ drivingTest.drivingSession.instructorUsername }}</div>
+                <div>Examiner Remarks: {{ drivingTest.examinerRemarks}}</div>
+                <div>Passed: {{drivingTest.passed }}</div>
+              </div>
+        </div>
+        <div
+      class="card-side d-flex flex-column"
+      *ngIf="role=='Examiner'"
+    >
+      <div class="btn">
+        <i
+          class="fa text-danger fas fa-trash"
+          data-toggle="tooltip"
+          data-placement="left"
+          title="Delete test"
+          (click)="onDeleteTest()"
+        ></i>
+      </div>
+      <div class="btn">
+        <i
+        *ngIf="checkTestDate(drivingTest.drivingSession.dateStart)"
+          (click)="onEditTest()"
+          class="fa fas fa-edit"
+          data-toggle="tooltip"
+          data-placement="left"
+          title="Edit Test"
+        ></i>
+      </div>
+      <div class="btn">
+        <i
+          (click)="onExamineTestClick()"
+          class="fa fas text-success fa-check"
+          data-toggle="tooltip"
+          data-placement="left"
+          title="Examine Test"
+        ></i>
+      </div>
+    </div>
+    </div>
+</div>

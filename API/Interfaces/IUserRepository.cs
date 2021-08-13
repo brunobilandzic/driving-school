@@ -24,5 +24,7 @@ namespace API.Interfaces
 
         Task<IEnumerable<PersonDto>> GetStudentsFromGroup(int groupId);
 
+        Task<IEnumerable<PersonDto>> GetUsersInRole(string roleName);
+
     }
 }

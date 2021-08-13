@@ -1,0 +1,11 @@
+<div>
+  <div *ngFor="let drivingTest of drivingTests">
+    <app-driving-test-card
+      [drivingTest]="drivingTest"
+      [role]="role"
+      (deleteTest)="deleteTest($event)"
+      (invokeRefresh)="refreshTests($event)"
+    >
+    </app-driving-test-card>
+  </div>
+</div>

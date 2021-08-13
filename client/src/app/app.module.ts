@@ -50,6 +50,10 @@ import { SessionListComponent } from './sessions/session-list/session-list.compo
 import { SessionCardComponent } from './sessions/session-card/session-card.component';
 import { SessionFormComponent } from './sessions/session-form/session-form.component';
 import { RemarkInputComponent } from './sessions/session-card/remark-input/remark-input.component';
+import { DrivingTestListComponent } from './driving-tests/driving-test-list/driving-test-list.component';
+import { DrivingTestsPanelComponent } from './driving-tests/driving-tests-panel/driving-tests-panel.component';
+import { DrivingTestCardComponent } from './driving-tests/driving-test-card/driving-test-card.component';
+import { ExamineTestModalComponent } from './driving-tests/examine-test-modal/examine-test-modal.component';
 
 
 @NgModule({
@@ -94,7 +98,11 @@ import { RemarkInputComponent } from './sessions/session-card/remark-input/remar
     SessionListComponent,
     SessionCardComponent,
     SessionFormComponent,
-    RemarkInputComponent
+    RemarkInputComponent,
+    DrivingTestListComponent,
+    DrivingTestsPanelComponent,
+    DrivingTestCardComponent,
+    ExamineTestModalComponent
   ],
   imports: [
     BrowserModule,

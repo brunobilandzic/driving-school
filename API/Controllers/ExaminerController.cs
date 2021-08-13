@@ -51,6 +51,25 @@ namespace API.Controllers
             return BadRequest("Failed to examine test.");        
         }
 
+        [HttpDelete("tests/{id}")]
+        public async Task<ActionResult> DeleteSession(int id)
+        {
+            await _unitOfWork.DrivingRepository.DeleteDrivingSession(id, User.GetUserId());
+
+            if(await _unitOfWork.SaveAllChanges() > 0) return Ok();
+            return BadRequest("Failed to delete driving session");
+        }
+
+        [HttpPut("session-general")]
+         public async Task<ActionResult> UpdateSessionGenereal(DrivingSessionDto drivingSessionDto) 
+         {
+             await _unitOfWork.DrivingRepository.EditDrivingSession(drivingSessionDto);
+
+            if(await _unitOfWork.SaveAllChanges() > 0) return Ok();
+
+            return BadRequest("No changes to session have been made.");
+         }
+
         
     }
 }

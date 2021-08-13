@@ -54,6 +54,16 @@ namespace API.Controllers
             return students;
         }
 
+        [HttpGet("role/{roleName}")]
+        public async Task<ActionResult<IEnumerable<PersonDto>>> GetUsersInRole(string roleName)
+        {
+            var users = await _unitOfWork.UserRepository.GetUsersInRole(roleName);
+
+            if(users == null) return BadRequest("Failed to fetch users in role " + roleName);
+
+            return Ok(users);
+        }
+
         [Authorize(Policy = "NotOnlyStudent")]
         [HttpGet("all-students")]
         public async Task<ActionResult<IEnumerable<PersonDto>>> GetAllStudents([FromQuery] int regulationsGroupId)

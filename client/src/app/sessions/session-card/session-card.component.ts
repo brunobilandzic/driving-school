@@ -14,6 +14,7 @@ export class SessionCardComponent implements OnInit {
   @Input() session: DrivingSessionModel;
   remarkModal: BsModalRef;
   @Output() refreshSessionList = new EventEmitter<string>();
+  @Output() deleteSession = new EventEmitter<number>();
   constructor(
     private router: Router,
     private modalService: BsModalService
@@ -39,5 +40,11 @@ export class SessionCardComponent implements OnInit {
 
   sessionDriven() {
     return !passedToday(new Date(this.session.dateStart).toUTCString());
+  }
+
+  onDeleteSessionClick() {
+    if(window.confirm("Dou you want to delete session " +this.session.drivingSessionId) == false) return;
+
+    this.deleteSession.emit(this.session.drivingSessionId);
   }
 }

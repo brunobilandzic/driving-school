@@ -22,6 +22,8 @@ namespace API.Interfaces
 
         Task EditDrivingSession(DrivingSessionDto drivingSessionDto);
 
+        Task DeleteDrivingSession(int drivingSessionId, int executorId);
+
         Task EditDrivingSessionInstructor(DrivingSessionEditInstructorDto drivingSessionDto, int userId);
 
         Task<DrivingSessionDto> EditDrivingSessionStudent(DrivingSessionEditStudentDto drivingSessionDto, int userId);

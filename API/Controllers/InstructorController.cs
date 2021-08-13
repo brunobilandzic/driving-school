@@ -99,6 +99,13 @@ namespace API.Controllers
         }
 
         
+        [HttpDelete("sessions/{id}")]
+        public async Task<ActionResult> DeleteSession(int id)
+        {
+            await _unitOfWork.DrivingRepository.DeleteDrivingSession(id, User.GetUserId());
 
+            if(await _unitOfWork.SaveAllChanges() > 0) return Ok();
+            return BadRequest("Failed to delete driving session");
+        }
     }
 }

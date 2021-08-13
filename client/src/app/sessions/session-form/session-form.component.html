@@ -32,7 +32,25 @@
             </option>
           </select>
         </div>
-        <div class="form-group d-flex">
+        <div  *ngIf="!isEditMode() && testForm" class="d-flex form-group align-items-center mb-3">
+          <div class="mr-2">Instructor:</div>
+          <select
+            [disabled]="isEditMode()"
+            name="instructorUsername"
+            class="form-select"
+            [formControl]="drivingSession.controls['instructorUsername']"
+            id=""
+          >
+            <option
+              class="instructor-option"
+              *ngFor="let instructor of instructors"
+              [value]="instructor"
+            >
+              {{ instructor }}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="!testForm" class="form-group d-flex">
           <div class="mr-2">Hours:</div>
           <input
             class="hours-input"
@@ -55,7 +73,5 @@
     </div>
   </form>
 
-  {{ drivingSession.value | json }}
-
-  {{ drivingSession.valid }}
+  {{drivingSession.value | json}}
 </div>

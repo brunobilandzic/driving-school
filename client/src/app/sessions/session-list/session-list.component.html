@@ -18,6 +18,7 @@
     <div class="session-card-wrap" *ngFor="let session of drivingSessions">
       <app-session-card
         (refreshSessionList)="refreshSessionList($event)"
+        (deleteSession)="onDeleteDrivingSession($event)"
         [session]="session"
       ></app-session-card>
     </div>

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DrivingSessionModel } from 'src/app/_models/driving-session';
 import { StudentModel } from 'src/app/_models/student';
+import { UserModel } from 'src/app/_models/user';
 import { DrivingService } from 'src/app/_services/driving.service';
 import { MembersService } from 'src/app/_services/members.service';
 
@@ -17,6 +18,9 @@ export class SessionFormComponent implements OnInit {
   drivingSession: FormGroup;
   drivers: string[];
   minDate = new Date();
+  examinerEdit = false;
+  testForm = false;
+  instructors: string[];
   constructor(
     private fb: FormBuilder,
     private membersService: MembersService,
@@ -29,10 +33,13 @@ export class SessionFormComponent implements OnInit {
       dateTime: ['', Validators.required],
       driverUsername: ['', Validators.required],
       hours: [1, [Validators.min(1), Validators.max(2)]],
+      instructorUsername: [''],
     });
     this.route.paramMap.subscribe((params) => {
       if (params == null) return;
       this.drivingSessionEdit = JSON.parse(params.get('data'));
+      if (params.get('examinerEdit')) this.examinerEdit = true;
+      if (params.get('testForm')) this.testForm = true;
     });
   }
 
@@ -44,6 +51,12 @@ export class SessionFormComponent implements OnInit {
         console.log(this.drivers);
       });
 
+    this.membersService
+      .getUsersFromRole('Instructor')
+      .subscribe((users: UserModel[]) => {
+        console.log(users);
+        this.instructors = users.map((u) => u.username);
+      });
     this.populateForm();
   }
 
@@ -73,27 +86,44 @@ export class SessionFormComponent implements OnInit {
     postSession['hours'] = this.drivingSession.value.hours;
 
     if (this.drivingSessionEdit == undefined) {
-      this.drivingService
-        .createDrivingSession(postSession)
-        .subscribe((ds: DrivingSessionModel) => {
+      if (this.testForm == false) {
+        this.drivingService
+          .createDrivingSession(postSession)
+          .subscribe((ds: DrivingSessionModel) => {
+            this.toastr.success(
+              'Successfully created driving session ' + ds.drivingSessionId
+            );
+          });
+      } else {
+        postSession['instructorUsername'] =
+          this.drivingSession.controls['instructorUsername'].value;
+        this.drivingService.createTest(postSession).subscribe((dt: any) => {
           this.toastr.success(
-            'Successfully created driving session ' + ds.drivingSessionId
+            'Successfully created driving test ' + dt.drivingSessionId
           );
         });
+      }
     } else {
-      postSession['instructorRemarks'] = this.drivingSessionEdit.instructorRemarks;
+      postSession['instructorRemarks'] =
+        this.drivingSessionEdit.instructorRemarks;
       postSession['studentRemarks'] = this.drivingSessionEdit.driverRemarks;
-      postSession['drivingSessionId'] = this.drivingSessionEdit.drivingSessionId;
-      this.drivingService.updateDrivingSession(postSession)
-        .subscribe(() => {
-          this.toastr.success("Successfully updated driving session.")
-        })
-
+      postSession['drivingSessionId'] =
+        this.drivingSessionEdit.drivingSessionId;
+      if (this.examinerEdit) {
+        this.drivingService
+          .updateDrivingSessionExaminer(postSession)
+          .subscribe(() => {
+            this.toastr.success('Successfully updated driving session.');
+          });
+      } else {
+        this.drivingService.updateDrivingSession(postSession).subscribe(() => {
+          this.toastr.success('Successfully updated driving session.');
+        });
+      }
     }
   }
 
-
   isEditMode() {
-    return this.drivingSessionEdit != undefined
+    return this.drivingSessionEdit != undefined;
   }
 }

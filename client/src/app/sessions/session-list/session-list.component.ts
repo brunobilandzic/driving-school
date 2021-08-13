@@ -39,4 +39,11 @@ export class SessionListComponent implements OnInit {
     this.loadDrivingSessions();
   }
 
+  onDeleteDrivingSession(drivingSessionId: number){
+    this.drivingService.deleteSession(drivingSessionId)
+      .subscribe(() => {
+        this.refreshSessionList(true);
+      })
+  }
+
 }
