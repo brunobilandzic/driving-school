@@ -25,5 +25,7 @@ namespace API.Entities
 
         public DrivingTest DrivingTest { get; set; }
 
+        public bool IsDriven { get; set; } = false;
+
     }
 }

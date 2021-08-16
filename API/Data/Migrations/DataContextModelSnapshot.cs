@@ -167,6 +167,9 @@ namespace API.Data.Migrations
                     b.Property<string>("InstructorRemarks")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsDriven")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("DrivingSessionId");
 
                     b.HasIndex("DriverId");

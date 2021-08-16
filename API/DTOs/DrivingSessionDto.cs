@@ -16,5 +16,7 @@ namespace API.DTOs
 
         public string DriverRemarks { get; set; }
 
+        public bool IsDriven { get; set; }
+
     }
 }

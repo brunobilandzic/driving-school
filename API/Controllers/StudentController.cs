@@ -19,7 +19,7 @@ namespace API.Controllers
         }
 
         [HttpGet("lectures")]
-        public async Task<ActionResult<IEnumerable<LectureDto>>> GetLectures()
+        public async Task<ActionResult<IEnumerable<StudentLectureDto>>> GetLectures()
         {
             var lectures = await _unitOfWork.StudentRepository.GetLectures(User.GetUserId());
 
@@ -29,10 +29,10 @@ namespace API.Controllers
         }
 
         [HttpGet("sessions")]
-        public async Task<ActionResult<PagedList<DrivingSessionDto>>> GetDrivingSessions([FromQuery] PaginationParams paginationParams)
+        public async Task<ActionResult<PagedList<DrivingSessionDto>>> GetDrivingSessions([FromQuery] SessionParams sessionParams)
         {
             var sessions = await _unitOfWork.DrivingRepository
-                .GetDrivingSessionsForStudent(User.GetUserId(), paginationParams);
+                .GetDrivingSessionsForStudent(User.GetUserId(), sessionParams);
 
             if(sessions == null) return BadRequest("Failed to fetch driving sessions.");
 
@@ -52,16 +52,7 @@ namespace API.Controllers
             return Ok(tests);
         }
 
-        [HttpGet("lecture-topics")]
-        public async Task<ActionResult<IEnumerable<LectureTopicDto>>> GetLectureTopics()
-        {
-            var lectureTopics = await _unitOfWork.ProfessorRepository
-                .GetLectureTopics();
-
-            if(lectureTopics == null) return BadRequest("Failed to fetch lecture topics.");
-
-            return Ok(lectureTopics);
-        }
+        
 
 
         [HttpPut("sessions")]

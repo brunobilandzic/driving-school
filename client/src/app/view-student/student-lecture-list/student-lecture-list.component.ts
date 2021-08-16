@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { StudentModel } from 'src/app/_models/student';
 import { StudentLectureModel } from 'src/app/_models/student-lecture';
 import { UsernameToId } from 'src/app/_models/username-to-id';
 import { LecturesService } from 'src/app/_services/lectures.service';
@@ -30,8 +29,6 @@ export class StudentLectureListComponent implements OnInit {
   
 
   toggleAttendance(lectureId: number) {
-    console.log(lectureId)
-    console.log(this.lectures)
     let lecture = this.lectures.find(l => l.lectureId == lectureId);
     let useranmeToId: UsernameToId = {
       username: lecture.studentUsername,

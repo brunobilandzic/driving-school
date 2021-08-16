@@ -3,12 +3,65 @@
     <div class="page-size">
       <div class="mr-2">Page Size:</div>
       <input
-        class="form-control size-input mr-2"
+        class="form-control size-input mr-1"
         type="number"
         max="50"
         min="1"
         [(ngModel)]="pageSize"
       />
+    </div>
+    <div class="today-toggle">
+      <button
+        class="btn btn-outline-dark btn-sm"
+        (click)="onTodayClick()"
+        [class.active]="sessionParams.today"
+      >
+        Today Only
+      </button>
+    </div>
+    <div>
+      <div
+        class="btn btn-sm btn-outline-dark"
+        [class.active]="customDateActive"
+        (click)="onCustomDateClick()"
+      >
+        Custom Date
+      </div>
+      <input
+        type="text"
+        *ngIf="customDateActive"
+        placeholder="Sessions Date"
+        (bsValueChange)="onDateChange($event)"
+        class="form-control form-date-input date-input"
+        bsDatepicker
+        [bsConfig]="bsConfig"
+      />
+    </div>
+    <div>
+      <select [(ngModel)]="sessionParams.sortDirection" name="sortDirectionSelect">
+        <option value="desc" [selected]="sessionParams.sortDirection == 'desc'">
+          Desc
+        </option>
+        <option value="asc" [selected]="sessionParams.sortDirection == 'asc'">
+          Asc
+        </option>
+      </select>
+    </div>
+    <div>
+      <select [(ngModel)]="sessionParams.isDriven" name="drivenSelect">
+        <option [value]="null" [selected]="sessionParams.isDriven == null">
+          All
+        </option>
+        <option [value]="true" [selected]="sessionParams.isDriven == true">
+          Driven
+        </option>
+        <option [value]="false" [selected]="sessionParams.isDriven == false">
+          Not Driven
+        </option>
+      </select>
+    </div>
+
+    <div class="search">
       <div class="btn btn-success btn-sm" (click)="loadDrivingSessions()">
         Search
       </div>

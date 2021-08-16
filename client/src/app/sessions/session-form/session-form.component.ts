@@ -21,6 +21,7 @@ export class SessionFormComponent implements OnInit {
   examinerEdit = false;
   testForm = false;
   instructors: string[];
+  createForDriver = false;
   constructor(
     private fb: FormBuilder,
     private membersService: MembersService,
@@ -37,9 +38,11 @@ export class SessionFormComponent implements OnInit {
     });
     this.route.paramMap.subscribe((params) => {
       if (params == null) return;
+      console.log(params);
       this.drivingSessionEdit = JSON.parse(params.get('data'));
       if (params.get('examinerEdit')) this.examinerEdit = true;
       if (params.get('testForm')) this.testForm = true;
+      if  (params.get('createForDriver')) this.createForDriver = true;
     });
   }
 
@@ -62,6 +65,10 @@ export class SessionFormComponent implements OnInit {
 
   populateForm() {
     if (this.drivingSessionEdit == undefined) return;
+    if(this.createForDriver) {
+      this.drivingSession.controls['driverUsername'].setValue(this.drivingSessionEdit.driverUsername);
+      return;
+    }
     this.drivingSessionEdit.dateStart = new Date(
       this.drivingSessionEdit.dateStart
     ).toUTCString();
@@ -85,7 +92,7 @@ export class SessionFormComponent implements OnInit {
     postSession['driverUsername'] = this.drivingSession.value.driverUsername;
     postSession['hours'] = this.drivingSession.value.hours;
 
-    if (this.drivingSessionEdit == undefined) {
+    if (this.drivingSessionEdit == undefined || this.createForDriver) {
       if (this.testForm == false) {
         this.drivingService
           .createDrivingSession(postSession)

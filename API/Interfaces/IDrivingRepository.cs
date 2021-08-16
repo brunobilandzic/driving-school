@@ -9,12 +9,12 @@ namespace API.Interfaces
     {
         
         Task<PagedList<DrivingSessionDto>> GetDrivingSessions(PaginationParams paginationParams);
-        Task<PagedList<DrivingSessionDto>> GetDrivingSessionsForInstructor(int instructorId, PaginationParams paginationParams);
+        Task<PagedList<DrivingSessionDto>> GetDrivingSessionsForInstructor(int instructorId, SessionParams sessionParams);
         Task<PagedList<DrivingTestDto>> GetDrivingTestsForInstructor(int instructorId, PaginationParams paginationParams);
         Task<PagedList<DrivingTestDto>> GetDrivingTestsForExaminer(int examinerId, PaginationParams paginationParams);
 
         Task<IEnumerable<DrivingTestDto>> GetDrivingTestsForStudent(int studentId);
-        Task<PagedList<DrivingSessionDto>> GetDrivingSessionsForStudent(int studentId, PaginationParams paginationParams);
+        Task<PagedList<DrivingSessionDto>> GetDrivingSessionsForStudent(int studentId, SessionParams sessionParams);
         Task<DrivingSessionDto> CreateDrivingSession(DrivingSessionDto drivingSessionDto, int instructorId);
         Task<DrivingTestDto> CreateDrivingTest(DrivingSessionDto drivingSessionDto, int examinerId);
         Task AddExaminer(UsernameToIdDto examinerToTest);

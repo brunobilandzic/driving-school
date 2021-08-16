@@ -37,7 +37,7 @@ export class MembersService {
   getRegulationsGroups()
   {
     return this.http
-      .get(this.baseUrl + 'professor/regulations-groups-active')
+      .get(this.baseUrl + 'common/regulations-groups-active')
       
   }
 

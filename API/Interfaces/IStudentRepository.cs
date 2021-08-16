@@ -7,7 +7,7 @@ namespace API.Interfaces
 {
     public interface IStudentRepository
     {
-        Task<IEnumerable<LectureDto>> GetLectures(int studentId);
+        Task<IEnumerable<StudentLectureDto>> GetLectures(int studentId);
 
 
         

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { passedToday } from 'src/app/_helpers/datePassedToday';
+import { passedToday } from 'src/app/_helpers/dates';
 import { RegulationsTestModel } from 'src/app/_models/regulations-test';
 
 @Component({

@@ -1,3 +1,10 @@
-export function getKey(p1: number, p2: number): string {
-    return p1.toString()+ '-' +p2.toString();
+export function getKey(...keys): string {
+    let key = '';
+
+    keys.forEach((_key, i) => {
+        if(i != 0) key += '-'
+        key += _key;
+    });
+
+    return key;
 }

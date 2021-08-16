@@ -13,7 +13,7 @@ import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
   providedIn: 'root',
 })
 export class LecturesService {
-  baseUrl = environment.baseApiUrl + 'professor/';
+  baseUrl = environment.baseApiUrl;
   lectures = new Map();
   constructor(private http: HttpClient) {}
 
@@ -25,7 +25,7 @@ export class LecturesService {
     let params = getPaginationHeaders(pageNumber, pageSize);
 
     return getPaginatedResult<Lecture[]>(
-      this.baseUrl + 'lectures',
+      this.baseUrl + 'professor/lectures',
       params,
       this.http
     ).pipe(
@@ -42,26 +42,30 @@ export class LecturesService {
       .find((l: Lecture) => l.lectureId == parseInt(lectureId));
     if (lecture) return of(lecture);
 
-    return this.http.get<Lecture>(this.baseUrl + 'lectures/' + lectureId);
+    return this.http.get<Lecture>(this.baseUrl + 'professor/lectures/' + lectureId);
   }
 
   getAttendance(lectureId: string): Observable<UsernameToBool []> {
-    return this.http.get<UsernameToBool []>(this.baseUrl + 'attendances/' + lectureId);
+    return this.http.get<UsernameToBool []>(this.baseUrl + 'professor/attendances/' + lectureId);
   }
 
   toggleAttendance(usernameToId: UsernameToId): Observable<boolean> {
-    return this.http.post(this.baseUrl + 'attendances-toggle', usernameToId).pipe(map(
+    return this.http.post(this.baseUrl + 'professor/attendances-toggle', usernameToId).pipe(map(
       () => {return true;}
     ))
   }
 
   markAttendances(usernamesToId: UsernamesToId): Observable<boolean> {
-    return this.http.post(this.baseUrl + 'attendances', usernamesToId).pipe(map(
+    return this.http.post(this.baseUrl + 'professor/attendances', usernamesToId).pipe(map(
       () => {return true;}
     ))
   }
 
   getStudentLectures() {
-    
+    return this.http.get(this.baseUrl + 'student/lectures');
+  }
+
+  getLectureTopics() {
+    return this.http.get(this.baseUrl + 'common/lecture-topics')
   }
 }

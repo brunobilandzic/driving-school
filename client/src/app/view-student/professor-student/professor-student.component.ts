@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { passedToday } from 'src/app/_helpers/datePassedToday';
+import { passedToday } from 'src/app/_helpers/dates';
 import { StudentModel } from 'src/app/_models/student';
 import { UsernameToId } from 'src/app/_models/username-to-id';
 import { MembersService } from 'src/app/_services/members.service';

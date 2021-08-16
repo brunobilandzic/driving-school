@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -119,6 +120,7 @@ namespace API.Data
             if(session == null || session.InstructorId != userId) return;
 
             session.InstructorRemarks = drivingSessionDto.InstructorRemarks;
+            session.IsDriven = drivingSessionDto.IsDriven;
 
             return;
         }
@@ -186,7 +188,7 @@ namespace API.Data
             return await PagedList<DrivingSessionDto>.CreateAsync(drivingSessions, paginationParams.PageNumber, paginationParams.PageSize);
         }
 
-        public async Task<PagedList<DrivingSessionDto>> GetDrivingSessionsForInstructor(int instructorId, PaginationParams paginationParams)
+        public async Task<PagedList<DrivingSessionDto>> GetDrivingSessionsForInstructor(int instructorId, SessionParams sessionParams)
         {
             var drivingSessions =  _context.DrivingSessions
                 .OrderByDescending(ds => ds.DateStart)
@@ -194,7 +196,17 @@ namespace API.Data
                 .ProjectTo<DrivingSessionDto>(_mapper.ConfigurationProvider)
                 .AsQueryable();
 
-            return await PagedList<DrivingSessionDto>.CreateAsync(drivingSessions, paginationParams.PageNumber, paginationParams.PageSize);
+            if(sessionParams.DateStart != null) 
+                drivingSessions = drivingSessions.Where(ds => sessionParams.DateStart.Value.Date.Equals(ds.DateStart.Date));
+            if(sessionParams.IsDriven != null)
+                drivingSessions = drivingSessions.Where(ds => ds.IsDriven == sessionParams.IsDriven);
+            if(sessionParams.SortDirection == "desc")
+                drivingSessions = drivingSessions.OrderByDescending(ds => ds.DateStart);
+            else if(sessionParams.SortDirection == "asc")
+                drivingSessions = drivingSessions.OrderBy(ds => ds.DateStart);
+
+
+            return await PagedList<DrivingSessionDto>.CreateAsync(drivingSessions, sessionParams.PageNumber, sessionParams.PageSize);
         }
 
         public async Task<PagedList<DrivingTestDto>> GetDrivingTestsForExaminer(int examinerId, PaginationParams paginationParams)
@@ -220,14 +232,23 @@ namespace API.Data
             return drivingTests;
         }
     	
-        public Task<PagedList<DrivingSessionDto>> GetDrivingSessionsForStudent(int studentId, PaginationParams paginationParams)
+        public Task<PagedList<DrivingSessionDto>> GetDrivingSessionsForStudent(int studentId, SessionParams sessionParams)
         {
             var sessions = _context.DrivingSessions
                 .Where(s => s.DriverId == studentId)
                 .ProjectTo<DrivingSessionDto>(_mapper.ConfigurationProvider)
                 .AsQueryable();
-            
-            return PagedList<DrivingSessionDto>.CreateAsync(sessions, paginationParams.PageNumber, paginationParams.PageSize);
+
+            if(sessionParams.DateStart != null) 
+                sessions = sessions.Where(ds => sessionParams.DateStart.Value.Date.Equals(ds.DateStart.Date));
+            if(sessionParams.IsDriven != null)
+                sessions = sessions.Where(ds => ds.IsDriven == sessionParams.IsDriven);
+            if(sessionParams.SortDirection == "desc")
+                sessions = sessions.OrderByDescending(ds => ds.DateStart);
+            else if(sessionParams.SortDirection == "asc")
+                sessions = sessions.OrderBy(ds => ds.DateStart);
+
+            return PagedList<DrivingSessionDto>.CreateAsync(sessions, sessionParams.PageNumber, sessionParams.PageSize);
 
         }
         public async Task<PagedList<DrivingTestDto>> GetDrivingTestsForInstructor(int instructorId, PaginationParams paginationParams)

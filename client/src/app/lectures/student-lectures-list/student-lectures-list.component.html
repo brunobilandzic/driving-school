@@ -1,0 +1,28 @@
+<div>
+  <div *ngFor="let lecture of studentLectures">
+    <div
+      [ngClass]="{
+        'card lecture-held-card': true,
+        future: checkFuture(lecture.dateStart),
+        missed: !checkFuture(lecture.dateStart) && !lecture.attendance,
+        attended: !checkFuture(lecture.dateStart) && lecture.attendance
+      }"
+      class="card lecture-held-card"
+    >
+      <div class="card-body">
+        <h4 class="card-title">{{ lecture.lectureTopic }}</h4>
+        <h6 class="card-subtitle text-muted">
+          {{ lecture.dateStart | date: "medium" }}
+        </h6>
+        <div
+          [innerHtml]="
+            checkFuture(lecture.dateStart)
+              ? ''
+              : '<b>Attendance: </b>' + lecture.attendance
+          "
+          class="card-text"
+        ></div>
+      </div>
+    </div>
+  </div>
+</div>

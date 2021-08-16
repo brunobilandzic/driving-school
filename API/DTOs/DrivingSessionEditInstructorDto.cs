@@ -8,5 +8,7 @@ namespace API.DTOs
 
         public string InstructorRemarks { get; set; }
 
+        public bool IsDriven { get; set; } = false;
+
     }
 }

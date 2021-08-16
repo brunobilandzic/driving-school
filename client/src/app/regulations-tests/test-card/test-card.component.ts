@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { passedToday } from 'src/app/_helpers/datePassedToday';
+import { passedToday } from 'src/app/_helpers/dates';
 import { RegulationsTestModel } from 'src/app/_models/regulations-test';
 import { RegulationsTestsService } from 'src/app/_services/regulations-tests.service';
 import { AddStudentsModalComponent } from './add-students-modal/add-students-modal.component';

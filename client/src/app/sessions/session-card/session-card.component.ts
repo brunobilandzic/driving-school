@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { passedToday } from 'src/app/_helpers/datePassedToday';
+import { passedToday } from 'src/app/_helpers/dates';
 import { DrivingSessionModel } from 'src/app/_models/driving-session';
 import { RemarkInputComponent } from './remark-input/remark-input.component';
 
@@ -14,6 +14,7 @@ export class SessionCardComponent implements OnInit {
   @Input() session: DrivingSessionModel;
   @Input() role: string; 
   remarkModal: BsModalRef;
+  @Input() viewOnly: boolean;
   @Output() refreshSessionList = new EventEmitter<string>();
   @Output() deleteSession = new EventEmitter<number>();
   constructor(private router: Router, private modalService: BsModalService) {}
@@ -32,7 +33,9 @@ export class SessionCardComponent implements OnInit {
       remark: this.role=='Instructor' ?  this.session.instructorRemarks: this.session.driverRemarks,
       drivingSessionId: this.session.drivingSessionId,
       refreshSessionList: this.refreshSessionList,
-      role: this.role
+      role: this.role,
+      isDriven: this.session.isDriven,
+      dateStart: this.session.dateStart
     };
     this.remarkModal = this.modalService.show(RemarkInputComponent, {
       initialState,

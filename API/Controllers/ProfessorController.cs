@@ -66,15 +66,7 @@ namespace API.Controllers
             return Ok(regulationGroups);
         }
 
-        [HttpGet("regulations-groups-active")]
-        public async Task<ActionResult<IEnumerable<RegulationsGroupMinDto>>> GetRegulationsGruopsActive()
-        {
-            var regulationGroups = await _unitOfWork.ProfessorRepository.GetRegulationsGroupsActive();
-
-            if (regulationGroups == null) return BadRequest("Something went wrong."); 
-
-            return Ok(regulationGroups);
-        }
+        
 
         [HttpGet("regulations-groups/{regulationsGroupId}")]
         public async Task<ActionResult<RegulationsGroupDto>> GetRegulationsGroup(int regulationsGroupId)

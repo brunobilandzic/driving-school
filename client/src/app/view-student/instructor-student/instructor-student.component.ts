@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { sortByDateDescending } from 'src/app/_helpers/sortByDateStart';
 import { DriverModel } from 'src/app/_models/driver';
 import { StudentModel } from 'src/app/_models/student';
 import { MembersService } from 'src/app/_services/members.service';
@@ -25,7 +26,10 @@ export class InstructorStudentComponent implements OnInit {
 
   loadStudent() {
     this.membersService.getDriver(this.username)
-      .subscribe((driver) => this.driver = driver)
+      .subscribe((driver) => {
+        driver.drivingSessionsTaken = sortByDateDescending(driver.drivingSessionsTaken);
+        this.driver = driver
+      })
   }
 
 

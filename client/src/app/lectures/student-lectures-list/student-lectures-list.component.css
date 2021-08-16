@@ -1,0 +1,20 @@
+.lecture-held-card{
+    margin: 2rem 0;
+    border-left: 5px solid;
+}
+
+.missed {
+    border-left-color: #bb0000;
+}
+
+.attended {
+    border-left-color: #009900;
+}
+
+.future {
+    border-left-color: #bb9900;
+}
+
+.card-text{
+    padding-top: 1rem;
+}

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
+import { passedToday } from 'src/app/_helpers/dates';
 import { DrivingService } from 'src/app/_services/driving.service';
 
 @Component({
@@ -11,7 +12,9 @@ import { DrivingService } from 'src/app/_services/driving.service';
 export class RemarkInputComponent implements OnInit {
   remark: string = "";
   role: string = "";
+  isDriven: Boolean;
   drivingSessionId: number;
+  dateStart: Date;
   refreshSessionList: EventEmitter<string>;
   constructor(
     public bsModalRef: BsModalRef,
@@ -25,8 +28,11 @@ export class RemarkInputComponent implements OnInit {
 
   onSubmit() {
     let remarksWrap = {}
-    if(this.role == 'Instructor')
+    if(this.role == 'Instructor'){
       remarksWrap["instructorRemarks"] = this.remark;
+      remarksWrap["isDriven"]=this.isDriven
+    }
+      
     else
       remarksWrap["driverRemarks"]= this.remark;
 
@@ -37,6 +43,10 @@ export class RemarkInputComponent implements OnInit {
         this.toastr.success("Remark successfully put.")
         this.refreshSessionList.emit(this.remark);
       })
+  }
+
+  startsBeforeToday() {
+    return !passedToday(new Date(this.dateStart).toISOString());
   }
 
 }

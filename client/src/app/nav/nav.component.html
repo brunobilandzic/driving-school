@@ -36,11 +36,17 @@
     </li>
   </ng-template>
 
+  <ng-template [ngIf]="roles?.includes('Student')">
+    <li class="nav-item">
+      <a href="/student/lectures" class="nav-link">Lectures</a>
+    </li>
+  </ng-template>
+  
+
   <ng-template [ngIf]="roles?.includes('Instructor') || roles?.includes('Student')">
     <li class="nav-item">
       <a href="/sessions" class="nav-link">Sessions</a>
     </li>
-    
   </ng-template>
 
   <ng-template [ngIf]="roles?.includes('Instructor') || roles?.includes('Examiner') || roles?.includes('Student')">

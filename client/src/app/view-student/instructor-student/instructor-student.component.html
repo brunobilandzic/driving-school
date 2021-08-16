@@ -1,2 +1,24 @@
-<div *ngIf="isProfessor" class="btn btn-outline-dark" (click)="toggleViewClick()">View As Professor</div>
-<p>Instructor view</p>
+<div
+  *ngIf="isProfessor"
+  class="btn btn-outline-dark"
+  (click)="toggleViewClick()"
+>
+  View As Professor
+</div>
+<div>
+  <tabset>
+    <tab heading="Info">
+      <app-instructor-student-info
+        [driver]="driver"
+        
+      >
+
+      </app-instructor-student-info>
+    </tab>
+    <tab heading="Sessions">
+      <app-student-sessions-list
+        [drivingSessionsTaken]="driver?.drivingSessionsTaken"
+      ></app-student-sessions-list>
+    </tab>
+  </tabset>
+</div>

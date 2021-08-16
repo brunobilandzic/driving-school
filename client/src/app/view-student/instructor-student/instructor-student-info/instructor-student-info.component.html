@@ -1,0 +1,33 @@
+<div *ngIf="driver" class="user-info row">
+    <div class="card col-4">
+      <img
+        class="card-img-top"
+        src="{{ driver.photoUrl }}"
+        alt="{{ driver.firstName + ' ' + driver.lastName }}"
+      />
+  
+      <div class="card-body">
+        <h4 class="card-title">
+          {{ driver.firstName + " " + driver.lastName }}
+        </h4>
+        <div class="card-text">
+          <div>
+            Regulations Group: {{ driver.regulationsGroupId }}
+          </div>
+          <div>
+            Registered on: {{ driver.dateRegistered | date }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="driver-info d-flex flex-column justify-content-between">
+        <ul class="info-list custom-list">
+            <li><b>Status:</b> {{driver.passed ? "Passed School" : "Not yet finished"}}</li>  
+            <li><b>Sessions Taken:</b> {{getDrivenSessionsCount()}} sessions driven.</li>
+        </ul>
+        <div class="info-footer">
+          <div class="btn btn-outline-dark ml-2" (click)="openSessionForm()">Sign For Session</div>
+        </div>
+    </div>
+  </div>
+  

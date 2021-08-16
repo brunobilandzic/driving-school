@@ -5,9 +5,12 @@ import { DrivingTestsPanelComponent } from './driving-tests/driving-tests-panel/
 import { AddLectureTopicComponent } from './lectures/add-lecture-topic/add-lecture-topic.component';
 import { HoldLectureComponent } from './lectures/hold-lecture/hold-lecture.component';
 import { LectureAttendanceComponent } from './lectures/lecture-attendance/lecture-attendance.component';
+import { LectureTopicsComponent } from './lectures/lecture-topics/lecture-topics.component';
 import { LectureViewComponent } from './lectures/lecture-view/lecture-view.component';
 import { LecturesHomeProfessorComponent } from './lectures/lectures-home-professor/lectures-home-professor.component';
+import { LecturesHomeStudentComponent } from './lectures/lectures-home-student/lectures-home-student.component';
 import { LecturesListComponent } from './lectures/lectures-list/lectures-list.component';
+import { StudentLecturesListComponent } from './lectures/student-lectures-list/student-lectures-list.component';
 import { MembersComponent } from './members/members.component';
 import { RegisterComponent } from './register/register.component';
 import { RegGroupFormComponent } from './regulations-groups/reg-group-form/reg-group-form.component';
@@ -43,10 +46,22 @@ const routes: Routes = [
     data: { activationRoles: ['Professor'] },
   },
   {
+    path: 'student/lectures',
+    component: LecturesHomeStudentComponent,
+    canActivate: [RoleGuard],
+    data: { activationRoles: ['Student'] },
+  },
+  {
     path: 'lectures/add-topic',
     component: AddLectureTopicComponent,
     canActivate: [RoleGuard],
     data: { activationRoles: ['Professor'] },
+  },
+  {
+    path: 'lectures/topic-list',
+    component: LectureTopicsComponent,
+    canActivate: [RoleGuard],
+    data: { activationRoles: ['Professor', 'Student'] },
   },
   {
     path: 'lectures/hold-lecture',
@@ -59,6 +74,12 @@ const routes: Routes = [
     component: LecturesListComponent,
     canActivate: [RoleGuard],
     data: { activationRoles: ['Professor'] },
+  },
+  {
+    path: 'student/lectures/list',
+    component: StudentLecturesListComponent,
+    canActivate: [RoleGuard],
+    data: { activationRoles: ['Student'] },
   },
   {
     path: 'lectures/list/:id',

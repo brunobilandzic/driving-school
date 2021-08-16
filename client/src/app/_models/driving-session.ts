@@ -6,4 +6,5 @@ export interface DrivingSessionModel {
   hours: number;
   instructorRemarks: string;
   driverRemarks: string;
+  isDriven: boolean;
 }

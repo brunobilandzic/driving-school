@@ -8,10 +8,10 @@
       <div>Driver: {{ session.driverUsername }}</div>
       <div>Instructor: {{ session.instructorUsername }}</div>
       <div>Instructor Remarks: {{ session.instructorRemarks }}</div>
-      <div>Driver Remarks: {{ session.driverRemarks }}</div>
+      <div>Driver Remarks: {{ session.driverRemarks }} {{role}}</div>
     </div>
   </div>
-  <div class="card-side d-flex flex-column align-items-center">
+  <div *ngIf="!viewOnly" class="card-side d-flex flex-column align-items-center">
     <div class="btn">
       <i
         *ngIf="role=='Instructor'"

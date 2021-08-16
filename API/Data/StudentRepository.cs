@@ -26,16 +26,11 @@ namespace API.Data
         }
         
 
-        public async Task<IEnumerable<LectureDto>> GetLectures(int studentId)
+        public async Task<IEnumerable<StudentLectureDto>> GetLectures(int studentId)
         {
-            var lectureIds = await _context.StudentLectures
+            var lectures = await _context.StudentLectures
                 .Where(sl => sl.StudentId == studentId)
-                .Select(sl => sl.LectureId)
-                .ToListAsync();
-
-            var lectures =  await _context.Lectures
-                .Where(l => lectureIds.Contains(l.LectureId))
-                .ProjectTo<LectureDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<StudentLectureDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
             return lectures;

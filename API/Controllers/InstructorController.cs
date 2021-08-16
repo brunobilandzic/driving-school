@@ -41,15 +41,18 @@ namespace API.Controllers
         }
 
         [HttpGet("sessions")]
-        public async Task<ActionResult<PagedList<DrivingSessionDto>>> GetSessions([FromQuery] PaginationParams paginationParams)
+        public async Task<ActionResult<PagedList<DrivingSessionDto>>> GetSessions([FromQuery] SessionParams sessionParams)
         {
             var sessions = await _unitOfWork.DrivingRepository
-                .GetDrivingSessionsForInstructor(User.GetUserId(), paginationParams);
+                .GetDrivingSessionsForInstructor(User.GetUserId(), sessionParams);
 
             if(sessions == null) return  BadRequest("Failed to fetch sessions for instructor.");
 
             Response.AddPaginationHeader(sessions.CurrentPage, sessions.PageSize, sessions.TotalCount, sessions.TotalPages);
 
+            Response.Headers.Add("DateStart", sessionParams.DateStart.ToString());
+            Response.Headers.Add("IsDriven", sessionParams.IsDriven.ToString());
+            
             return Ok(sessions);
         }
         [HttpPost("sessions")]

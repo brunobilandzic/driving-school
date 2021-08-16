@@ -8,9 +8,13 @@
     <textarea
       class="text-area form-control"
         [(ngModel)]="remark"
-        placeholder="'Remark'"
+        placeholder="Remark"
         name="instructorRemarksControl"
     ></textarea>
+    <div *ngIf="role == 'Instructor' && startsBeforeToday()" class="form-check mt-2 mb-1">
+      <input type="checkbox" [(ngModel)]="isDriven" class="form-check-input">
+      <label class="form-check-label">Is Session Driven?</label>
+    </div>
   </div>
   <div class="modal-footer">
     <div class="btn btn-success" (click)="onSubmit()">Save</div>

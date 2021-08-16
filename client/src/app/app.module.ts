@@ -54,6 +54,11 @@ import { DrivingTestListComponent } from './driving-tests/driving-test-list/driv
 import { DrivingTestsPanelComponent } from './driving-tests/driving-tests-panel/driving-tests-panel.component';
 import { DrivingTestCardComponent } from './driving-tests/driving-test-card/driving-test-card.component';
 import { ExamineTestModalComponent } from './driving-tests/examine-test-modal/examine-test-modal.component';
+import { LectureTopicsComponent } from './lectures/lecture-topics/lecture-topics.component';
+import { LecturesHomeStudentComponent } from './lectures/lectures-home-student/lectures-home-student.component';
+import { StudentLecturesListComponent } from './lectures/student-lectures-list/student-lectures-list.component';
+import { StudentSessionsListComponent } from './view-student/instructor-student/student-sessions-list/student-sessions-list.component';
+import { InstructorStudentInfoComponent } from './view-student/instructor-student/instructor-student-info/instructor-student-info.component';
 
 
 @NgModule({
@@ -102,7 +107,12 @@ import { ExamineTestModalComponent } from './driving-tests/examine-test-modal/ex
     DrivingTestListComponent,
     DrivingTestsPanelComponent,
     DrivingTestCardComponent,
-    ExamineTestModalComponent
+    ExamineTestModalComponent,
+    LectureTopicsComponent,
+    LecturesHomeStudentComponent,
+    StudentLecturesListComponent,
+    StudentSessionsListComponent,
+    InstructorStudentInfoComponent
   ],
   imports: [
     BrowserModule,

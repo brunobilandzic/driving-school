@@ -3,14 +3,49 @@
     height: 2rem;
 }
 
+.date-input {
+    height: 2rem;
+}
+
 .page-size {
     display: flex;
     align-items: center;
 
 }
 
+.search {
+    display: flex;
+    align-items: center;
+
+}
+
+
 .session-list-nav {
+    display: flex;
+    flex-direction: row;
     padding-bottom: 1rem;
     margin-bottom: 0.5rem;
     border-bottom: 1px solid black;
 }
+
+.session-list-nav div {
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.session-params {
+    display: flex;
+    align-items: center;
+}
+
+.form-check-input {
+    position: relative;
+    margin:0;
+    margin-right: 0.5rem;
+}
+
+.btn {
+    white-space: nowrap;
+}
+
