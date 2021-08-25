@@ -3,4 +3,5 @@ import { UserModel } from "./user";
 
 export interface DriverModel extends UserModel {
     drivingSessionsTaken: DrivingSessionModel [];
+    passed: boolean;
 }

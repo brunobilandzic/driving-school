@@ -1,0 +1,10 @@
+.register-form, .group-select{
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form, .group-select {
+    width: 400px;
+}

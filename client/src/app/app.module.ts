@@ -59,6 +59,7 @@ import { LecturesHomeStudentComponent } from './lectures/lectures-home-student/l
 import { StudentLecturesListComponent } from './lectures/student-lectures-list/student-lectures-list.component';
 import { StudentSessionsListComponent } from './view-student/instructor-student/student-sessions-list/student-sessions-list.component';
 import { InstructorStudentInfoComponent } from './view-student/instructor-student/instructor-student-info/instructor-student-info.component';
+import { RegisterEmployeeComponent } from './register-employee/register-employee.component';
 
 
 @NgModule({
@@ -112,7 +113,8 @@ import { InstructorStudentInfoComponent } from './view-student/instructor-studen
     LecturesHomeStudentComponent,
     StudentLecturesListComponent,
     StudentSessionsListComponent,
-    InstructorStudentInfoComponent
+    InstructorStudentInfoComponent,
+    RegisterEmployeeComponent
   ],
   imports: [
     BrowserModule,

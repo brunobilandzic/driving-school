@@ -81,6 +81,41 @@ namespace API.Controllers
 
         }
 
+        [HttpPost("register-employee")]
+        // Only admins, instructors and professor can register users.
+        [Authorize(Policy = "StudentRegistration")]
+        public async Task<ActionResult<AuthUserDto>> RegisterEmployee(RegisterDto registerDto)
+        {
+
+            if (await UserExists(registerDto.Username)) return BadRequest("User already exists.");
+
+            // userManager.CreateAsnyc takes an AppUser as a parameter
+            // so we have to map from registerDto to AppUser
+            var user = _mapper.Map<AppUser>(registerDto);
+
+
+
+            user.UserName = registerDto.Username.ToLower();
+
+            var result = await _userManager.CreateAsync(user, registerDto.Password);
+
+            if (!result.Succeeded) return BadRequest(result.Errors);
+
+            var roleResult = await _userManager.AddToRolesAsync(user, registerDto.Roles);
+
+            if (!roleResult.Succeeded) return BadRequest(roleResult.Errors);
+
+            return new AuthUserDto
+            {
+                Username = user.UserName,
+                Token = await _tokenService.CreateToken(user),
+                PhotoUrl = user.PhotoUrl,
+                FirstName = user.FirstName,
+                LastName = user.LastName
+            };
+
+        }
+
         [HttpPost("login")]
         public async Task<ActionResult<AuthUserDto>> Login(LoginDto loginDto)
         {

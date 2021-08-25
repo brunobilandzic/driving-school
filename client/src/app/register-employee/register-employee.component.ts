@@ -7,23 +7,22 @@ import { MembersService } from '../_services/members.service';
 import { RolesService } from '../_services/roles.service';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css'],
+  selector: 'app-register-employee',
+  templateUrl: './register-employee.component.html',
+  styleUrls: ['./register-employee.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterEmployeeComponent implements OnInit {
   model = {
     firstName: '',
     lastName: '',
     username: '',
     password: '',
     repeatPassword: '',
-    regulationsGroupId: undefined
+    roles: []
   };
   regulationsGroups: any;
   
-  baseUrl = environment.baseApiUrl + 'account/register-student';
-  roles: string[] = [];
+  baseUrl = environment.baseApiUrl + 'account/register-employee';
   registrationSuccess = false;
   registeredUser: UserModel;
   constructor(
@@ -34,8 +33,7 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.rolesService.roles$.subscribe((roles) => (this.roles = roles));
-    this.getRegulationsGroups();
+
   }
 
   check() {
@@ -57,6 +55,8 @@ export class RegisterComponent implements OnInit {
     if (this.model.password != this.model.repeatPassword) {
       this.toastr.error('Passwords do not match');
     }
+
+    this.model
     
     this.register().subscribe((response: UserModel) => {
       this.toastr.success(`You've Successfully registered ${response.firstName} ${response.lastName}`);
@@ -66,10 +66,14 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  getRegulationsGroups()
-  {
-    this.membersService.getRegulationsGroups()
-      .subscribe((groups:Array<any>) => this.regulationsGroups = groups.filter((g: any) => (new Date(g.dateEnd).getTime()  > Date.now())));
+  resolveRoleCheck(e: any) {
+    let roleChecked = e.target.value;
+    if(this.model.roles.includes(roleChecked))
+      this.model.roles = this.model.roles.filter(r => r != roleChecked);
+    else
+      this.model.roles.push(roleChecked)
+    
+    console.log(this.model.roles);
   }
 
   register() {
@@ -84,4 +88,5 @@ export class RegisterComponent implements OnInit {
       this.model[key] = '';
     }
   }
+
 }

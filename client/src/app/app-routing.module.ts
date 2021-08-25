@@ -12,6 +12,7 @@ import { LecturesHomeStudentComponent } from './lectures/lectures-home-student/l
 import { LecturesListComponent } from './lectures/lectures-list/lectures-list.component';
 import { StudentLecturesListComponent } from './lectures/student-lectures-list/student-lectures-list.component';
 import { MembersComponent } from './members/members.component';
+import { RegisterEmployeeComponent } from './register-employee/register-employee.component';
 import { RegisterComponent } from './register/register.component';
 import { RegGroupFormComponent } from './regulations-groups/reg-group-form/reg-group-form.component';
 import { RegGroupListComponent } from './regulations-groups/reg-group-list/reg-group-list.component';
@@ -38,6 +39,12 @@ const routes: Routes = [
     component: RegisterComponent,
     canActivate: [RoleGuard],
     data: { activationRoles: ['Admin', 'Professor', 'Instructor'] },
+  },
+  {
+    path: 'register-employee',
+    component: RegisterEmployeeComponent,
+    canActivate: [RoleGuard],
+    data: { activationRoles: ['Admin'] },
   },
   {
     path: 'lectures',
